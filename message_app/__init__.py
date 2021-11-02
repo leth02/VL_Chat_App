@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, render_template, session, redirect, u
 import requests
 import json
 
-def create_app(test_config = None):
+def create_app(test_config=None):
     app = Flask(__name__)
 
     # if test config is passed, update app to use that config object
@@ -21,19 +21,19 @@ def create_app(test_config = None):
         return render_template("messages.html")
 
 
-    @app.route("/signup", methods = ["GET"])
+    @app.route("/signup", methods=["GET"])
     def user_signup():
         return render_template("user_signup.html")
 
 
-    @app.route("/signin", methods = ["GET"])
+    @app.route("/signin", methods=["GET"])
     def user_signin():
         return render_template("user_signin.html")
 
 
     # ===== JSON API endpoints =====
 
-    @app.route("/api/signup", methods = ["GET"])
+    @app.route("/api/signup", methods=["GET"])
     def api_user_signup():
         try:
             params = request.form
@@ -47,13 +47,12 @@ def create_app(test_config = None):
             # TODO connect to SQLite database and create a new account with the provided credentials
             # if successful, redirect user to the app page
             # otherwise, return JSON response containing the error
-            
 
         except Exception as error:
             return {"Error": "Bad request. " + str(error)}, 400
 
 
-    @app.route("/api/signin", methods = ["POST"])
+    @app.route("/api/signin", methods=["POST"])
     def api_user_signin():
         try:
             params = request.form
@@ -67,7 +66,6 @@ def create_app(test_config = None):
             # TODO connect to SQLite database and validate the provided credentials
             # if successful, redirect user to the app page
             # otherwise, return JSON response containing the error of invalid credentials
-            
 
         except Exception as error:
             return {"Error": "Bad request. " + str(error)}, 400
