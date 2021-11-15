@@ -1,6 +1,5 @@
 import pytest
 import os
-import sys
 import tempfile
 
 from message_app import create_app
