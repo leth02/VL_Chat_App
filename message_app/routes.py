@@ -91,10 +91,11 @@ def api_user_signin():
         params = request.form
         username = params.get("username", "")
         password = params.get("password", "")
+        print(username, password)
 
         if username == "" or password == "":
             session["error"] = "Invalid username/password. Please try again."
-            return redirect(url_for("user_signup"))
+            raise Exception(session["error"])
 
         # Connect and fetch data from the users table
         db_name = "VL_MESSAGES.db"
@@ -108,7 +109,7 @@ def api_user_signin():
         # User not found
         if not userData:
             session["error"] = "Invalid username/password. Please try again."
-            return redirect(url_for("user_signup"))
+            raise Exception(session["error"])
 
         correctPassword = userData[0]
         salt = userData[1]
@@ -123,7 +124,7 @@ def api_user_signin():
             return redirect(url_for("index"))
         else:
             session["error"] = "Invalid username/password. Please try again."
-            return redirect(url_for("user_signup"))
+            raise Exception(session["error"])
 
     except Exception as error:
         return {"Error": "Bad request. " + str(error)}, 400
