@@ -35,16 +35,24 @@ def api_user_signup():
         params = request.form
         username = params.get("username", "")
         password = params.get("password", "")
+        confirmPassword = params.get("confirmPassword", "")
         email = params.get("email", "")
-        emailRegex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        emailRegex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
         
         # Verify email
-        if not re.fullmatch(emailRegex, email):
-            session["error"] = "Invalid Email. Please try a valid email"
+        if re.fullmatch(emailRegex, email) is None:
+            print("abcd")
+            session["error"] = "Invalid Email. Please try a valid email."
+            raise Exception(session["error"])
+
+        # Verify password
+        if password != confirmPassword:
+            session["error"] = "Password doesn't not match. Please try again."
+            raise Exception(session["error"])
 
         if username == "" or password == "":
             session["error"] = "Invalid username/password. Please try again."
-            return redirect(url_for("user_signup"))
+            raise Exception(session["error"])
 
         # Connect to the db
         db_name = "VL_MESSAGES.db"
@@ -65,7 +73,7 @@ def api_user_signup():
         userData = c.fetchone()
         if userData:
             session["error"] = "Username has been taken. Please try another one."
-            return redirect(url_for("user_signup"))
+            raise Exception(session['error'])
 
         # Hash the password
         salt = os.urandom(5)
