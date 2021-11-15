@@ -5,6 +5,7 @@ import requests
 import json
 import os
 import sqlite3
+import re
 
 # ===== HTML Pages =====
 @app.route("/", methods=["GET"])
@@ -35,6 +36,11 @@ def api_user_signup():
         username = params.get("username", "")
         password = params.get("password", "")
         email = params.get("email", "")
+        emailRegex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        
+        # Verify email
+        if not re.fullmatch(emailRegex, email):
+            session["error"] = "Invalid Email. Please try a valid email"
 
         if username == "" or password == "":
             session["error"] = "Invalid username/password. Please try again."
