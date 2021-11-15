@@ -12,10 +12,9 @@ def test_login_no_password(supply_url):
 	url = supply_url + "/signin" 
 	data = {'username':'long'}
 	resp = requests.post(url, data=data)
-	print(resp.text)
 	j = json.loads(resp.text)
 	assert resp.status_code == 400
-	assert j['Error'] == "Bad request. Invalid username/password. Please try again.", resp.text
+	assert j['Error'] == "Bad request. Invalid username/password. Please try again."
 
 def test_login_no_email(supply_url):
 	url = supply_url + "/signin" 
@@ -23,7 +22,7 @@ def test_login_no_email(supply_url):
 	resp = requests.post(url, data=data)
 	j = json.loads(resp.text)
 	assert resp.status_code == 400, resp.text
-	assert j['Error'] == "Bad request. Invalid username/password. Please try again.", resp.text
+	assert j['Error'] == "Bad request. Invalid username/password. Please try again."
 
 def test_login_wrong_password(supply_url):
 	url = supply_url + "/signin" 
@@ -31,7 +30,7 @@ def test_login_wrong_password(supply_url):
 	resp = requests.post(url, data=data)
 	j = json.loads(resp.text)
 	assert resp.status_code == 400, resp.text
-	assert j['Error'] == "Bad request. Invalid username/password. Please try again.", resp.text
+	assert j['Error'] == "Bad request. Invalid username/password. Please try again."
 
 def test_login_invalid_user(supply_url):
 	url = supply_url + "/signin" 
@@ -39,4 +38,4 @@ def test_login_invalid_user(supply_url):
 	resp = requests.post(url, data=data)
 	j = json.loads(resp.text)
 	assert resp.status_code == 400, resp.text
-	assert j['Error'] == "Bad request. Invalid username/password. Please try again.", resp.text
+	assert j['Error'] == "Bad request. Invalid username/password. Please try again."
