@@ -1,11 +1,4 @@
-import sqlite3
+from message_app import create_app
 
-conn = sqlite3.connect("VL_MESSAGES.db")
-
-c = conn.cursor()
-
-c.execute(f"SELECT * FROM users WHERE username=23")
-userData = c.fetchone()
-print(userData)
-conn.commit()
-conn.close()
+def testAssertTrue():
+    assert True

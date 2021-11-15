@@ -1,4 +1,1 @@
-from message_app import create_app
-
-app = create_app()
-
+from message_app import app
