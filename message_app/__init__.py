@@ -1,4 +1,5 @@
 from flask import Flask
+from config import KEY
 
 
 def create_app(test_config=None):
@@ -10,4 +11,8 @@ def create_app(test_config=None):
 
     return app
 
-app = create_app()
+app = create_app(
+    {'SECRET_KEY' : KEY}
+)
+
+from message_app import routes
