@@ -59,3 +59,5 @@ def create_app(test_config=None, name=__name__):
     @app.route("/signin", methods=["GET", "POST"])
     def user_signin():
         return render_template("user_signin.html")
+    
+    return app
