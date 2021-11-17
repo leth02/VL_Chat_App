@@ -1,15 +1,19 @@
 from hashlib import sha256
 from flask import Flask, jsonify, request, render_template, session, redirect, url_for
-import requests
-import json
+import sys
+sys.path.append("..")
+from db import db
 import os
 import sqlite3
 import re
-from config import KEY
 
 
 def create_app(test_config=None):
 	app = Flask(__name__)
+
+	app.config.from_mapping(
+		SECRET_KEY=b'\xb0\x9a\xc9\x05\x19\xafv\x88\xfaB\xe5$\x07\x12\x10\x9e'
+	)
 
 	# if test config is passed, update app to use that config object
 	if test_config:
@@ -37,6 +41,7 @@ def create_app(test_config=None):
 
 	# ===== JSON API endpoints =====
 
+	
 	@app.route("/api/signup", methods=["POST"])
 	def api_user_signup():
 		try:
@@ -49,7 +54,6 @@ def create_app(test_config=None):
 			
 			# Verify email
 			if re.fullmatch(emailRegex, email) is None:
-				print("abcd")
 				session["error"] = "Invalid Email. Please try a valid email."
 				raise Exception(session["error"])
 
@@ -62,38 +66,29 @@ def create_app(test_config=None):
 				session["error"] = "Invalid username/password. Please try again."
 				raise Exception(session["error"])
 
-			# Connect to the db
-			db_name = "VL_MESSAGES.db"
-			conn = sqlite3.connect(db_name)
-			c = conn.cursor()
-
-			# Create table users if not exist
-			c.execute("""CREATE TABLE IF NOT EXISTS users (
-				username text NOT NULL PRIMARY KEY,
-				password text NOT NULL,
-				salt text,
-				email text
-				)"""
+			# Connect and fetch data from the users table
+			userData = db.query_db(
+				"SELECT password, salt FROM users WHERE username=:user_name", 
+				{'user_name': username},
+				one=True
 			)
 
-			#  Verify whether username is taken or not
-			c.execute("SELECT * FROM users WHERE username=:user_name", {'user_name': username})
-			userData = c.fetchone()
 			if userData:
 				session["error"] = "Username has been taken. Please try another one."
 				raise Exception(session['error'])
 
 			# Hash the password
-			salt = os.urandom(5)
-			password += str(salt)
+			salt = str(os.urandom(5))
+			password += salt
 			h = sha256()
 			h.update(bytes(password, "utf8"))
 			password = h.hexdigest()
 
 			# Add user to the database
-			c.execute(f"INSERT INTO users VALUES (:username, :password, :salt, :email)", {"username": username, "password": password, "salt": salt, "email": email})
-			conn.commit()
-			c.close()
+			db.query_db("INSERT INTO users VALUES (:username, :password, :salt, :email)", 
+				{"username": username, "password": password, "salt": salt, "email": email}
+			)
+			db.get_db().commit()
 
 			return redirect(url_for("index"))
 
@@ -107,28 +102,25 @@ def create_app(test_config=None):
 			params = request.form
 			username = params.get("username", "")
 			password = params.get("password", "")
-			print("asd", "asdsa")
 
 			if username == "" or password == "":
 				session["error"] = "Invalid username/password. Please try again."
 				raise Exception(session["error"])
 
 			# Connect and fetch data from the users table
-			db_name = "VL_MESSAGES.db"
-			conn = sqlite3.connect(db_name)
-			c = conn.cursor()
-			with conn:
-				c.execute("SELECT password, salt FROM users WHERE username=:user_name", {'user_name': username})
-				userData = c.fetchone()
-			c.close()
+			userData = db.query_db(
+				"SELECT password, salt FROM users WHERE username=:user_name", 
+				{'user_name': username},
+				one=True
+			)
 
 			# User not found
 			if not userData:
 				session["error"] = "Invalid username/password. Please try again."
 				raise Exception(session["error"])
 
-			correctPassword = userData[0]
-			salt = userData[1]
+			correctPassword = userData["password"]
+			salt = userData["salt"]
 			password = password + str(salt)
 
 			# Hash the password
