@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-=======
-import sys, os
-sys.path.insert(0, os.getcwd())
-from message_app import create_app
->>>>>>> 6400368 (update test api signin using pytest-mocker)
 import pytest
 import os
 import tempfile
@@ -86,9 +80,9 @@ def sampleSignInData():
 def sampleSignUpData():
 	data = {
 		"valid": {
-			"username": "validUserName",
-			"password": "validPassword",
-			"confirmPassword": "validPassword",
+			"username": "validUserName1",
+			"password": "validPassword1",
+			"confirmPassword": "validPassword1",
 			"email": "validEmail@test.com"
 		},
 		"invalid": {

@@ -1,7 +1,7 @@
+import sys, os
+sys.path.append(os.getcwd())
 from hashlib import sha256
 from flask import Flask, jsonify, request, render_template, session, redirect, url_for
-import sys
-sys.path.append("..")
 from db import db
 import os
 from message_app.db.db import get_db_SQLAlchemy
