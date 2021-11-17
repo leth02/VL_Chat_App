@@ -57,9 +57,10 @@ def create_app(test_config=None):
 
 			# Verify password
 			if password != confirmPassword:
-				session["error"] = "Password doesn't not match. Please try again."
+				session["error"] = "Password does not match. Please try again."
 				raise Exception(session["error"])
 
+			# No username or password
 			if username == "" or password == "":
 				session["error"] = "Invalid username/password. Please try again."
 				raise Exception(session["error"])
@@ -84,8 +85,7 @@ def create_app(test_config=None):
 
 			# Add user to the database
 			db.query_db("INSERT INTO users VALUES (:username, :password, :salt, :email)",
-				{"username": username, "password": password, "salt": salt, "email": email}
-			)
+				{"username": username, "password": password, "salt": salt, "email": email})
 			db.get_db().commit()
 
 			return redirect(url_for("index"))
@@ -101,6 +101,7 @@ def create_app(test_config=None):
 			username = params.get("username", "")
 			password = params.get("password", "")
 
+			# No username or password
 			if username == "" or password == "":
 				session["error"] = "Invalid username/password. Please try again."
 				raise Exception(session["error"])
@@ -117,18 +118,19 @@ def create_app(test_config=None):
 				session["error"] = "Invalid username/password. Please try again."
 				raise Exception(session["error"])
 
+			# Hash the password
 			correctPassword = userData["password"]
 			salt = userData["salt"]
 			password = password + str(salt)
-
-			# Hash the password
 			h = sha256()
 			h.update(bytes(password, "utf8"))
 			password = h.hexdigest()
 
+			# Correct Password
 			if password == correctPassword:
 				return redirect(url_for("index"))
 			else:
+				# Wrong password
 				session["error"] = "Invalid username/password. Please try again."
 				raise Exception(session["error"])
 
