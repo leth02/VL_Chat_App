@@ -8,7 +8,7 @@ def test_valid_signup(sampleSignUpData, client, mocker):
 
 def test_signup_wrong_confirm_password(sampleSignUpData, client):
 	resp = client.post('/api/signup', data=sampleSignUpData["invalid"]["wrong_confirm_password"])
-	assert resp.json["Error"] == "Bad request. Password doesn't not match. Please try again."
+	assert resp.json["Error"] == "Bad request. Password does not match. Please try again."
 	assert resp.status_code == 400
 
 def test_signup_invalid_email(sampleSignUpData, client):
