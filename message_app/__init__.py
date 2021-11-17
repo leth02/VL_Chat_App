@@ -1,9 +1,8 @@
+import sys, os
+sys.path.append(os.getcwd())
 from hashlib import sha256
 from flask import Flask, jsonify, request, render_template, session, redirect, url_for
-import sys
-sys.path.append("..")
 from db import db
-import os
 import sqlite3
 import re
 
@@ -68,7 +67,7 @@ def create_app(test_config=None):
 
 			# Connect and fetch data from the users table
 			userData = db.query_db(
-				"SELECT password, salt FROM users WHERE username=:user_name", 
+				"SELECT * FROM users WHERE username=:user_name", 
 				{'user_name': username},
 				one=True
 			)

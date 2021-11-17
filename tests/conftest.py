@@ -18,9 +18,9 @@ def sampleSignInData():
 def sampleSignUpData():
 	data = {
 		"valid": {
-			"username": "validUserName",
-			"password": "validPassword",
-			"confirmPassword": "validPassword",
+			"username": "validUserName1",
+			"password": "validPassword1",
+			"confirmPassword": "validPassword1",
 			"email": "validEmail@test.com"
 		},
 		"invalid": {

@@ -1,6 +1,5 @@
 import sqlite3
 import os
-import time
 from flask import g, current_app
 
 # Sources:
