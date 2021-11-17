@@ -68,7 +68,7 @@ def test_runner(app):
 @pytest.fixture
 def sampleSignInData():
 	data = {
-		"valid": {'username': 'long','password': '12345','salt': r"b'\xe9a\xf2\xd7_'"},
+		"valid": {'username': 'long', 'password': '12345', 'salt': r"b'\xe9a\xf2\xd7_'"},
 		"invalid": {
 			"wrong_password": {'username': 'long', 'password': '1234'},
 			"invalid_user": {'username': 'wrong_user', 'password': "test"}
