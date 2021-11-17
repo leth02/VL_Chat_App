@@ -1,14 +1,9 @@
-<<<<<<< HEAD
 from hashlib import sha256
 from flask import Flask, jsonify, request, render_template, session, redirect, url_for
 import requests
 import json
 import os
 from message_app.db.db import get_db_SQLAlchemy
-=======
-from flask import Flask
-from config import KEY
->>>>>>> 518b656 (update test api_signin)
 
 # The function accepts a name as an argument. Leaving the name by default (app=Flask(__name__)) automatically
 # includes the package name in the path for SQLALCHEMY_DATABASE_URI, which creates confusion when

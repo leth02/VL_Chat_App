@@ -64,3 +64,14 @@ def test_client(app):
 @pytest.fixture
 def test_runner(app):
     return app.test_cli_runner()
+
+@pytest.fixture
+def sampleData():
+	data = {
+		"valid": {'username': 'long','password': '12345'},
+		"invalid": {
+			"wrong_password": {'username': 'long', 'password': '1234'},
+			"invalid_user": {'username': 'wrong_user', 'password': "test"}
+		}
+	}
+	return data
