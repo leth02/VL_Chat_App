@@ -1,9 +1,9 @@
-import sys, os
+import sys
+import os
 sys.path.append(os.getcwd())
 from hashlib import sha256
 from flask import Flask, jsonify, request, render_template, session, redirect, url_for
 from db import db
-import sqlite3
 import re
 
 
@@ -40,7 +40,6 @@ def create_app(test_config=None):
 
 	# ===== JSON API endpoints =====
 
-	
 	@app.route("/api/signup", methods=["POST"])
 	def api_user_signup():
 		try:
@@ -50,7 +49,7 @@ def create_app(test_config=None):
 			confirmPassword = params.get("confirmPassword", "")
 			email = params.get("email", "")
 			emailRegex = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
-			
+
 			# Verify email
 			if re.fullmatch(emailRegex, email) is None:
 				session["error"] = "Invalid Email. Please try a valid email."
@@ -67,7 +66,7 @@ def create_app(test_config=None):
 
 			# Connect and fetch data from the users table
 			userData = db.query_db(
-				"SELECT * FROM users WHERE username=:user_name", 
+				"SELECT * FROM users WHERE username=:user_name",
 				{'user_name': username},
 				one=True
 			)
@@ -84,7 +83,7 @@ def create_app(test_config=None):
 			password = h.hexdigest()
 
 			# Add user to the database
-			db.query_db("INSERT INTO users VALUES (:username, :password, :salt, :email)", 
+			db.query_db("INSERT INTO users VALUES (:username, :password, :salt, :email)",
 				{"username": username, "password": password, "salt": salt, "email": email}
 			)
 			db.get_db().commit()
@@ -108,7 +107,7 @@ def create_app(test_config=None):
 
 			# Connect and fetch data from the users table
 			userData = db.query_db(
-				"SELECT password, salt FROM users WHERE username=:user_name", 
+				"SELECT password, salt FROM users WHERE username=:user_name",
 				{'user_name': username},
 				one=True
 			)
