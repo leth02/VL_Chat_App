@@ -15,7 +15,7 @@ def create_app(test_config=None):
     if test_config:
         app.config.update(test_config)
 
-    # create data base with comand line: flask init-db
+    # create data base by running command: flask init-db
     db.init_app(app)
 
     #================Registering Blueprints==================

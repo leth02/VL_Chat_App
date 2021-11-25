@@ -6,10 +6,10 @@ from flask import current_app, g
 from flask.cli import with_appcontext
 
 def get_db():
-    db = getattr(g, '_database', None)
+    db = getattr(g, 'db', None)
 
     if db is None:
-        db = g._database = sqlite3.connect(current_app.config['DATABASE'])
+        db = g.db = sqlite3.connect(current_app.config['DATABASE'])
         db.execute("PRAGMA foreign_keys = ON;")
 
     db.row_factory = make_dicts
@@ -23,10 +23,12 @@ def close_db(e=None):
         db.close()
 
 def make_dicts(cursor, row):
+    """convert the retrieved data into dictionary with key is column name"""
     return dict((cursor.description[idx][0], value)
                 for idx, value in enumerate(row))
 
 def query_db(query, args=(), one=False):
+    """Run a query"""
     cur = get_db().execute(query, args)
     rv = cur.fetchall()
     cur.close()
@@ -38,10 +40,11 @@ def init_db():
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
+# define a command line called init-db that calls the init_db_command function
+# init_db_command function creates a database
 @click.command('init-db')
 @with_appcontext
 def init_db_command():
-    """Clear the existing data and create new tables."""
     init_db()
     click.echo('Initialized the database.')
 

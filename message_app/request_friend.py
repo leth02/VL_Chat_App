@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, jsonify
 from . import db
 
-request_messages = Blueprint("request_messages", __name__ )
+request_messages = Blueprint("request_messages", __name__)
 
 @request_messages.route("/api/request/send/<int:sender_id>/<int:receiver_id>", methods=["POST"])
 def send_request(sender_id, receiver_id):
