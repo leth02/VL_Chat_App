@@ -1,20 +1,31 @@
 from flask import Flask, jsonify, request, render_template, session, redirect, url_for
 import requests
 import json
+from . import db
+import os
 
 def create_app(test_config=None):
     app = Flask(__name__)
+
+    app.config.from_mapping(
+        DATABASE=os.path.join('message_app', 'VL.sqlite'),
+    )
 
     # if test config is passed, update app to use that config object
     if test_config:
         app.config.update(test_config)
 
+    # create data base with comand line: flask init-db
+    db.init_app(app)
+
+    #================Registering Blueprints==================
+    from . import request_friend
+    app.register_blueprint(request_friend.request_messages)
 
     # ===== HTML Pages =====
     @app.route("/", methods=["GET"])
     def index():
         return render_template("index.html")
-
 
     @app.route("/messages", methods=["GET"])
     def messages():
@@ -71,3 +82,4 @@ def create_app(test_config=None):
             return {"Error": "Bad request. " + str(error)}, 400
 
     return app
+
