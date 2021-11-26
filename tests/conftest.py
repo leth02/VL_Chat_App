@@ -6,7 +6,7 @@ import os
 import sys
 
 # Path to message_app
-sys.path.append(os.getcwd()[:-5])
+sys.path.append(os.getcwd())
 
 from message_app import create_app
 from message_app.db.db import get_db, init_db
