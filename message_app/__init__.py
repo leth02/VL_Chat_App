@@ -1,14 +1,23 @@
 from flask import Flask, jsonify, request, render_template, session, redirect, url_for
 import requests
 import json
+import os
+
 
 def create_app(test_config=None):
     app = Flask(__name__)
+    app.config.from_mapping(
+        SECRET_KEY='dev',
+        DATABASE=os.path.join(app.instance_path, "db", 'VL_MESSAGES.sqlite'),
+    )
 
     # if test config is passed, update app to use that config object
     if test_config:
         app.config.update(test_config)
 
+    # connect to the database
+    from message_app.db import db
+    db.init_app(app)
 
     # ===== HTML Pages =====
     @app.route("/", methods=["GET"])

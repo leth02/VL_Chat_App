@@ -21,6 +21,7 @@ python -m pip install -r requirements.txt
 ```
 export FLASK_APP=message_app
 export FLASK_ENV=development
+flask init-db
 flask run
 ```
 

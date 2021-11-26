@@ -2,7 +2,8 @@ import os
 import tempfile
 
 import pytest
-import os, sys
+import os
+import sys
 
 # Path to message_app
 sys.path.append(os.getcwd()[:-5])

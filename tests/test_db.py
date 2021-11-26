@@ -1,12 +1,13 @@
 import sqlite3
 
 import pytest
-import sys, os
+import sys
+import os
 # Path to message_app
 sys.path.append(os.getcwd()[:-5])
 from message_app.db.db import get_db
 
-# Within an application context, get_db should return the same connection each time it’s called. 
+# Within an application context, get_db should return the same connection each time it’s called.
 # After the context, the connection should be closed.
 def test_get_close_db(app):
     with app.app_context():
