@@ -4,6 +4,9 @@
 --
 -- Structure for table users
 --
+
+BEGIN TRANSACTION;
+
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     id INTEGER PRIMARY KEY,
@@ -21,8 +24,8 @@ CREATE TABLE conversation_request (
     id INTEGER PRIMARY KEY,
     initiator_id INTEGER NOT NULL,
     receiver_id INTEGER NOT NULL,
-    accepted INTEGER NOT NULL -- 1 means accepted; 0 means has not been accepted or has been declined
-    FOREIGN KEY (initiator_id) REFERENCES users (id)
+    accepted INTEGER NOT NULL, -- 1 means accepted; 0 means has not been accepted or has been declined
+    FOREIGN KEY (initiator_id) REFERENCES users (id),
     FOREIGN KEY (receiver_id) REFERENCES users (id)
 );
 
@@ -47,7 +50,7 @@ CREATE TABLE messages (
     receiver_id INTEGER NOT NULL,
     content TEXT,
     seen INTEGER NOT NULL, -- 1 means seen and 0 means has not been seen
-    FOREIGN KEY (sender_id) REFERENCES users (id)
+    FOREIGN KEY (sender_id) REFERENCES users (id),
     FOREIGN KEY (receiver_id) REFERENCES users (id)
 );
 
@@ -55,10 +58,9 @@ CREATE TABLE messages (
 -- Populate sample data for development
 --
 
-BEGIN;
+INSERT INTO users (id, username, email, password_hash, password_salt) VALUES (1000, 'username1', 'username1@example.com', 'password_hash_1', 'password_salt_1');
+INSERT INTO users (id, username, email, password_hash, password_salt) VALUES (1001, 'username2', 'username2@example.com', 'password_hash_2', 'password_salt_2');
+INSERT INTO users (id, username, email, password_hash, password_salt) VALUES (1002, 'username3', 'username3@example.com', 'password_hash_3', 'password_salt_3');
 
-INSERT INTO users (id, username, email, password_hash, password_salt) VALUES (1000, 'username1', 'username1@example.com', 'password_hash_1', 'password_salt_1')
-INSERT INTO users (id, username, email, password_hash, password_salt) VALUES (1001, 'username2', 'username2@example.com', 'password_hash_2', 'password_salt_2')
-INSERT INTO users (id, username, email, password_hash, password_salt) VALUES (1002, 'username3', 'username3@example.com', 'password_hash_3', 'password_salt_3')
 
-COMMIT;
+COMMIT TRANSACTION;
