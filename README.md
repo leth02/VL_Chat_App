@@ -28,10 +28,10 @@ $ flask run
 
 You can create a new database for development by using the SQL scripts from ```message-app.sql```
 
-Step into the ```./message_app``` directory, then run the following command
+Step into the ```./message_app/db``` directory, then run the following command
 
 ```
-$ sqlite3 message_app_db
+$ sqlite3 VL_MESSAGES
 ```
 Note: message_app_db is the name that will be used in deployment, and you can use your favorite name when developing locally.
 
@@ -49,7 +49,9 @@ If you run into this issue, there are two solutions:
 
 1) Add new/modified files to git staging area *one by one*, and skip the binary database files. If you run ```git add .```, it might add the binary database file into git staging area.
 
-2) Delete the binary database file, then you can use ```git add .``` safely because the database file is no longer present (you can use ```git status``` to check before doing ```git add .```) 
+2) Delete the binary database file, then you can use ```git add .``` safely because the database file is no longer present (you can use ```git status``` to check before doing ```git add .```)
+
+3) Temporary solution: For line 34, use "sqlite3 VL_MESSAGES.sqlite3" instead of "sqlite3 VL_MESSAGES". This will guarantee gitignore recognize the database.
 
 
 ## Testing
