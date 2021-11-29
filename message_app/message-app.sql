@@ -48,8 +48,9 @@ CREATE TABLE messages (
     conversation_id INTEGER NOT NULL,
     sender_id INTEGER NOT NULL,
     receiver_id INTEGER NOT NULL,
-    content TEXT,
+    content TEXT NOT NULL,
     seen INTEGER NOT NULL, -- 1 means seen and 0 means has not been seen
+    timestamp INTEGER NOT NULL,
     FOREIGN KEY (sender_id) REFERENCES users (id),
     FOREIGN KEY (receiver_id) REFERENCES users (id)
 );
