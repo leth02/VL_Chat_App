@@ -45,9 +45,12 @@ sqlite> .read message-app.sql
 
 Even though ```*.sqlite3``` has been added to ```.gitignore```, the binary Sqlite database files are still listed when you run ```git status```. This issue is on Windows, and I am not sure if this issue is applicable to Linux/MacOS.
 
-If you run into this issue, the solution is to add new/modified files to git staging area *one by one*, and skip the binary database files.
+If you run into this issue, there are two solutions:
 
-If you run ```git add .```, it might add the binary database file into git staging area.
+1) Add new/modified files to git staging area *one by one*, and skip the binary database files. If you run ```git add .```, it might add the binary database file into git staging area.
+
+2) Delete the binary database file, then you can use ```git add .``` safely because the database file is no longer present (you can use ```git status``` to check before doing ```git add .```) 
+
 
 ## Testing
 
