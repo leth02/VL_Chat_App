@@ -8,7 +8,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, "db", 'VL_MESSAGES.sqlite3'),
+        DATABASE=os.path.join(app.instance_path, "db", 'message_app_db.sqlite3'),
     )
 
     # if test config is passed, update app to use that config object

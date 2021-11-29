@@ -31,7 +31,7 @@ You can create a new database for development by using the SQL scripts from ```m
 Step into the ```./message_app/db``` directory, then run the following command
 
 ```
-$ sqlite3 VL_MESSAGES
+$ sqlite3 message_app_db
 ```
 Note: message_app_db is the name that will be used in deployment, and you can use your favorite name when developing locally.
 
@@ -51,7 +51,7 @@ If you run into this issue, there are two solutions:
 
 2) Delete the binary database file, then you can use ```git add .``` safely because the database file is no longer present (you can use ```git status``` to check before doing ```git add .```)
 
-3) Temporary solution: For line 34, use "sqlite3 VL_MESSAGES.sqlite3" instead of "sqlite3 VL_MESSAGES". This will guarantee gitignore recognize the database.
+3) Temporary solution: For line 34, use "sqlite3 message_app_db.sqlite3" instead of "sqlite3 message_app_db". This will guarantee gitignore recognize the database.
 
 
 ## Testing
