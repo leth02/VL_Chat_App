@@ -28,7 +28,11 @@ $ flask run
 
 You can create a new database for development by using the SQL scripts from ```message-app.sql```
 
+<<<<<<< HEAD
 Step into the ```./message_app/db``` directory, then run the following command
+=======
+Step into the ```./message_app``` directory, then run the following command
+>>>>>>> cb91a212309579be17a75823532ed9cd904c15e7
 
 ```
 $ sqlite3 message_app_db
