@@ -24,6 +24,13 @@ $ export FLASK_ENV=development
 $ flask run
 ```
 
+**Configure Flask and start the application (for Window user)**
+```
+$env:FLASK_APP="message_app/__init__.py"
+$env:FLASK_ENV="development"
+flask run
+```
+
 **Populate sample database**
 
 You can create a new database for development by using the SQL scripts from ```message-app.sql```
