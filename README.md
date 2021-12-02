@@ -24,11 +24,18 @@ $ export FLASK_ENV=development
 $ flask run
 ```
 
+**Configure Flask and start the application (for Window user)**
+```
+$env:FLASK_APP="message_app/__init__.py"
+$env:FLASK_ENV="development"
+flask run
+```
+
 **Populate sample database**
 
 You can create a new database for development by using the SQL scripts from ```message-app.sql```
 
-Step into the ```./message_app``` directory, then run the following command
+Step into the ```./message_app/db``` directory, then run the following command
 
 ```
 $ sqlite3 message_app_db
@@ -45,11 +52,13 @@ sqlite> .read message-app.sql
 
 Even though ```*.sqlite3``` has been added to ```.gitignore```, the binary Sqlite database files are still listed when you run ```git status```. This issue is on Windows, and I am not sure if this issue is applicable to Linux/MacOS.
 
-If you run into this issue, there are two solutions:
+If you run into this issue, there are three solutions:
 
 1) Add new/modified files to git staging area *one by one*, and skip the binary database files. If you run ```git add .```, it might add the binary database file into git staging area.
 
-2) Delete the binary database file, then you can use ```git add .``` safely because the database file is no longer present (you can use ```git status``` to check before doing ```git add .```) 
+2) Delete the binary database file, then you can use ```git add .``` safely because the database file is no longer present (you can use ```git status``` to check before doing ```git add .```)
+
+3) Temporary solution: For line 34, use "sqlite3 message_app_db.sqlite3" instead of "sqlite3 message_app_db". This will guarantee gitignore recognize the database.
 
 
 ## Testing
