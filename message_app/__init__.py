@@ -1,11 +1,15 @@
 from flask import Flask, jsonify, request, render_template, session, redirect, url_for
 import requests
 import json
-from . import db
 import os
+
 
 def create_app(test_config=None):
     app = Flask(__name__)
+    app.config.from_mapping(
+        SECRET_KEY='dev',
+        DATABASE=os.path.join(app.instance_path, "db", 'message_app_db.sqlite3'),
+    )
 
     app.config.from_mapping(
         DATABASE=os.path.join('message_app', 'VL.sqlite'),
@@ -15,12 +19,9 @@ def create_app(test_config=None):
     if test_config:
         app.config.update(test_config)
 
-    # create data base by running command: flask init-db
+    # connect to the database
+    from message_app.db import db
     db.init_app(app)
-
-    #================Registering Blueprints==================
-    from . import request_friend
-    app.register_blueprint(request_friend.request_messages)
 
     # ===== HTML Pages =====
     @app.route("/", methods=["GET"])

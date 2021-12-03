@@ -2,65 +2,35 @@ import os
 import tempfile
 
 import pytest
+import os
+import sys
 
 from message_app import create_app
-from message_app.db import get_db
-from message_app.db import init_db
-
-# read in SQL for populating test data
-with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
-    _data_sql = f.read().decode("utf8")
+from message_app.db.db import get_db, init_db
 
 @pytest.fixture
 def app():
-    """Create and configure a new app instance for each test."""
+    db_fd, db_path = tempfile.mkstemp()
 
-    # create a temporary file to isolate the database for each test
-    # db_file_descriptor: the entry number of temporatory db file
-    # db_file_path: the path of temporary db file
-    temp_db_file = tempfile.mkstemp()
-    db_file_descriptor = temp_db_file[0]
-    db_file_path = temp_db_file[1]
+    app = create_app({
+        'TESTING': True,
+        'DATABASE': db_path,
+    })
 
-    # create the app with test config
-    app = create_app({"TESTING": True, "DATABASE": db_file_path})
-
-    # create the database and load test data
     with app.app_context():
         init_db()
-        get_db().executescript(_data_sql)
 
     yield app
 
-    # close and remove the temporary database
-    os.close(db_file_descriptor)
-    os.unlink(db_file_path)
+    os.close(db_fd)
+    os.unlink(db_path)
+
 
 @pytest.fixture
 def client(app):
-    """A test client for the app."""
     return app.test_client()
 
 
 @pytest.fixture
 def runner(app):
-    """A test runner for the app's Click commands."""
     return app.test_cli_runner()
-
-
-class AuthActions:
-    def __init__(self, client):
-        self._client = client
-
-    def login(self, username="test", password="test"):
-        return self._client.post(
-            "/auth/login", data={"username": username, "password": password}
-        )
-
-    def logout(self):
-        return self._client.get("/auth/logout")
-
-
-@pytest.fixture
-def auth(client):
-    return AuthActions(client)
