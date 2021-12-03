@@ -3,7 +3,7 @@ import pytest
 def test_login_valid(sampleSignInData, client, mocker):
 	for key in sampleSignInData["valid"].keys():
 		validUser = sampleSignInData["valid"][key]
-		mocker.patch("message_app.query_db", return_value={"password_hash": validUser["password_hash"], "salt": validUser["salt"]})
+		mocker.patch("message_app.db.query_db", return_value={"password_hash": validUser["password_hash"], "salt": validUser["salt"]})
 		mocker.patch("message_app.hashing", return_value=validUser["password_hash"])
 		resp = client.post('/api/signin', data={"username": validUser["username"], "password": validUser["password_hash"]})
 		assert resp.status_code == 302
