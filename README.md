@@ -38,7 +38,7 @@ You can create a new database for development by using the SQL scripts from ```m
 Step into the ```./message_app/db``` directory, then run the following command
 
 ```
-$ sqlite3 message_app_db
+$ sqlite3 message_app_db.sqlite3
 ```
 Note: message_app_db is the name that will be used in deployment, and you can use your favorite name when developing locally.
 

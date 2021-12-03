@@ -44,6 +44,10 @@ def get_db():
             current_app.config['DATABASE'],
             detect_types=sqlite3.PARSE_DECLTYPES
         )
+        # Enable validating foreign_keys
+        g.db.execute("PRAGMA foreign_keys = ON;")
+        g.db.row_factory = make_dicts
+
     return g.db
 
 
@@ -67,6 +71,10 @@ def query_db(query: str, args={}, one=False):
     cur.close()
     return (rv[0] if rv else None) if one else rv
 
+def make_dicts(cursor, row):
+    """convert the retrieved data into dictionary with key is column name"""
+    return dict((cursor.description[idx][0], value)
+                for idx, value in enumerate(row))
 
 # Init a new database if the database doesn't exist.
 # open_resource() opens a file relative to the flaskr package, which is useful since you won’t necessarily

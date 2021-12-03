@@ -1,13 +1,3 @@
--- message-app.sql -- for SQLite 3
--- For reference on datatypes in SQLite, please visit https://www.sqlite.org/draft/datatype3.html
-
---
--- Structure for table users
---
-
-BEGIN TRANSACTION;
-
-DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     id INTEGER PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
@@ -19,7 +9,6 @@ CREATE TABLE users (
 --
 -- Structure for table conversation_request
 --
-DROP TABLE IF EXISTS conversation_request;
 CREATE TABLE conversation_request (
     id INTEGER PRIMARY KEY,
     initiator_id INTEGER NOT NULL,
@@ -34,7 +23,6 @@ CREATE TABLE conversation_request (
 --
 -- Structure for table conversations
 --
-DROP TABLE IF EXISTS conversations;
 CREATE TABLE conversations (
     id INTEGER PRIMARY KEY,
     participants TEXT NOT NULL,
@@ -44,7 +32,6 @@ CREATE TABLE conversations (
 --
 -- Structure for table messages
 --
-DROP TABLE IF EXISTS messages;
 CREATE TABLE messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     conversation_id INTEGER NOT NULL,
@@ -65,5 +52,5 @@ INSERT INTO users (id, username, email, password_hash, password_salt) VALUES (10
 INSERT INTO users (id, username, email, password_hash, password_salt) VALUES (1001, 'username2', 'username2@example.com', 'password_hash_2', 'password_salt_2');
 INSERT INTO users (id, username, email, password_hash, password_salt) VALUES (1002, 'username3', 'username3@example.com', 'password_hash_3', 'password_salt_3');
 
+INSERT INTO conversation_request (id, initiator_id, receiver_id, accepted, request_time) VALUES (1001, 1000, 1001, 0, 12345678);
 
-COMMIT TRANSACTION;
