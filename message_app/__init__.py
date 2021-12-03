@@ -1,6 +1,5 @@
 import sys
 import os
-sys.path.append(os.getcwd())
 from hashlib import sha256
 from flask import Flask, jsonify, request, render_template, session, redirect, url_for
 from db import db

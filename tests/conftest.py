@@ -3,6 +3,7 @@ import os
 import tempfile
 
 from message_app import create_app
+<<<<<<< HEAD
 from message_app.db.db import DB as db
 
 # Name of the testing database
@@ -15,6 +16,9 @@ from message_app.db.db import get_db
 # read in SQL for populating test data
 with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
     data_sql = f.read().decode("utf8")
+=======
+from message_app.db.db import init_db
+>>>>>>> ff1e16a (update test_api_login)
 
 @pytest.fixture
 def app():
@@ -65,12 +69,18 @@ def test_client(app):
 def test_runner(app):
     return app.test_cli_runner()
 
+
 @pytest.fixture
 def sampleSignInData():
 	data = {
-		"valid": {'username': 'long', 'password': '12345', 'salt': r"b'\xe9a\xf2\xd7_'"},
+		"valid":{
+			"valid_1": {'username': 'username1', 'password_hash': 'password_hash_1', 'salt': 'password_salt_1'},
+			"valid_2": {'username': 'username2', 'password_hash': 'password_hash_2', 'salt': 'password_salt_2'},
+			"valid_3": {'username': 'username3', 'password_hash': 'password_hash_3', 'salt': 'password_salt_3'},
+		},
+		
 		"invalid": {
-			"wrong_password": {'username': 'long', 'password': '1234'},
+			"wrong_password": {'username': 'username1', 'password': "wrongPassword"},
 			"invalid_user": {'username': 'wrong_user', 'password': "test"}
 		}
 	}
@@ -87,22 +97,22 @@ def sampleSignUpData():
 		},
 		"invalid": {
 			"wrong_confirm_password": {
-				"username": "nameA",
-				"password": "testPassword",
-				"confirmPassword": "WrongConfirmPassword",
-				"email": "test@gmail.com"
+				"username": "wrongConfirmPassword",
+				"password": "wrongConfirmPassword",
+				"confirmPassword": "",
+				"email": "wrongConfirmPassword@gmail.com"
 			},
 			"invalid_email": {
-				"username": "nameA",
-				"password": "passwordA",
-				"confirmPassword": "passwordB",
+				"username": "invalidEmailAddress",
+				"password": "invalidEmailAddress",
+				"confirmPassword": "invalidEmailAddress",
 				"email": "invalidEmailAddress"
 			},
 			"taken_username": {
-				"username": "long",
-				"password": "testPassword",
-				"confirmPassword": "testPassword",
-				"email": "test@gmail.com"
+				"username": "username1",
+				"password": "takenUserName",
+				"confirmPassword": "takenUserName",
+				"email": "takenUserName@gmail.com"
 			}
 		}
 	}
