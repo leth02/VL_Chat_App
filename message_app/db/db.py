@@ -1,6 +1,16 @@
 import sqlite3
 import os
 from flask import current_app, g
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+
+engine = create_engine('sqlite:////message_app_db.sqlite3')
+db_session = scoped_session(sessionmaker(autocommit=False,
+                                         autoflush=False,
+                                         bind=engine))
+Base = declarative_base()
+Base.query = db_session.query_property()
 
 # Connect to the database
 # This function returns a database connection, which is used to execute the commands read from the file.
@@ -23,10 +33,11 @@ def get_db():
 # Close the database connection
 # We close the connection to our database and remove it from the g object
 def close_db(e=None):
-    db = g.pop('db', None)
+    db_session.remove()
+    # db = g.pop('db', None)
 
-    if db is not None:
-        db.close()
+    # if db is not None:
+    #     db.close()
 
 
 # Run a query
@@ -45,7 +56,10 @@ def query_db(query: str, args={}, one=False):
 # open_resource() opens a file relative to the flaskr package, which is useful since you won’t necessarily
 # know where that location is when deploying the application later.
 def init_db():
-    db = get_db()
+    # db = get_db()
+    import message_app.model
+    Base.metadata.create_all(bind=engine)
+
     path_to_schema = os.path.join("db", 'message-app.sql')
     with current_app.open_resource(path_to_schema) as f:
         db.executescript(f.read().decode('utf8'))
