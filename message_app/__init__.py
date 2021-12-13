@@ -2,22 +2,27 @@ from flask import Flask, jsonify, request, render_template, session, redirect, u
 import requests
 import json
 import os
+from message_app.db.db import get_db_SQLAlchemy
 
-
-def create_app(test_config=None):
-    app = Flask(__name__)
+# The function accepts a name as an argument. Leaving the name by default (app=Flask(__name__)) automatically
+# includes the package name in the path for SQLALCHEMY_DATABASE_URI. This will create confusion when
+# setting up the path for testing database
+def create_app(name=__name__, test_config=None):
+    app = Flask(name)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, "db", 'message_app_db.sqlite3'),
+        DATABASE=os.path.join("message_app", "db", 'message_app_db.sqlite3'), # This line is for the old use of our database. It will be removed after we change everything to SQLAlchemy.
+        SQLALCHEMY_DATABASE_URI=os.path.join("sqlite:///", "db", 'message_app_db.sqlite3'),
+        SQLALCHEMY_TRACK_MODIFICATIONS=True # Surpress the track modifications warning
     )
 
     # if test config is passed, update app to use that config object
     if test_config:
         app.config.update(test_config)
 
-    # connect to the database
-    from message_app.db import db
-    db.init_app(app)
+    # Create a connection to the database
+    with app.app_context():
+        get_db_SQLAlchemy()
 
     # ===== HTML Pages =====
     @app.route("/", methods=["GET"])

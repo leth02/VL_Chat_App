@@ -1,30 +1,42 @@
-import os
-import tempfile
-
 import pytest
 import os
 import sys
 
 from message_app import create_app
-from message_app.db.db import get_db, init_db
+from message_app.db.db import DB as _db
+
+# Name of the testing database
+TEST_DB = os.path.join("test_message_app_db.sqlite3")
+
+# The database URI that should be used for the connection.
+TEST_DB_URI = os.path.join("sqlite:///", TEST_DB)
 
 @pytest.fixture
 def app():
-    db_fd, db_path = tempfile.mkstemp()
-
-    app = create_app({
+    app = create_app(__name__, {
         'TESTING': True,
-        'DATABASE': db_path,
+        'SQLALCHEMY_DATABASE_URI': TEST_DB_URI
     })
 
     with app.app_context():
-        init_db()
+        yield app
 
-    yield app
+@pytest.fixture
+def db(app):
+    def tear_down():
+        # This function drops all the tables, removes the current connection, and deletes the temporary database file.
+        _db.drop_all()
+        _db.session.remove()
+        os.remove(os.path.join("tests", TEST_DB))
 
-    os.close(db_fd)
-    os.unlink(db_path)
+    # Attach the application to SQLAlchemy
+    _db.app = app
 
+    # Creates a testing database and all tables for that database.
+    _db.create_all()
+
+    yield _db
+    tear_down()
 
 @pytest.fixture
 def client(app):

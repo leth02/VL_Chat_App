@@ -1,16 +1,12 @@
 import sqlite3
 import os
 from flask import current_app, g
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from flask_sqlalchemy import SQLAlchemy
 
-engine = create_engine('sqlite:////message_app_db.sqlite3')
-db_session = scoped_session(sessionmaker(autocommit=False,
-                                         autoflush=False,
-                                         bind=engine))
-Base = declarative_base()
-Base.query = db_session.query_property()
+# Create an object of SQLAlchemy. Other modules (conftest, model, etc) will import
+# this object instead of creating a new one. The reason is each SQLAlchemy object includes the contents
+# of a database. In order to retrieve the same data, we need to use the same object.
+DB = SQLAlchemy()
 
 # Connect to the database
 # This function returns a database connection, which is used to execute the commands read from the file.
@@ -18,26 +14,43 @@ Base.query = db_session.query_property()
 # The data on g is lost after the context ends. Flask provides the g object for this purpose.
 # g is a simple namespace object that has the same lifetime as an application context.
 # db is an attribute of object g. We will store the connection to our database to g.db
-# The sqlite3.Row is used to convert the row data in tuple to dictionary for easier access
+def get_db_SQLAlchemy():
+    if '_db' not in g:
+        DB.init_app(current_app)
+        g._db = DB
+    return g._db
+
+# Close the database connection
+# We close the connection to our database and remove it from the g object
+def close_db_SQLALchemy(e=None):
+    db = g.pop('_db')
+    if db is not None:
+        db.session.remove()
+
+
+# Connect to the database
+# This function returns a database connection, which is used to execute the commands read from the file.
+# The g name stands for “global”, but that is referring to the data being global within a context.
+# The data on g is lost after the context ends. Flask provides the g object for this purpose.
+# g is a simple namespace object that has the same lifetime as an application context.
+# db is an attribute of object g. We will store the connection to our database to g.db
+# This function is for the old use of the database. It will be removed after we change to SQLAlchemy
 def get_db():
     if 'db' not in g:
         g.db = sqlite3.connect(
             current_app.config['DATABASE'],
             detect_types=sqlite3.PARSE_DECLTYPES
         )
-        g.db.row_factory = sqlite3.Row
-
     return g.db
 
 
 # Close the database connection
 # We close the connection to our database and remove it from the g object
 def close_db(e=None):
-    db_session.remove()
-    # db = g.pop('db', None)
+    db = g.pop('db', None)
 
-    # if db is not None:
-    #     db.close()
+    if db is not None:
+        db.close()
 
 
 # Run a query
@@ -56,10 +69,7 @@ def query_db(query: str, args={}, one=False):
 # open_resource() opens a file relative to the flaskr package, which is useful since you won’t necessarily
 # know where that location is when deploying the application later.
 def init_db():
-    # db = get_db()
-    import message_app.model
-    Base.metadata.create_all(bind=engine)
-
+    db = get_db()
     path_to_schema = os.path.join("db", 'message-app.sql')
     with current_app.open_resource(path_to_schema) as f:
         db.executescript(f.read().decode('utf8'))
@@ -67,4 +77,5 @@ def init_db():
 
 # Register the close_db function with the application instance
 def init_app(app):
-    app.teardown_appcontext(close_db)
+    app.teardown_appcontext(close_db) # This line will be removed after changing to SQLAlchemy
+    app.teardown_appcontext(close_db_SQLALchemy)
