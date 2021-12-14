@@ -13,10 +13,10 @@ TEST_DB_URI = os.path.join("sqlite:///", TEST_DB)
 
 @pytest.fixture
 def app():
-    app = create_app(__name__, {
+    app = create_app({
         'TESTING': True,
         'SQLALCHEMY_DATABASE_URI': TEST_DB_URI
-    })
+    }, __name__)
 
     with app.app_context():
         yield app

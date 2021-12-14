@@ -7,7 +7,7 @@ from message_app.db.db import get_db_SQLAlchemy
 # The function accepts a name as an argument. Leaving the name by default (app=Flask(__name__)) automatically
 # includes the package name in the path for SQLALCHEMY_DATABASE_URI. This will create confusion when
 # setting up the path for testing database
-def create_app(name=__name__, test_config=None):
+def create_app(test_config=None, name=__name__):
     app = Flask(name)
     app.config.from_mapping(
         SECRET_KEY='dev',
