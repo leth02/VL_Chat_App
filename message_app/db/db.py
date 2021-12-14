@@ -23,9 +23,10 @@ def get_db_SQLAlchemy():
 # Close the database connection
 # We close the connection to our database and remove it from the g object
 def close_db_SQLALchemy(e=None):
-    db = g.pop('_db')
-    if db is not None:
-        db.session.remove()
+    if '_db' in g:
+        db = g.pop('_db')
+        if db is not None:
+            db.session.remove()
 
 
 # Connect to the database

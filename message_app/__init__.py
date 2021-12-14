@@ -22,7 +22,12 @@ def create_app(name=__name__, test_config=None):
 
     # Create a connection to the database
     with app.app_context():
+        # Connect to the database using SQLAlchemy
         get_db_SQLAlchemy()
+
+        # Connect to the database using sqlite3.connect()
+        from message_app.db import db
+        db.init_app(app)
 
     # ===== HTML Pages =====
     @app.route("/", methods=["GET"])
