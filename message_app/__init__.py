@@ -13,7 +13,11 @@ def create_app(test_config=None, name=__name__):
         SECRET_KEY='dev',
         DATABASE=os.path.join("message_app", "db", 'message_app_db.sqlite3'), # This line is for the old use of our database. It will be removed after we change everything to SQLAlchemy.
         SQLALCHEMY_DATABASE_URI=os.path.join("sqlite:///", "db", 'message_app_db.sqlite3'),
-        SQLALCHEMY_TRACK_MODIFICATIONS=True # Surpress the track modifications warning
+
+        # If set to True, Flask-SQLAlchemy will track modifications of objects and emit signals. 
+        # The default is None, which enables tracking but issues a warning that it will 
+        # be disabled by default in the future. This requires extra memory and should be disabled if not needed.
+        SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
 
     # if test config is passed, update app to use that config object
