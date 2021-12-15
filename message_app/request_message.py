@@ -6,13 +6,13 @@ request_messages = Blueprint("request_messages", __name__)
 @request_messages.route("/api/request/send/<int:sender_id>/<int:receiver_id>/<int:request_time>", methods=["POST"])
 def send_request(sender_id, receiver_id, request_time):
     try:
-        requestData = db.query_db(
+        request_data = db.query_db(
                 "SELECT * FROM conversation_request WHERE initiator_id=:sender_id AND receiver_id=:receiver_id",
                 {"sender_id": sender_id, "receiver_id": receiver_id},
                 one=True
                 )
 
-        if requestData:
+        if request_data:
             raise Exception("Request has already been sent")
 
         db.query_db(
@@ -28,13 +28,13 @@ def send_request(sender_id, receiver_id, request_time):
 @request_messages.route("/api/request/accept/<int:request_id>/<int:accepted_time>", methods=["POST"])
 def accept_request(request_id, accepted_time):
     try:
-        requestData = db.query_db(
+        request_data = db.query_db(
                 "SELECT * FROM conversation_request WHERE id=:request_id AND accepted=:accepted",
                 {"request_id": request_id, "accepted": 0},
                 one=True
                 )
 
-        if not requestData:
+        if not request_data:
             raise Exception("No request found")
 
         db.query_db(
@@ -50,13 +50,13 @@ def accept_request(request_id, accepted_time):
 @request_messages.route("/api/request/reject/<int:request_id>", methods=["POST"])
 def reject_request(request_id):
     try:
-        requestData = db.query_db(
+        request_data = db.query_db(
                 "SELECT * FROM conversation_request WHERE id=:request_id AND accepted=:accepted",
                 {"request_id": request_id, "accepted": 0},
                 one=True
                 )
 
-        if not requestData:
+        if not request_data:
             raise Exception("No request found")
 
         db.query_db(
@@ -83,12 +83,12 @@ def get_all_requests(user_id):
         if not userData:
             raise Exception("No user found")
 
-        requestData = db.query_db(
+        request_data = db.query_db(
                 "SELECT * FROM conversation_request WHERE receiver_id=:user_id AND accepted=0",
                 {"user_id": user_id}
                 )
 
-        return jsonify(requestData), 200
+        return jsonify(request_data), 200
 
     except Exception as error:
         return {"Error": "Bad Request." + str(error)}, 400
