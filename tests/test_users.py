@@ -4,11 +4,11 @@ from sqlalchemy.exc import IntegrityError
 import json
 
 class TestUserModel:
-    # Test for insertion, selection, and insertion of User model.
+    # Test for insertion, selection, and deletion of User model.
     # Adding a valid user to the users table. The table is empty, so the user is expected to have an id of 1
     # after being added to the database.
     # After successfully adding the new user, we delete that user.
-    # Test for selection is already included in the User.delete() function, so we don't have to
+    # Selection is already included in the User.delete() function, so we don't have to
     # create a test for it.
     def test_basic_commands(self, test_db):
         test_user = User(username="test1", email="test1@test.com", password_hash="password_hash_1", password_salt="password_salt_1")
