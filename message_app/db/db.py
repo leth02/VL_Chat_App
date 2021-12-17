@@ -3,9 +3,11 @@ import os
 from flask import current_app, g
 from flask_sqlalchemy import SQLAlchemy
 
-# Create an object of SQLAlchemy. Other modules (conftest, model, etc) will import
-# this object instead of creating a new one. The reason is each SQLAlchemy object includes the contents
-# of a database. In order to retrieve the same data, we need to use the same object.
+# Create an SQLAlchemy instance that is used throughout the application. As we create a Flask instance
+# dynamically by using factory pattern, we cannot pass it here (DB = SQLAlchemy(app)) because the app
+# instance has not existed. Inside the factory function to create a Flask app instance, we need to call
+# get_db_SQLAlchemy function which in turns will call DB.init_app(current_app) to initialize the use of
+# the app with this database setup.
 DB = SQLAlchemy()
 
 # Connect to the database

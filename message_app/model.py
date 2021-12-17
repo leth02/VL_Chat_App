@@ -2,6 +2,7 @@
 from __future__ import annotations
 from message_app.db.db import DB as db
 import json
+from typing import Union
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -11,9 +12,9 @@ class User(db.Model):
     password_hash = db.Column(db.String(120))
     password_salt = db.Column(db.String(120))
 
-    def __eq__(self, __o: User) -> bool:
+    def __eq__(self, other_user: User) -> bool:
         # Compare two users using its username
-        return __o.username == self.username
+        return other_user.username == self.username
 
     # Return a json encoding of the user data
     def to_json(self) -> str:
@@ -30,18 +31,25 @@ class User(db.Model):
     # Insert, Delete, and Select functions
     #
 
-    def insert(__o: User) -> None:
+    @classmethod
+    def insert(cls, new_user: User) -> None:
         # Add a new user to the database
-        db.session.add(__o)
+        db.session.add(new_user)
         db.session.commit()
 
-    def delete(username: str) -> User:
-        # Delete an user from the database
+    @classmethod
+    def delete(cls, username: str) -> Union[User, None]:
+        # Delete and return an user from the database. Return None if the user doesn't exist
         user = User.select(username)
-        db.session.delete(user)
-        db.session.commit()
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+        return user
 
-    def select(username: str) -> User:
-        # Get an user from the database using username
+    @classmethod
+    def select(cls, username: str) -> Union[User, None]:
+        # Get an user from the database using username. Return None if the user doesn't exist
+        # The method selects only one user for now, but it CAN BE IMPROVED later on.
+        # TODO: Select multiple users with multiple conditions
         user = User.query.filter_by(username=username).first()
         return user

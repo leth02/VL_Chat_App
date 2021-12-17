@@ -3,7 +3,7 @@ import os
 import sys
 
 from message_app import create_app
-from message_app.db.db import DB as _db
+from message_app.db.db import DB as db
 
 # Name of the testing database
 TEST_DB = os.path.join("test_message_app_db.sqlite3")
@@ -22,27 +22,27 @@ def app():
         yield app
 
 @pytest.fixture
-def db(app):
+def test_db(app):
     def tear_down():
         # This function drops all the tables, removes the current connection, and deletes the temporary database file.
-        _db.drop_all()
-        _db.session.remove()
+        db.drop_all()
+        db.session.remove()
         os.remove(os.path.join("tests", TEST_DB))
 
     # Attach the application to SQLAlchemy
-    _db.app = app
+    db.init_app(app)
 
     # Creates a testing database and all tables for that database.
-    _db.create_all()
+    db.create_all()
 
-    yield _db
+    yield db
     tear_down()
 
 @pytest.fixture
-def client(app):
+def test_client(app):
     return app.test_client()
 
 
 @pytest.fixture
-def runner(app):
+def test_runner(app):
     return app.test_cli_runner()
