@@ -39,7 +39,7 @@ def app():
     # these lines will be removed like db_db, db_path
     os.close(db_fd)
     os.unlink(db_path)
-    
+
 @pytest.fixture
 def test_db(app):
     def tear_down():
