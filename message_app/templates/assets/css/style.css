@@ -1,0 +1,178 @@
+/*=============== GOOGLE FONTS ===============*/
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;500;600;700&display=swap");
+
+/*=============== VARIABLES CSS ===============*/
+
+:root {
+  /*========== Colors ==========*/
+  --input-clr: #f3f3f5;
+  --title-clr: hsl(30, 4%, 9%);
+  --text-clr: hsl(36, 4%, 24%);
+  --lighter-text-clr: hsl(47, 4%, 45%);
+  --body-clr: #ffffff;
+  --lighter-body-clr: #f3f3f3;
+  --luther-clr: rgb(41, 116, 210);
+
+  /*========== Font and typography ==========*/
+  --biggest-font-size: 2rem;
+  --h2-font-size: 1.25rem;
+  --h3-font-size: 1.125rem;
+  --normal-font-size: 0.938rem;
+  --small-font-size: 0.813rem;
+  --smaller-font-size: 0.75rem;
+
+  /*========== Font weight ==========*/
+  --font-semi-bold: 600;
+  --font-bold: 700;
+}
+
+/*=============== BASE ===============*/
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+html {
+  font-size: 100%;
+  scroll-behavior: smooth;
+}
+
+@media only screen and (max-width: 1024px) {
+  html {
+    font-size: 80%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  html {
+    font-size: 60%;
+  }
+}
+
+body {
+  background-color: var(--body-clr);
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.5;
+  color: var(--title-clr);
+  font-weight: var(--font-semi-bold);
+}
+
+a {
+  text-decoration: none;
+  color: unset;
+}
+
+ul,
+li {
+  list-style-type: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+/*=============== THEME ===============*/
+/*========== Variables Dark theme ==========*/
+
+/* TODO: Write smthg here */
+
+/*========== Button Dark/Light ==========*/
+/* TODO: Write smthg here */
+
+/*=============== REUSABLE CSS CLASSES ===============*/
+/* ? I wonder we have any common classes ? */
+/* TODO: Write smthg here */
+
+/*=============== SIGN IN ===============*/
+/* TODO: Write smthg here */
+body#signup {
+  background: rgb(16, 115, 206);
+  background: linear-gradient(
+    173deg,
+    rgba(16, 115, 206, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+}
+div#main-container-signin {
+  position: absolute;
+  margin: 0px auto;
+  right: 40%;
+  left: 40%;
+  width: fit-content;
+  text-align: center;
+}
+input {
+  background-color: #ededed;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 5%;
+  border-color: #ffffff;
+  padding: 5px;
+}
+/*=============== SIGN UP ===============*/
+/* TODO: Write smthg here */
+div#main-container-signup {
+  position: absolute;
+  margin: 0px auto;
+  right: 40%;
+  left: 40%;
+  width: fit-content;
+  text-align: center;
+  padding: 5px;
+}
+div#box {
+  box-shadow: 6.1px 5.2px 2.6px rgba(0, 0, 0, 0.039),
+    11.5px 9.9px 6.7px rgba(0, 0, 0, 0.056),
+    16.5px 14.2px 12.8px rgba(0, 0, 0, 0.068),
+    21.8px 18.6px 22.3px rgba(0, 0, 0, 0.08),
+    28.3px 24.2px 37.7px rgba(0, 0, 0, 0.094),
+    39.1px 33.5px 63.4px rgba(0, 0, 0, 0.113),
+    70px 60px 100px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  padding: 5px;
+}
+button#submit {
+  background-color: var(--luther-clr);
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 5px;
+  margin-top: 5%;
+  box-shadow: 6.1px 5.2px 2.6px rgba(0, 0, 0, 0.039),
+    11.5px 9.9px 6.7px rgba(0, 0, 0, 0.056),
+    16.5px 14.2px 12.8px rgba(0, 0, 0, 0.068),
+    21.8px 18.6px 22.3px rgba(0, 0, 0, 0.08),
+    28.3px 24.2px 37.7px rgba(0, 0, 0, 0.094),
+    39.1px 33.5px 63.4px rgba(0, 0, 0, 0.113),
+    70px 60px 100px rgba(0, 0, 0, 0.15);
+}
+
+/*=============== CHAT APP ===============*/
+/* TODO: Write smthg here */
