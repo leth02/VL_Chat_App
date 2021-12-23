@@ -12,6 +12,7 @@
   --body-clr: #ffffff;
   --lighter-body-clr: #f3f3f3;
   --luther-clr: rgb(41, 116, 210);
+  --darker-input-clr: #E9E9E9;
 
   /*========== Font and typography ==========*/
   --biggest-font-size: 2rem;
