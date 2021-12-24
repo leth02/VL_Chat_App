@@ -60,8 +60,57 @@ def test_db(app):
 @pytest.fixture
 def test_client(app):
     return app.test_client()
+## test for check conversation_id or not 
+def check_conversation():
+	data = {
+		"valid": {
+            "valid_1" : {'id': 1, 'participants': 'sturekev', 'last_message_id': 1},
+            "valid_2" : {'id': 2, 'participants': 'sturekev', 'last_message_id': 1},
+            "valid_3" : {'id': 3, 'participants': 'sturekev', 'last_message_id': 1},
+        },
+		"invalid": {
+			"wrong_conversation_id": {'id': 0, 'participants': 'sturekev', 'last_message_id': 1},
+			"invalid_last_message_id": {'id': '3W', 'participants': 'sturekev', 'last_message_id': '1'}
+		}
+	}
+	return data
 
+@pytest.fixture
+def test_save_messages():
+	data = {
+		"valid": {
+			'valid_1': {
+                'id': 0, 'conversation_id': 0, 'sender_id': 0,'reciever_id': 1,
+                'content': "welcome to VL chat app" , 'seen': 0, 'timestamp': 1234566,
+            },
+            'valid_2': {
+                'id': 1, 'conversation_id': 1, 'sender_id': 0,'reciever_id': 1,
+                'content': "welcome to VL chat app" , 'seen': 0, 'timestamp': 1234566,
+            },
+		},
+		"invalid": {
+			'seen': {
+                'id': 1, 'conversation_id': 1, 'sender_id': 0,'reciever_id': 1,
+                'content': "welcome to VL chat app" , 'seen': 0, 'timestamp': 1234566,
+            },
+			"invalid_email": {
+				"username": "nameA",
+				"password": "passwordA",
+				"confirmPassword": "passwordB",
+				"email": "invalidEmailAddress"
+			},
+			"taken_username": {
+				"username": "long",
+				"password": "testPassword",
+				"confirmPassword": "testPassword",
+				"email": "test@gmail.com"
+			}
+		}
+	}
+	return data
+## test for single collumn fail on messages table
 
+ 
 @pytest.fixture
 def test_runner(app):
     return app.test_cli_runner()
