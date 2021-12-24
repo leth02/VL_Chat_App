@@ -1,13 +1,75 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>VL | Index</title>
-        <meta charset="utf-8">
-    </head>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <title>Message app interface</title>
 
-    <body>
-        <h1>Place holder for the index page</h1>
-        <button>Sign in</button>
-        <button>Sign up</button>
-    </body>
+    <link
+      href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <script src="./assets/js/main.js" defer></script>
+  </head>
+  <body>
+    <!-- =============== SIGN IN =============== -->
+    <!-- TODO: Write smthg here  -->
+
+    <!-- =============== SIGN UP =============== -->
+    <!-- TODO: Write smthg here  -->
+
+    <!-- =============== CHAT APP =============== -->
+    <!-- TODO: Write smthg here  -->
+
+    <div class="chatapp__main">
+      <!-- The left main column -->
+      <div class="main-list">
+        <div class="main-list__options">
+          <div class="options-user">
+            <img src="" alt="Account Profile" class="account-img" />
+            <h2>Chats</h2>
+          </div>
+          <div class="options-icons">
+            <i class="bx bx-dots-horizontal-rounded"></i>
+            <i class="bx bxs-video-plus"></i>
+            <i class="bx bxs-edit"></i>
+          </div>
+        </div>
+
+        <div class="main-list__search">
+            <i class="bx bx-search"></i>
+            <input type="text" list="search-list" name="Conversation name" placeholder="Search Messenger"/>
+          
+        </div>
+        <!-- Result for search bar above -->
+        <datalist id="search-list">
+          <option value=""></option>
+          <option value=""></option>
+          <!-- To be continue =))))) -->
+        </datalist>
+
+        <div class="main-list__convos">
+          <div class="convos-item">
+            <img src="" alt="" class="user-avatar convos-item__img" />
+            <div class="convos-item__content">
+              <h3></h3>
+              <p></p>
+              <img
+              src=""
+              alt="User status"
+              class="user-avatar convos-item__status"
+            />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- The center main column -->
+      <div class="main-convos"></div>
+      <!-- The right main column -->
+      <div class="main-setting"></div>
+    </div>
+  </body>
 </html>
