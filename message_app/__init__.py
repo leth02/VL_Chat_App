@@ -33,6 +33,10 @@ def create_app(test_config=None, name=__name__):
         from message_app.db import db
         db.init_app(app)
 
+    #================Registering Blueprints==================
+    from . import request_message
+    app.register_blueprint(request_message.request_messages)
+
     # ===== HTML Pages =====
     @app.route("/", methods=["GET"])
     def index():

@@ -4,3 +4,4 @@ pytest
 flake8
 pytest-mock
 flask_sqlalchemy
+python-dotenv
