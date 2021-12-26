@@ -1,25 +1,24 @@
 import pytest
 
-def test_login_valid(sampleSignInData, client, mocker):
-	for key in sampleSignInData["valid"].keys():
-		validUser = sampleSignInData["valid"][key]
-		mocker.patch("message_app.db.query_db", return_value={"password_hash": validUser["password_hash"], "salt": validUser["salt"]})
-		mocker.patch("message_app.hashing", return_value=validUser["password_hash"])
-		resp = client.post('/api/signin', data={"username": validUser["username"], "password": validUser["password_hash"]})
-		assert resp.status_code == 302
+from message_app.utils import HASHING_PACKAGE
 
-def test_login_wrong_password(sampleSignInData, client, mocker):
-	wrongPassword = sampleSignInData["invalid"]["wrong_password"]
-	validUser = sampleSignInData["valid"]["valid_1"]
-	mocker.patch("message_app.query_db", return_value={"password_hash": validUser["password_hash"], "salt": validUser["salt"]})
-	mocker.patch("message_app.hashing", return_value=wrongPassword["password"])
-	resp = client.post('/api/signin', data={"username": wrongPassword["username"], "password": wrongPassword["password"]})
-	assert resp.json["Error"] == "Bad request. Invalid username/password. Please try again."
-	assert resp.status_code == 400
+class TestAPISignIn:
+	def test_valid_signin(self, sampleSignInData, test_db, test_client, mocker):
+		for key in sampleSignInData["valid"].keys():
+			valid_user = sampleSignInData["valid"][key]
+			mocker.patch("message_app.user_sign_in.hashing", return_value=HASHING_PACKAGE(valid_user["password_hash"], valid_user["password_salt"]))
+			resp = test_client.post('/api/signin', data={"username": valid_user["username"], "password": valid_user["password_hash"]})
+			assert resp.status_code == 302
 
-def test_login_invalid_username(sampleSignInData, client, mocker):
-	wrongPassword = sampleSignInData["invalid"]["invalid_user"]
-	mocker.patch("message_app.query_db", return_value={})
-	resp = client.post('/api/signin', data={"username": wrongPassword["username"], "password": wrongPassword["password"]})
-	assert resp.json["Error"] == "Bad request. Invalid username. Please try again."
-	assert resp.status_code == 400
+	def test_signin_wrong_password(self, sampleSignInData, test_db, test_client, mocker):
+		wrongPassword = sampleSignInData["invalid"]["wrong_password"]
+		mocker.patch("message_app.user_sign_in.hashing", return_value=HASHING_PACKAGE(wrongPassword["password_hash"], wrongPassword["password_salt"]))
+		resp = test_client.post('/api/signin', data={"username": wrongPassword["username"], "password": wrongPassword["password_hash"]})
+		assert resp.json["Error"] == "Bad request. Invalid login credentials. Please try again."
+		assert resp.status_code == 400
+
+	def test_signin_invalid_username(self, sampleSignInData, test_db, test_client):
+		invalid_user = sampleSignInData["invalid"]["invalid_user"]
+		resp = test_client.post('/api/signin', data={"username": invalid_user["username"], "password": invalid_user["password_hash"]})
+		assert resp.json["Error"] == "Bad request. Invalid login credentials. Please try again."
+		assert resp.status_code == 400

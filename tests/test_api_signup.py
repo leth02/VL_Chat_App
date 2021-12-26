@@ -1,8 +1,7 @@
 import pytest
 
-def test_valid_signup(sampleSignUpData, client, mocker):
-	mocker.patch("message_app.query_db", return_value={})
-	resp = client.post('/api/signup', data=sampleSignUpData["valid"])
+def test_valid_signup(sampleSignUpData, test_db, test_client, mocker):
+	resp = test_client.post('/api/signup', data=sampleSignUpData["valid"])
 	assert resp.status_code == 302
 
 def test_signup_wrong_confirm_password(sampleSignUpData, client):

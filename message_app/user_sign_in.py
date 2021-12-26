@@ -15,7 +15,7 @@ def api_user_signin():
 
         if username == "" or input_password == "":
             session["error"] = "Invalid login credentials. Please try again."
-            return redirect(url_for("user_signin"))
+            raise Exception(session["error"])
 
         # Connect and fetch data from the users table
         user_data = User.select(username)
@@ -23,7 +23,7 @@ def api_user_signin():
         # User not found
         if not user_data:
             session["error"] = "Invalid login credentials. Please try again."
-            return redirect(url_for("user_signin"))
+            raise Exception(session["error"])
 
         user_password = user_data.password_hash
         salt = user_data.password_salt
@@ -35,7 +35,7 @@ def api_user_signin():
             return redirect(url_for("messages"))
         else:
             session["error"] = "Invalid login credentials. Please try again."
-            return redirect(url_for("user_signin"))
+            raise Exception(session["error"])
 
     except Exception as error:
         return {"Error": "Bad request. " + str(error)}, 400

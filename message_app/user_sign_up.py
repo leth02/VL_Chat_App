@@ -26,10 +26,6 @@ def api_user_signup():
             session["error"] = "Password does not match. Please try again."
             raise Exception(session["error"])
 
-        if username == "" or password == "":
-            session["error"] = "Invalid username/password. Please try again."
-            return redirect(url_for("user_signup"))
-
         # Verify validity of the username
         user_data = User.select(username)
         if user_data is not None:
