@@ -1,17 +1,7 @@
 flask
 requests
 pytest
-<<<<<<< HEAD
-<<<<<<< HEAD
 flake8
 pytest-mock
 flask_sqlalchemy
 python-dotenv
-=======
-pytest-mock
-flake8
->>>>>>> 1b15734 (Update test api signup with pytest-mock)
-=======
-pytest-mock
-flake8
->>>>>>> e2f18b91ef858c3a7a53ac145d01a61b1481d4f4
