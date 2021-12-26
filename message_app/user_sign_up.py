@@ -1,7 +1,6 @@
 from flask import Blueprint, request, session, redirect, url_for
 from message_app.utils import hashing
 from message_app.model import User
-from hashlib import sha256
 import re
 
 user_sign_up = Blueprint("user_sign_up", __name__)
@@ -26,12 +25,12 @@ def api_user_signup():
             session["error"] = "Password does not match. Please try again."
             raise Exception(session["error"])
 
-        # Verify validity of the username
+        # Verify username
         user_data = User.select(username)
         if user_data is not None:
             # Username taken
-            session["error"] = "Username has been taken. Please try a different username"
-            return redirect(url_for("user_signup"))
+            session["error"] = "Username has been taken. Please try a different username."
+            raise Exception(session["error"])
         else:
             # Hash the password
             password, salt = hashing(password)

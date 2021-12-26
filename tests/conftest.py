@@ -66,56 +66,6 @@ def test_db(app):
 def test_client(app):
 	return app.test_client()
 
-
 @pytest.fixture
 def test_runner(app):
 	return app.test_cli_runner()
-
-
-@pytest.fixture
-def sampleSignInData():
-	data = {
-		"valid":{
-			"valid_1": {'username': 'username1', 'password_hash': 'password_hash_1', 'password_salt': 'password_salt_1'},
-			"valid_2": {'username': 'username2', 'password_hash': 'password_hash_2', 'password_salt': 'password_salt_2'},
-			"valid_3": {'username': 'username3', 'password_hash': 'password_hash_3', 'password_salt': 'password_salt_3'},
-		},
-		
-		"invalid": {
-			"wrong_password": {'username': 'username1', 'password_hash': "wrongPassword", "password_salt": "password_salt_1"},
-			"invalid_user": {'username': 'wrong_user', 'password_hash': "wrong_user_password"}
-		}
-	}
-	return data
-
-@pytest.fixture
-def sampleSignUpData():
-	data = {
-		"valid": {
-			"username": "validUserName1",
-			"password": "validPassword1",
-			"confirmPassword": "validPassword1",
-			"email": "validEmail@test.com"
-		},
-		"invalid": {
-			"wrong_confirm_password": {
-				"username": "wrongConfirmPassword",
-				"password": "wrongConfirmPassword",
-				"confirmPassword": "",
-				"email": "wrongConfirmPassword@gmail.com"
-			},
-			"invalid_email": {
-				"username": "invalidEmailAddress",
-				"password": "invalidEmailAddress",
-				"confirmPassword": "invalidEmailAddress",
-				"email": "invalidEmailAddress"
-			},
-			"taken_username": {
-				"username": "username1",
-				"password": "takenUserName",
-				"confirmPassword": "takenUserName",
-				"email": "takenUserName@gmail.com"
-			}
-		}
-	}
-	return data

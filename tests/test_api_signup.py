@@ -1,21 +1,49 @@
 import pytest
 
-def test_valid_signup(sampleSignUpData, test_db, test_client, mocker):
-	resp = test_client.post('/api/signup', data=sampleSignUpData["valid"])
-	assert resp.status_code == 302
+@pytest.fixture
+def sampleSignUpData():
+	data = {
+		"valid": {
+			"username": "validUserName1",
+			"password": "validPassword1",
+			"confirmPassword": "validPassword1",
+			"email": "validEmail@test.com"
+		},
+		"invalid": {
+			"wrong_confirm_password": {
+				"password": "wrongConfirmPassword",
+				"confirmPassword": "",
+				"email": "wrongConfirmPassword@gmail.com"
+			},
+			"invalid_email": {
+				"email": "invalidEmailAddress"
+			},
+			"taken_username": {
+				"username": "username1",
+				"password": "takenUserName",
+				"confirmPassword": "takenUserName",
+				"email": "takenUserName@gmail.com"
+			}
+		}
+	}
+	return data
 
-def test_signup_wrong_confirm_password(sampleSignUpData, client):
-	resp = client.post('/api/signup', data=sampleSignUpData["invalid"]["wrong_confirm_password"])
-	assert resp.json["Error"] == "Bad request. Password does not match. Please try again."
-	assert resp.status_code == 400
+class TestAPISignUp:
+	def test_signup_invalid_email(self, sampleSignUpData, test_db, test_client):
+		resp = test_client.post('/api/signup', data=sampleSignUpData["invalid"]["invalid_email"])
+		assert resp.json["Error"] == "Bad request. Invalid Email. Please try a valid email."
+		assert resp.status_code == 400
 
-def test_signup_invalid_email(sampleSignUpData, client):
-	resp = client.post('/api/signup', data=sampleSignUpData["invalid"]["invalid_email"])
-	assert resp.json["Error"] == "Bad request. Invalid Email. Please try a valid email."
-	assert resp.status_code == 400
+	def test_signup_wrong_confirm_password(self, sampleSignUpData, test_db, test_client):
+		resp = test_client.post('/api/signup', data=sampleSignUpData["invalid"]["wrong_confirm_password"])
+		assert resp.json["Error"] == "Bad request. Password does not match. Please try again."
+		assert resp.status_code == 400
 
-def test_signup_taken_username(sampleSignUpData, client, mocker):
-	mocker.patch("db.db.query_db", return_value={"username": "long", "password": "9bb4acdd315eefe2ab3ef7bd25c17f4a092f426ed2a97898a6e1c0014875cdf7", "salt": r"b'\xe9a\xf2\xd7_'"})
-	resp = client.post('/api/signup', data=sampleSignUpData["invalid"]["taken_username"])
-	assert resp.json["Error"] == "Bad request. Username has been taken. Please try another one."
-	assert resp.status_code == 400
+	def test_signup_taken_username(self, sampleSignUpData, test_db, test_client):
+		resp = test_client.post('/api/signup', data=sampleSignUpData["invalid"]["taken_username"])
+		assert resp.json["Error"] == "Bad request. Username has been taken. Please try a different username."
+		assert resp.status_code == 400
+
+	def test_valid_signup(self, sampleSignUpData, test_db, test_client):
+		resp = test_client.post('/api/signup', data=sampleSignUpData["valid"])
+		assert resp.status_code == 302

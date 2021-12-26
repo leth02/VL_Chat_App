@@ -2,6 +2,22 @@ import pytest
 
 from message_app.utils import HASHING_PACKAGE
 
+@pytest.fixture
+def sampleSignInData():
+	data = {
+		"valid": {
+			"valid_1": {'username': 'username1', 'password_hash': 'password_hash_1', 'password_salt': 'password_salt_1'},
+			"valid_2": {'username': 'username2', 'password_hash': 'password_hash_2', 'password_salt': 'password_salt_2'},
+			"valid_3": {'username': 'username3', 'password_hash': 'password_hash_3', 'password_salt': 'password_salt_3'},
+		},
+
+		"invalid": {
+			"wrong_password": {'username': 'username1', 'password_hash': "wrongPassword", "password_salt": "password_salt_1"},
+			"invalid_user": {'username': 'wrong_user', 'password_hash': "wrong_user_password"}
+		}
+	}
+	return data
+
 class TestAPISignIn:
 	def test_valid_signin(self, sampleSignInData, test_db, test_client, mocker):
 		for key in sampleSignInData["valid"].keys():

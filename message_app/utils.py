@@ -8,7 +8,7 @@ HASHING_PACKAGE = namedtuple("Hashing_Package", ["password_hash", "password_salt
 
 # Hash function using sha256
 # Function returns the password_hash and password_salt
-def hashing(password: str, salt = None) -> NamedTuple:
+def hashing(password: str, salt=None) -> NamedTuple:
     if not salt:
         salt = os.urandom(5)
 
