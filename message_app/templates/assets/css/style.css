@@ -1,26 +1,26 @@
 /*=============== GOOGLE FONTS ===============*/
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;500;600;700&display=swap');
 
 /*=============== VARIABLES CSS ===============*/
 
 :root {
-  /*========== Colors ==========*/
-  --input-clr: #f3f3f5;
-  --title-clr: hsl(30, 4%, 9%);
-  --text-clr: hsl(36, 4%, 24%);
-  --lighter-text-clr: hsl(47, 4%, 45%);
-  --body-clr: #ffffff;
-  --lighter-body-clr: #f3f3f3;
-  --luther-clr: rgb(41, 116, 210);
-  --darker-input-clr: #E9E9E9;
+    /*========== Colors ==========*/
+    --title-clr: hsl(30, 4%, 9%);
+    --text-clr: hsl(36, 4%, 24%);
+    --lighter-text-clr: hsl(47, 4%, 45%);
+    --body-clr: #ffffff;
+    --lighter-body-clr: #f3f3f3;
+    --input-clr: #F3F3F5; 
+    --darker-input-clr: #E9E9E9;
+    --luther-clr: rgb(41, 116, 210);
 
   /*========== Font and typography ==========*/
   --biggest-font-size: 2rem;
   --h2-font-size: 1.25rem;
   --h3-font-size: 1.125rem;
-  --normal-font-size: 0.938rem;
-  --small-font-size: 0.813rem;
-  --smaller-font-size: 0.75rem;
+  --normal-font-size: .938rem;
+  --small-font-size: .813rem;
+  --smaller-font-size: .75rem;
 
   /*========== Font weight ==========*/
   --font-semi-bold: 600;
@@ -72,10 +72,11 @@ html {
 
 body {
   background-color: var(--body-clr);
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.6rem;
+  font-weight: normal;
   overflow-x: hidden;
-  transition: 0.5s;
+  transition: .5s;
 }
 
 h1,
@@ -98,6 +99,31 @@ li {
 
 img {
   max-width: 100%;
+}
+
+/* RESET CSS FOR FORM */
+input,
+select,
+textarea,
+button {
+  outline: none;
+  font-size: 1.6rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: normal;
+}
+
+textarea {
+  resize: none;
+}
+
+input[type= "number"]::-webkit-inner-spin-button,
+input[type = "number"]::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+button {
+  cursor: pointer;
 }
 
 /*=============== THEME ===============*/
