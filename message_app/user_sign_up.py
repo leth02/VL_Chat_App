@@ -39,6 +39,9 @@ def api_user_signup():
             # Add user to the database
             User.insert(new_user)
 
+            # Create a session for this user
+            session["user"] = username
+
         return redirect(url_for("index"))
 
     except Exception as error:

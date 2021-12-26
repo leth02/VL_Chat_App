@@ -32,6 +32,7 @@ def api_user_signin():
         password = hashing(input_password, salt).password_hash
 
         if password == user_password:
+            session["user"] = username
             return redirect(url_for("messages"))
         else:
             session["error"] = "Invalid login credentials. Please try again."

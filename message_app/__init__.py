@@ -59,6 +59,10 @@ def create_app(test_config=None, name=__name__):
 
     @app.route("/signin", methods=["GET", "POST"])
     def user_signin():
-        return render_template("user_signin.html")
+        # If a session exists, redirect to index page instead of login page
+        if "user" in session:
+            return redirect(url_for("index"))
+        else:
+            return render_template("user_signin.html")
 
     return app
