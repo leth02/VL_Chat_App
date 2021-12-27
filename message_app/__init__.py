@@ -34,8 +34,10 @@ def create_app(test_config=None, name=__name__):
         db.init_app(app)
 
     #================Registering Blueprints==================
-    from . import request_message
+    from . import request_message, user_sign_in, user_sign_up
     app.register_blueprint(request_message.request_messages)
+    app.register_blueprint(user_sign_in.user_sign_in)
+    app.register_blueprint(user_sign_up.user_sign_up)
 
     # ===== HTML Pages =====
     @app.route("/", methods=["GET"])
@@ -55,46 +57,10 @@ def create_app(test_config=None, name=__name__):
 
     @app.route("/signin", methods=["GET"])
     def user_signin():
-        return render_template("user_signin.html")
-
-
-    # ===== JSON API endpoints =====
-
-    @app.route("/api/signup", methods=["GET"])
-    def api_user_signup():
-        try:
-            params = request.form
-            username = params.get("username", "")
-            password = params.get("password", "")
-
-            if username == "" or password == "":
-                session["error"] = "Invalid username/password. Please try again."
-                return redirect(url_for("user_signup"))
-
-            # TODO connect to SQLite database and create a new account with the provided credentials
-            # if successful, redirect user to the app page
-            # otherwise, return JSON response containing the error
-
-        except Exception as error:
-            return {"Error": "Bad request. " + str(error)}, 400
-
-
-    @app.route("/api/signin", methods=["POST"])
-    def api_user_signin():
-        try:
-            params = request.form
-            username = params.get("username", "")
-            password = params.get("password", "")
-
-            if username == "" or password == "":
-                session["error"] = "Invalid username/password. Please try again."
-                return redirect(url_for("user_signup"))
-
-            # TODO connect to SQLite database and validate the provided credentials
-            # if successful, redirect user to the app page
-            # otherwise, return JSON response containing the error of invalid credentials
-
-        except Exception as error:
-            return {"Error": "Bad request. " + str(error)}, 400
+        # If a session exists, redirect to index page instead of login page
+        if "user" in session:
+            return redirect(url_for("index"))
+        else:
+            return render_template("user_signin.html")
 
     return app
