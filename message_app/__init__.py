@@ -1,6 +1,4 @@
-from flask import Flask, jsonify, request, render_template, session, redirect, url_for
-import requests
-import json
+from flask import Flask, render_template, session, redirect, url_for
 import os
 from message_app.db.db import get_db_SQLAlchemy
 

@@ -1,6 +1,5 @@
 from flask import Blueprint, request, session, redirect, url_for
 from message_app.model import User
-from hashlib import sha256
 
 from message_app.utils import hashing
 
@@ -11,9 +10,9 @@ def api_user_signin():
     try:
         params = request.form
         username = params.get("username", "")
-        input_password = params.get("password", "")
+        user_password_input = params.get("password", "")
 
-        if username == "" or input_password == "":
+        if username == "" or user_password_input == "":
             session["error"] = "Invalid login credentials. Please try again."
             raise Exception(session["error"])
 
@@ -25,13 +24,13 @@ def api_user_signin():
             session["error"] = "Invalid login credentials. Please try again."
             raise Exception(session["error"])
 
-        user_password = user_data.password_hash
+        user_password_hash = user_data.password_hash
         salt = user_data.password_salt
 
         # Hash the password
-        password = hashing(input_password, salt).password_hash
+        user_password_input_hash = hashing(user_password_input, salt).password_hash
 
-        if password == user_password:
+        if user_password_input_hash == user_password_hash:
             session["user"] = username
             return redirect(url_for("messages"))
         else:

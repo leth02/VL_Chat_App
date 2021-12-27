@@ -2,7 +2,7 @@
 from __future__ import annotations
 from message_app.db.db import DB as db
 import json
-from typing import Union
+from typing import Union, List
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -53,3 +53,9 @@ class User(db.Model):
         # TODO: Select multiple users with multiple conditions
         user = User.query.filter_by(username=username).first()
         return user
+
+    @classmethod
+    def select_all(cls) -> List:
+        all_users = User.query.all()
+        return all_users
+
