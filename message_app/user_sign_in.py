@@ -1,6 +1,5 @@
 from flask import Blueprint, request, session, redirect, url_for
 from message_app.model import User
-
 from message_app.utils import hashing
 
 user_sign_in = Blueprint("user_sign_in", __name__)
@@ -39,4 +38,3 @@ def api_user_signin():
 
     except Exception as error:
         return {"Error": "Bad request. " + str(error)}, 400
-
