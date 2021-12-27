@@ -15,9 +15,6 @@ def sampleSignUpData():
                 "confirmPassword": "",
                 "email": "wrongConfirmPassword@gmail.com"
             },
-            "invalid_email": {
-                "email": "invalidEmailAddress"
-            },
             "taken_username": {
                 "username": "username1",
                 "password": "takenUserName",
@@ -29,11 +26,6 @@ def sampleSignUpData():
     return data
 
 class TestAPISignUp:
-    def test_signup_invalid_email(self, sampleSignUpData, test_db, test_client):
-        resp = test_client.post('/api/signup', data=sampleSignUpData["invalid"]["invalid_email"])
-        assert resp.json["Error"] == "Bad request. Invalid Email. Please try a valid email."
-        assert resp.status_code == 400
-
     def test_signup_wrong_confirm_password(self, sampleSignUpData, test_db, test_client):
         resp = test_client.post('/api/signup', data=sampleSignUpData["invalid"]["wrong_confirm_password"])
         assert resp.json["Error"] == "Bad request. Password does not match. Please try again."

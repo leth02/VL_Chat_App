@@ -13,12 +13,6 @@ def api_user_signup():
         password = params.get("password", "")
         confirmPassword = params.get("confirmPassword", "")
         email = params.get("email", "")
-        emailRegex = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
-
-        # Verify email
-        if re.fullmatch(emailRegex, email) is None:
-            session["error"] = "Invalid Email. Please try a valid email."
-            raise Exception(session["error"])
 
         # Verify password
         if password != confirmPassword:
