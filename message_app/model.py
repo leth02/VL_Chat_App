@@ -27,15 +27,15 @@ class User(db.Model):
         }
         return json.dumps(data)
 
-    #
-    # Insert, Delete, and Select functions
-    #
+
+    #================Class Methods==================
 
     @classmethod
     def insert(cls, new_user: User) -> None:
         # Add a new user to the database
         db.session.add(new_user)
         db.session.commit()
+        cls.last_user_id += 1
 
     @classmethod
     def delete(cls, username: str) -> Union[User, None]:
@@ -44,6 +44,7 @@ class User(db.Model):
         if user:
             db.session.delete(user)
             db.session.commit()
+            cls.last_user_id -= 1
         return user
 
     @classmethod
@@ -59,3 +60,10 @@ class User(db.Model):
         all_users = User.query.all()
         return all_users
 
+    @classmethod
+    def get_last_user_id(cls) -> int:
+        return cls.last_user_id
+
+    @classmethod
+    def initiate_id(cls) -> None:
+        cls.last_user_id = 0
