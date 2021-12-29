@@ -29,48 +29,15 @@
     <div class="error">
 
     </div>
-    <div class="signin-box">
-        <h3 class='title'>Sign In</h3>
-        <div id="box">
-            <form action="/" method="GET">
-            <div class="input-box">
-                <input id="name" name="name" type="text" placeholder="Username" />
-            </div>
-            <div class="input-box-signin">
-                <input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Password"
-                />
-            </div>
-            <div class="submit-button">
-                <button id="submit" name="password" type="submit">Submit</button>
-            </div>
-            </form>
-        </div>
-    </div>
-    <div class="signup-box">
-        <h3 class='title'>Sign Up</h3>
-        <div id="box">
-            <form action="/" method="GET">
+    <div class="main-container">
+        <div class="signin-box">
+            <h3 class='title'>Sign In</h3>
+            <div id="box">
+                <form action="/" method="GET">
                 <div class="input-box">
-                    <div id="icon"></div>
-                    <div>
-                    <input id="mail" name="email" type="text" placeholder="Email" />
-                    </div>
+                    <input id="name" name="name" type="text" placeholder="Username" />
                 </div>
-                <div class="input-box">
-                    <div id="icon"></div>
-                    <input
-                    id="name"
-                    name="username"
-                    type="text"
-                    placeholder="Username"
-                    />
-                </div>
-                <div class="input-box">
-                    <div id="icon"></div>
+                <div class="input-box-signin">
                     <input
                     id="password"
                     name="password"
@@ -78,19 +45,58 @@
                     placeholder="Password"
                     />
                 </div>
-                <div class="input-box">
-                    <div id="icon"></div>
-                    <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    placeholder="Confirm Password"
-                    />
+                <div class="submit-button">
+                    <button id="signin-submit" name="password" type="submit">Submit</button>
                 </div>
-                <div class = 'submit-button'>
-                    <button id="submit" name="password" type="submit">Submit</button>
-                </div>
-            </form>
+                </form>
+                <p class="switch-phrase">Doesn't have an account?</p>
+                <button id="switch-in-to-up" name="password" type="button">Sign Up</button>
+            </div>
+        </div>
+        <div class="signup-box">
+            <h3 class='title'>Sign Up</h3>
+            <div id="box">
+                <form action="/" method="GET">
+                    <div class="input-box">
+                        <div id="icon"></div>
+                        <div>
+                        <input id="mail" name="email" type="text" placeholder="Email" />
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        <div id="icon"></div>
+                        <input
+                        id="name"
+                        name="username"
+                        type="text"
+                        placeholder="Username"
+                        />
+                    </div>
+                    <div class="input-box">
+                        <div id="icon"></div>
+                        <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                        />
+                    </div>
+                    <div class="input-box">
+                        <div id="icon"></div>
+                        <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="Confirm Password"
+                        />
+                    </div>
+                    <div class = 'submit-button'>
+                        <button id="signup-submit" name="password" type="submit">Submit</button>
+                    </div>
+                </form>
+                <p class="switch-phrase">Already have an account?</p>
+                <button id="switch-up-to-in" name="password" type="button">Sign In</button>
+            </div>
         </div>
     </div>
 </html>

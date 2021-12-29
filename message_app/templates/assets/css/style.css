@@ -180,7 +180,7 @@ div#box {
   width: fit-content;
   margin: 0 auto;
 }
-button#submit {
+button {
   display: block;
   margin: 0px auto;
   background-color: var(--luther-clr);
@@ -196,6 +196,21 @@ button#submit {
     39.1px 33.5px 63.4px rgba(0, 0, 0, 0.113),
     70px 60px 100px rgba(0, 0, 0, 0.15);
   width: fit-content;
+}
+h3.title {
+  text-align: center;
+}
+p.switch-phrase {
+  display: inline-block;
+  font-size: 0.75em;
+}
+button#switch-up-to-in {
+  font-size: 0.75em;
+  margin-right: 0px;
+}
+button#switch-in-to-up {
+  font-size: 0.75em;
+  margin-right: 0px;
 }
 
 /*=============== CHAT APP ===============*/
