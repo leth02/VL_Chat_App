@@ -1,7 +1,10 @@
 from flask import Blueprint, request, session, redirect, url_for
 from message_app.utils import hashing
 from message_app.model import User
+<<<<<<< HEAD
 import re
+=======
+>>>>>>> 6847dd4a1d06c917fff9a2d9e4caf1b6048d27ba
 
 user_sign_up = Blueprint("user_sign_up", __name__)
 
@@ -13,12 +16,6 @@ def api_user_signup():
         password = params.get("password", "")
         confirmPassword = params.get("confirmPassword", "")
         email = params.get("email", "")
-        emailRegex = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
-
-        # Verify email
-        if re.fullmatch(emailRegex, email) is None:
-            session["error"] = "Invalid Email. Please try a valid email."
-            raise Exception(session["error"])
 
         # Verify password
         if password != confirmPassword:
