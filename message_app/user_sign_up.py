@@ -1,10 +1,6 @@
 from flask import Blueprint, request, session, redirect, url_for
 from message_app.utils import hashing
 from message_app.model import User
-<<<<<<< HEAD
-import re
-=======
->>>>>>> 6847dd4a1d06c917fff9a2d9e4caf1b6048d27ba
 
 user_sign_up = Blueprint("user_sign_up", __name__)
 
