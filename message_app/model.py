@@ -35,7 +35,6 @@ class User(db.Model):
         # Add a new user to the database
         db.session.add(new_user)
         db.session.commit()
-        cls.last_user_id += 1
 
     @classmethod
     def delete(cls, username: str) -> Union[User, None]:
@@ -44,7 +43,6 @@ class User(db.Model):
         if user:
             db.session.delete(user)
             db.session.commit()
-            cls.last_user_id -= 1
         return user
 
     @classmethod
@@ -62,8 +60,6 @@ class User(db.Model):
 
     @classmethod
     def get_last_user_id(cls) -> int:
-        return cls.last_user_id
-
-    @classmethod
-    def initiate_id(cls) -> None:
-        cls.last_user_id = 0
+        # Get last user ID
+        id = User.query.order_by(User.id.desc()).first().id
+        return id

@@ -47,7 +47,6 @@ def test_db(app):
         # This function drops all the tables, removes the current connection, and deletes the temporary database file.
         db.drop_all()
         db.session.remove()
-        User.last_user_id = 0
         os.remove(os.path.join("tests", TEST_DB))
 
     # Attach the application to SQLAlchemy
@@ -55,7 +54,6 @@ def test_db(app):
 
     # Creates a testing database and all tables for that database.
     db.create_all()
-    User.initiate_id()
 
     # Populate testing data for users table
     User.insert(User(username="username1", email="email1@test.com", password_hash="password_hash_1", password_salt="password_salt_1"))
