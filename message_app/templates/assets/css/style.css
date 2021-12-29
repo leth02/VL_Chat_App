@@ -140,6 +140,17 @@ button {
 
 /*=============== SIGN IN ===============*/
 /* TODO: Write smthg here */
+ul.nav-bar-left {
+    display: inline;
+}
+ul.nav-bar-right {
+  position: absolute;
+  right: 0;
+  display: inline;
+}
+li {
+  display: inline;
+}
 div.signup-box {
   display: block;
   position: absolute;
@@ -148,10 +159,11 @@ div.signup-box {
   text-align: center;
 }
 input {
-  background-color: #d1d1d1;
+  background-color: var(--lighter-body-clr);
+  color: var(--lighter-text-clr);
   border-radius: 10px;
   text-align: center;
-  margin-top: 10px;
+  margin-bottom: 1.5rem;
   border-color: #ffffff;
 }
 /*=============== SIGN UP ===============*/
@@ -176,7 +188,7 @@ div#box {
     39.1px 33.5px 63.4px rgba(0, 0, 0, 0.113),
     70px 60px 100px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
-  padding: 5px;
+  padding: 2rem;
   width: fit-content;
   margin: 0 auto;
 }
@@ -187,18 +199,10 @@ button.blue-button {
   color: #ffffff;
   border-radius: 10px;
   padding: 5px;
-  margin-top: 10px;
-  box-shadow: 6.1px 5.2px 2.6px rgba(0, 0, 0, 0.039),
-    11.5px 9.9px 6.7px rgba(0, 0, 0, 0.056),
-    16.5px 14.2px 12.8px rgba(0, 0, 0, 0.068),
-    21.8px 18.6px 22.3px rgba(0, 0, 0, 0.08),
-    28.3px 24.2px 37.7px rgba(0, 0, 0, 0.094),
-    39.1px 33.5px 63.4px rgba(0, 0, 0, 0.113),
-    70px 60px 100px rgba(0, 0, 0, 0.15);
-  width: fit-content;
 }
 h3.title {
   text-align: center;
+  margin-bottom: 1rem;
 }
 p.switch-phrase {
   display: inline-block;
@@ -212,6 +216,12 @@ button#switch-in-to-up {
   font-size: 0.75em;
   margin-right: 0px;
 }
+button.nav {
+  border-radius: 10px;
+  padding: 5px;
+  color: var(--luther-clr)
+}
+
 
 /*=============== CHAT APP ===============*/
 /* TODO: Write smthg here */
