@@ -16,10 +16,12 @@ class TestUserModel:
         # Add the user to the database
         User.insert(test_user)
 
+        assert test_user.id == User.get_last_user_id()
+
         # Delete the same user from the database
         deleted_user = User.delete(test_user.username)
 
-        assert test_user.id == 1
+        assert test_user.id == User.get_last_user_id() + 1
         assert deleted_user.id == test_user.id
 
         # deleted_user should be None, for it has already been deleted
@@ -52,7 +54,7 @@ class TestUserModel:
         test_user = User(username="test1", email="test1@test.com", password_hash="password_hash_1", password_salt="password_salt_1")
         User.insert(test_user)
         test_data = {
-            "id": 1,
+            "id": User.get_last_user_id(),
             "username": "test1",
             "email": "test1@test.com",
             "password_hash": "password_hash_1",

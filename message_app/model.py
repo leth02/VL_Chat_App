@@ -2,7 +2,7 @@
 from __future__ import annotations
 from message_app.db.db import DB as db
 import json
-from typing import Union
+from typing import Union, List
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -27,9 +27,8 @@ class User(db.Model):
         }
         return json.dumps(data)
 
-    #
-    # Insert, Delete, and Select functions
-    #
+
+    #================Class Methods==================
 
     @classmethod
     def insert(cls, new_user: User) -> None:
@@ -53,3 +52,14 @@ class User(db.Model):
         # TODO: Select multiple users with multiple conditions
         user = User.query.filter_by(username=username).first()
         return user
+
+    @classmethod
+    def select_all(cls) -> List:
+        all_users = User.query.all()
+        return all_users
+
+    @classmethod
+    def get_last_user_id(cls) -> int:
+        # Get last user ID
+        id = User.query.order_by(User.id.desc()).first().id
+        return id

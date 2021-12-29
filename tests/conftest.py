@@ -5,6 +5,7 @@ import tempfile
 
 from message_app import create_app
 from message_app.db.db import DB as db
+from message_app.model import User
 
 # Name of the testing database
 TEST_DB = os.path.join("test_message_app_db.sqlite3")
@@ -53,6 +54,11 @@ def test_db(app):
 
     # Creates a testing database and all tables for that database.
     db.create_all()
+
+    # Populate testing data for users table
+    User.insert(User(username="username1", email="email1@test.com", password_hash="password_hash_1", password_salt="password_salt_1"))
+    User.insert(User(username="username2", email="email2@test.com", password_hash="password_hash_2", password_salt="password_salt_2"))
+    User.insert(User(username="username3", email="email3@test.com", password_hash="password_hash_3", password_salt="password_salt_3"))
 
     yield db
     tear_down()
