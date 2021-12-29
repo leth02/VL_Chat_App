@@ -140,7 +140,7 @@ button {
 
 /*=============== SIGN IN ===============*/
 /* TODO: Write smthg here */
-div#signup-box {
+div.signup-box {
   display: block;
   position: absolute;
   margin: 0px auto;
@@ -156,7 +156,7 @@ input {
 }
 /*=============== SIGN UP ===============*/
 /* TODO: Write smthg here */
-div#signin-box {
+div.signin-box {
   text-align: center;
   display: block;
   position: absolute;
@@ -180,7 +180,7 @@ div#box {
   width: fit-content;
   margin: 0 auto;
 }
-button {
+button.blue-button {
   display: block;
   margin: 0px auto;
   background-color: var(--luther-clr);

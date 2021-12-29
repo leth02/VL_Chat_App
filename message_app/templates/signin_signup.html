@@ -17,7 +17,7 @@
         <div class="logo">
 
         </div>
-        <ul>
+        <ul class="nav-bar-left">
             <li>
                 <a>Home</a>
             </li>
@@ -25,12 +25,20 @@
                 <a>About Us</a>
             </li>
         </ul>
+        <ul class="nav-bar-right">
+            <li>
+                <button class="nav" id="signin" type="button">Sign In</button>
+            </li>
+            <li>
+                <button class="nav" id="signup" type="button">Sign Up</button>
+            </li>
+        </ul>
     </header>
-    <div class="error">
+    <div id="error">
 
     </div>
     <div class="main-container">
-        <div class="signin-box">
+        <div id="signin-box">
             <h3 class='title'>Sign In</h3>
             <div id="box">
                 <form action="/" method="GET">
@@ -46,14 +54,14 @@
                     />
                 </div>
                 <div class="submit-button">
-                    <button id="signin-submit" name="password" type="submit">Submit</button>
+                    <button class="blue-button" id="signin-submit" name="password" type="submit">Submit</button>
                 </div>
                 </form>
                 <p class="switch-phrase">Doesn't have an account?</p>
-                <button id="switch-in-to-up" name="password" type="button">Sign Up</button>
+                <button class="blue-button" id="switch-in-to-up" name="password" type="button">Sign Up</button>
             </div>
         </div>
-        <div class="signup-box">
+        <div id="signup-box">
             <h3 class='title'>Sign Up</h3>
             <div id="box">
                 <form action="/" method="GET">
@@ -91,11 +99,11 @@
                         />
                     </div>
                     <div class = 'submit-button'>
-                        <button id="signup-submit" name="password" type="submit">Submit</button>
+                        <button class="blue-button" id="signup-submit" name="password" type="submit">Submit</button>
                     </div>
                 </form>
                 <p class="switch-phrase">Already have an account?</p>
-                <button id="switch-up-to-in" name="password" type="button">Sign In</button>
+                <button class="blue-button" id="switch-up-to-in" name="password" type="button">Sign In</button>
             </div>
         </div>
     </div>
