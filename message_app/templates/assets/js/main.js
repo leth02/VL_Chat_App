@@ -1,25 +1,24 @@
 "use strict";
 // =============== SIGN IN ===============
 // TODO: Write smthg here
-var signin_box = document.getElementById("signin-box");
-var signin = document.getElementById("signin");
-signin.onclick = function () {
-  if (signin_box.style.display === "none") {
-    signin_box.style.display = "block";
-  }
-  if (signup_box.style.display != "none") {
-    signup_box.style.display = "none";
-  }
+var signin_box = document.getElementsByClassName("signin-box");
+var in_to_up = document.getElementById("switch-in-to-up");
+in_to_up.onclick = function () {
+  signin_box[0].classList.toggle("show");
+  signup_box[0].classList.toggle("hide");
+
+  signin_box[0].classList.toggle("hide");
+  signup_box[0].classList.toggle("show");
 };
+
 // =============== SIGN UP ===============
 // TODO: Write smthg here
-var signup_box = document.getElementById("signup-box");
-var signup = document.getElementById("signup");
-signup.onclick = function () {
-  if (signup_box.style.display === "none") {
-    signup_box.style.display = "block";
-  }
-  if (signin_box.style.display != "none") {
-    signin_box.style.display = "none";
-  }
+var signup_box = document.getElementsByClassName("signup-box");
+var up_to_in = document.getElementById("switch-up-to-in");
+up_to_in.onclick = function () {
+  signin_box[0].classList.toggle("show");
+  signup_box[0].classList.toggle("hide");
+
+  signup_box[0].classList.toggle("show");
+  signin_box[0].classList.toggle("hide");
 };

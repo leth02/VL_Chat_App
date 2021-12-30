@@ -7,10 +7,6 @@
     <link rel="stylesheet" href="./assets/css/style.css" />
     <title>VL | Sign In & Sign Up</title>
     <script src="./assets/js/main.js" defer></script>
-    <link
-      href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css"
-      rel="stylesheet"
-    />
   </head>
   <body>
     <header>
@@ -25,46 +21,45 @@
                 <a>About Us</a>
             </li>
         </ul>
-        <ul class="nav-bar-right">
-            <li>
-                <button class="nav" id="signin" type="button">Sign In</button>
-            </li>
-            <li>
-                <button class="nav" id="signup" type="button">Sign Up</button>
-            </li>
-        </ul>
+        
     </header>
+    <div id='fetch_test'></div>
     <div id="error">
 
     </div>
     <div class="main-container">
-        <div id="signin-box">
-            <div id="box">
-                <h3 class='title'>Sign In</h3>
+        <div class="signin-box show">
+            <div class="box">
                 <form action="/" method="GET">
-                <div class="input-box">
-                    <input id="name" name="name" type="text" placeholder="Username" />
-                </div>
-                <div class="input-box-signin">
-                    <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                    />
-                </div>
-                <div class="submit-button">
-                    <button class="blue-button" id="signin-submit" name="password" type="submit">Submit</button>
-                </div>
+                    <h3 class='title'>Sign In</h3>
+                    <div class="input-box">
+                        <input id="name" name="name" type="text" placeholder="Username" />
+                    </div>
+                    <div class="input-box-signin">
+                        <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                        />
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" name="" id="checkbox__input" class="checkbox__input" />
+                        <label for="checkbox__input" class="checkbox__label">Rememer Sign in</label>
+                    </div>
+                    <div class="submit-button">
+                        <button class="blue-button" id="signin-submit" name="password" type="submit">Submit</button>
+                    </div>
                 </form>
                 <p class="switch-phrase">Doesn't have an account?</p>
-                <button class="blue-button" id="switch-in-to-up" name="password">Sign Up</button>
+                <button class="switch-btn" id="switch-in-to-up" name="password">Sign Up</button>
+                
             </div>
         </div>
-        <div id="signup-box">
-            <div id="box">
-                <h3 class='title'>Sign Up</h3>
+        <div class="signup-box hide">
+            <div class="box">
                 <form action="/" method="GET">
+                    <h3 class='title'>Sign Up</h3>
                     <div class="input-box">
                         <div id="icon"></div>
                         <div>
@@ -98,13 +93,18 @@
                         placeholder="Confirm Password"
                         />
                     </div>
+                    <div class="checkbox">
+                        <input type="checkbox" name="" id="checkbox__input" class="checkbox__input" />
+                        <label for="checkbox__input" class="checkbox__label">I agree to the terms</label>
+                    </div>
                     <div class = 'submit-button'>
                         <button class="blue-button" id="signup-submit" name="password" type="submit">Submit</button>
                     </div>
                 </form>
                 <p class="switch-phrase">Already have an account?</p>
-                <button class="blue-button" id="switch-up-to-in" name="password" type="button">Sign In</button>
+                <button class="switch-btn" id="switch-up-to-in" name="password" type="button">Sign In</button>
             </div>
         </div>
     </div>
 </html>
+
