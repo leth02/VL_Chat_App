@@ -4,23 +4,24 @@
 /*=============== VARIABLES CSS ===============*/
 
 :root {
-    /*========== Colors ==========*/
-    --title-clr: hsl(30, 4%, 9%);
-    --text-clr: hsl(36, 4%, 24%);
-    --lighter-text-clr: hsl(47, 4%, 45%);
-    --body-clr: #ffffff;
-    --lighter-body-clr: #f3f3f3;
-    --input-clr: #F3F3F5; 
-    --darker-input-clr: #E9E9E9;
-    --luther-clr: rgb(41, 116, 210);
+  /*========== Colors ==========*/
+  --title-clr: #181716;
+  --text-clr: rgb(64, 62, 59);
+  --lighter-text-clr: hsl(47, 4%, 45%);
+  --darker-body-clr: #e4e6eb;
+  --body-clr: #ffffff;
+  --lighter-body-clr: #f3f3f3;
+  --input-clr: #f3f3f5;
+  --darker-input-clr: #e9e9e9;
+  --luther-clr: rgb(41, 116, 210);
 
   /*========== Font and typography ==========*/
   --biggest-font-size: 2rem;
   --h2-font-size: 1.25rem;
   --h3-font-size: 1.125rem;
-  --normal-font-size: .938rem;
-  --small-font-size: .813rem;
-  --smaller-font-size: .75rem;
+  --normal-font-size: 0.938rem;
+  --small-font-size: 0.813rem;
+  --smaller-font-size: 0.75rem;
 
   /*========== Font weight ==========*/
   --font-semi-bold: 600;
@@ -75,9 +76,10 @@ html {
 body {
   background-color: var(--body-clr);
   font-family: 'Poppins', sans-serif;
-  font-weight: 400;
+  font-size: 1.6rem;
+  font-weight: normal;
   overflow-x: hidden;
-  transition: .5s;
+  transition: 0.5s;
 }
 
 h1,
@@ -102,16 +104,38 @@ img {
   max-width: 100%;
 }
 
+/* RESET CSS FOR FORM */
+input,
+select,
+textarea,
+button {
+  outline: none;
+  font-size: 1.6rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: normal;
+}
+
+textarea {
+  resize: none;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+button {
+  cursor: pointer;
+}
 
 /*=============== THEME ===============*/
 /*========== Variables Dark theme ==========*/
 
 /* TODO: Write smthg here */
 
-
 /*========== Button Dark/Light ==========*/
 /* TODO: Write smthg here */
-
 
 /*=============== REUSABLE CSS CLASSES ===============*/
 /* ? I wonder we have any common classes ? */
@@ -120,42 +144,57 @@ img {
 /*=============== SIGN IN ===============*/
 /* TODO: Write smthg here */
 
-
 /*=============== SIGN UP ===============*/
 /* TODO: Write smthg here */
-
 
 /*=============== CHAT APP ===============*/
 /* TODO: Write smthg here */
 
+.user-avatar {
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  overflow: hidden;
+}
 
 /* =========== CHATAPP (MAIN) ========= */
-.chatapp {
+.chatapp__main {
   display: flex;
 }
 
 /* =========== CHATAPP LIST ========= */
 .main-list {
-  flex: 1 1 25%;
+  width: 25%;
 }
 
 .main-list__options {
   display: flex;
   align-items: center;
-  width: 25%;
   justify-content: space-around;
   padding: 2rem 1.5rem 1.5rem;
 }
 
-.options-user {
+.options__user {
   flex: 1 1 12rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
 }
-.options-user h2 {
+.options__user h2 {
   font-size: 2rem;
   font-weight: 700;
 }
 
-.options-icons {
+.options__user img {
+  width: 35px;
+  height: 35px;
+
+  /* ! Just to highlight the image existence */
+  border: 3px solid black;
+}
+
+.options__icons {
   flex: 1 1 12rem;
   font-size: 2rem;
   cursor: pointer;
@@ -164,7 +203,7 @@ img {
   justify-content: space-evenly;
 }
 
-.options-icons i {
+.options__icons span {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -174,14 +213,12 @@ img {
   background-color: var(--input-clr);
 }
 
-.options-icons i:hover {
+.options__icons span:hover {
   background-color: var(--darker-input-clr);
 }
 
-
 .main-list__search {
   background-color: var(--input-clr);
-  width: 32rem;
   height: 4rem;
   border-radius: 2rem;
   display: flex;
@@ -191,7 +228,7 @@ img {
 
 .main-list__search input {
   background-color: inherit;
-  flex : 1 1 85%;
+  flex: 1 1 85%;
   height: 2rem;
   border: none;
   outline: none;
@@ -206,16 +243,26 @@ img {
 .convos-item {
   display: flex;
   align-items: center;
+  position: relative;
+  background-color: var(--body-clr);
+  padding: 8px;
+  border-radius: 7px;
+  box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: 0.2s ease;
+  width: 100%;
+}
+
+.convos-item:hover {
+  background-color: #e4e6eb;
 }
 
 .convos-item__img {
-  display: block;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+  margin-right: 12px;
   overflow: hidden;
-  object-fit: cover;
   flex-shrink: 0;
+  width: 56px;
+  height: 56px;
 }
 
 .convos-item__content {
@@ -223,14 +270,80 @@ img {
   flex-grow: 1;
 }
 
+.convos-item__content h3 {
+  font-size: 15px;
+}
 
+.convos-item__content p {
+  font-size: 13px;
+  color: var(--lighter-text-clr);
+}
 
-
-
+.convos-item__status {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
 
 /* =========== CHATAPP CONVOS ========= */
-.main__convos {
+.main-convos {
   width: 50%;
+}
+
+.main-convos__user {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--darker-body-clr);
+  box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.05);
+}
+
+.main-convos__user img {
+  width: 35px;
+  height: 35px;
+  margin: 6px;
+
+  /* ! Just to highlight the image existence */
+  border: 3px solid black;
+}
+
+.user-info {
+  flex: 1 1 60%;
+  padding: 2rem 1.5rem 1.5rem;
+}
+
+.user-info p {
+  color: var(--lighter-text-clr);
+  font-size: 1.2rem;
+}
+
+.user-options__icons {
+  flex: 1 1 25%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.user-options__icons span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background-color: var(--input-clr);
+  color: var(--luther-clr);
+}
+
+.user-options__icons span:last-child {
+  font-size: 20px;
+}
+
+.user-options__icons span:hover {
+  background-color: var(--darker-input-clr);
 }
 
 #toggle {
@@ -248,12 +361,246 @@ img {
   transform: scale(1.2);
 }
 
+/* TODO */
 
+.center {
+  position: absolute;
+  top: 50%;
+  left: calc(50% + 12rem);
+  transform: translate(-50%, -50%);
+}
 
+.pic {
+  width: 4rem;
+  height: 4rem;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
 
+.contact {
+  position: relative;
+  margin-bottom: 1rem;
+  padding-left: 5rem;
+  height: 4.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.contact .pic {
+  position: absolute;
+  left: 0;
+}
+.contact .name {
+  font-weight: 500;
+  margin-bottom: 0.125rem;
+}
+.contact .message,
+.contact .seen {
+  font-size: 0.9rem;
+  color: #999;
+}
+.contact .badge {
+  box-sizing: border-box;
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  padding-top: 0.125rem;
+  border-radius: 1rem;
+  top: 0;
+  left: 2.5rem;
+  background: #333;
+  color: white;
+}
 
+.contacts {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(-6rem, -50%);
+  width: 24rem;
+  height: 32rem;
+  padding: 1rem 2rem 1rem 1rem;
+  box-sizing: border-box;
+  border-radius: 1rem 0 0 1rem;
+  cursor: pointer;
+  background: white;
+  box-shadow: 0 0 8rem 0 rgba(0, 0, 0, 0.1),
+    2rem 2rem 4rem -3rem rgba(0, 0, 0, 0.5);
+  transition: transform 500ms;
+}
+.contacts h2 {
+  margin: 0.5rem 0 1.5rem 5rem;
+}
+.contacts .fa-bars {
+  position: absolute;
+  left: 2.25rem;
+  color: #999;
+  transition: color 200ms;
+}
+.contacts .fa-bars:hover {
+  color: #666;
+}
+.contacts .contact:last-child {
+  margin: 0;
+}
+.contacts:hover {
+  transform: translate(-23rem, -50%);
+}
+
+.chat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  z-index: 2;
+  box-sizing: border-box;
+  border-radius: 1rem;
+  background: white;
+  box-shadow: 0 0 8rem 0 rgba(0, 0, 0, 0.1),
+    0rem 2rem 4rem -3rem rgba(0, 0, 0, 0.5);
+}
+.chat .contact.bar {
+  flex-basis: 3.5rem;
+  flex-shrink: 0;
+  margin: 1rem;
+  box-sizing: border-box;
+}
+.chat .messages {
+  padding: 1rem;
+  background: #f7f7f7;
+  flex-shrink: 2;
+  overflow-y: auto;
+  box-shadow: inset 0 2rem 2rem -2rem rgba(0, 0, 0, 0.05),
+    inset 0 -2rem 2rem -2rem rgba(0, 0, 0, 0.05);
+}
+.chat .messages .time {
+  font-size: 0.8rem;
+  background: #eee;
+  padding: 0.25rem 1rem;
+  border-radius: 2rem;
+  color: #999;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: 0 auto;
+}
+.chat .messages .message {
+  box-sizing: border-box;
+  padding: 0.5rem 1rem;
+  margin: 1rem;
+  background: #fff;
+  border-radius: 1.125rem 1.125rem 1.125rem 0;
+  min-height: 2.25rem;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  max-width: 66%;
+  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.075),
+    0rem 1rem 1rem -1rem rgba(0, 0, 0, 0.1);
+}
+.chat .messages .message.parker {
+  margin: 1rem 1rem 1rem auto;
+  border-radius: 1.125rem 1.125rem 0 1.125rem;
+  background-color: var(--luther-clr);
+  color: white;
+}
+.chat .messages .message .typing {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-right: 0rem;
+  box-sizing: border-box;
+  background: #ccc;
+  border-radius: 50%;
+}
+.chat .messages .message .typing.typing-1 {
+  -webkit-animation: typing 3s infinite;
+  animation: typing 3s infinite;
+}
+.chat .messages .message .typing.typing-2 {
+  -webkit-animation: typing 3s 250ms infinite;
+  animation: typing 3s 250ms infinite;
+}
+.chat .messages .message .typing.typing-3 {
+  -webkit-animation: typing 3s 500ms infinite;
+  animation: typing 3s 500ms infinite;
+}
+.chat .input {
+  box-sizing: border-box;
+  flex-basis: 4rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem 0 1.5rem;
+}
+.chat .input i {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  color: #666;
+  cursor: pointer;
+  transition: color 200ms;
+}
+.chat .input i:hover {
+  color: #333;
+}
+.chat .input input {
+  border: none;
+  background-image: none;
+  background-color: white;
+  padding: 0.5rem 1rem;
+  margin-right: 1rem;
+  border-radius: 1.125rem;
+  flex-grow: 2;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1),
+    0rem 1rem 1rem -1rem rgba(0, 0, 0, 0.2);
+  font-family: Red hat Display, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+}
+.chat .input input:placeholder {
+  color: #999;
+}
+
+@-webkit-keyframes typing {
+  0%,
+  75%,
+  100% {
+    transform: translate(0, 0.25rem) scale(0.9);
+    opacity: 0.5;
+  }
+  25% {
+    transform: translate(0, -0.25rem) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes typing {
+  0%,
+  75%,
+  100% {
+    transform: translate(0, 0.25rem) scale(0.9);
+    opacity: 0.5;
+  }
+  25% {
+    transform: translate(0, -0.25rem) scale(1);
+    opacity: 1;
+  }
+}
+.pic.stark {
+  background-image: url('https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/7/73/SMH_Mentor_6.png');
+}
+
+.pic.banner {
+  background-image: url('https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/4/4f/BruceHulk-Endgame-TravelingCapInPast.jpg');
+}
+
+/* TODO */
 
 /* =========== CHATAPP SETTING ========= */
-.main__setting {
+.main-setting {
   width: 25%;
 }
