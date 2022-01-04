@@ -1,7 +1,7 @@
 import bcrypt
 
 # Hash function using brcypt
-# Function returns the password_hash and password_salt
+# Function returns the password_hash
 def hash_pw(password: str) -> bytes:
     salt = bcrypt.gensalt()
     password_hash = bcrypt.hashpw(bytes(password, 'utf8'), salt)
