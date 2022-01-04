@@ -1,6 +1,4 @@
 import bcrypt
-from collections import namedtuple
-from typing import NamedTuple
 
 # Hash function using brcypt
 # Function returns the password_hash and password_salt
