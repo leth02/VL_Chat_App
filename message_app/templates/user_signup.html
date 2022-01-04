@@ -6,11 +6,10 @@
     </head>
 
     <body>
-        <h1>Place holder for the sign up page</h1>
         <h2>New User Registration</h2>
 
         <div class="container">
-            <form name="register" action="{{url_for('api_user_signup')}}" method="POST">>
+            <form name="register" action="{{url_for('user_sign_up.api_user_signup')}}" method="POST">>
                 <label for="username"><b>Username</b></label>
                 <input type="text" placeholder="Enter Username" name="username" required>
                 <br>
