@@ -14,7 +14,7 @@ DB = SQLAlchemy()
 def init_SQLAlchemy() -> None:
     # Explicitly register tables' information
     from message_app.model import User
-    
+
     DB.init_app(current_app)
     DB.create_all()
 
