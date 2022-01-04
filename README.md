@@ -1,12 +1,10 @@
 # VL_Chat_App
-VL is a chat application built by some random students at Luther College.
-
-Team members: Luc Vuong, Kevin Tu, Long Khuong, Bill Dang, Hudson Nguyen, Duy Nguyen, Tan Le.
+VL is an open-source chat application built with Python and JavaScript
 
 ## Development
-As we use Python 3.8 for testing, we expect that you use Python 3.8. Also, you should have **SQLite3** installed. For information about installing SQLite, please visit https://www.sqlite.org/draft/index.html
+Please have Python 3 and SQLite3 installed on your machine.
 
-**Create and activate a virtual environment (recommended)**
+**Create and activate a virtual environment (optional but recommended)**
 ```
 $ python -m venv venv
 $ . venv/bin/activate
@@ -24,14 +22,7 @@ $ export FLASK_ENV=development
 $ flask run
 ```
 
-**Configure Flask and start the application (for Window user)**
-```
-$env:FLASK_APP="message_app/__init__.py"
-$env:FLASK_ENV="development"
-flask run
-```
-
-**Populate sample database**
+**Populate development database**
 
 You can create a new database for development by using the SQL scripts from ```message-app.sql```
 
@@ -48,18 +39,6 @@ Then, inside the sqlite shell, run
 sqlite> .read message-app.sql
 ```
 
-**A small issue between git and sqlite**
-
-Even though ```*.sqlite3``` has been added to ```.gitignore```, the binary Sqlite database files are still listed when you run ```git status```. This issue is on Windows, and I am not sure if this issue is applicable to Linux/MacOS.
-
-If you run into this issue, there are three solutions:
-
-1) Add new/modified files to git staging area *one by one*, and skip the binary database files. If you run ```git add .```, it might add the binary database file into git staging area.
-
-2) Delete the binary database file, then you can use ```git add .``` safely because the database file is no longer present (you can use ```git status``` to check before doing ```git add .```)
-
-3) Temporary solution: For line 34, use "sqlite3 message_app_db.sqlite3" instead of "sqlite3 message_app_db". This will guarantee gitignore recognize the database.
-
 
 ## Testing
 
@@ -68,7 +47,7 @@ If you run into this issue, there are three solutions:
 $ flake8 .
 ```
  
-### Run unit tests and functional tests
+### Run unit tests and integration tests
 
 Tests related to a feature should be grouped into a class (e.g. class TestUserController)
 
