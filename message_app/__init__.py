@@ -22,6 +22,12 @@ def create_app(test_config=None, name=__name__):
     if test_config:
         app.config.update(test_config)
 
+    #================Registering Blueprints==================
+    from . import request_message, user_sign_in, user_sign_up
+    app.register_blueprint(request_message.request_messages)
+    app.register_blueprint(user_sign_in.user_sign_in)
+    app.register_blueprint(user_sign_up.user_sign_up)
+
     # Create a connection to the database
     with app.app_context():
         # Connect to the database using SQLAlchemy
@@ -30,12 +36,6 @@ def create_app(test_config=None, name=__name__):
         # Connect to the database using sqlite3.connect()
         from message_app.db import db
         db.init_app(app)
-
-    #================Registering Blueprints==================
-    from . import request_message, user_sign_in, user_sign_up
-    app.register_blueprint(request_message.request_messages)
-    app.register_blueprint(user_sign_in.user_sign_in)
-    app.register_blueprint(user_sign_up.user_sign_up)
 
     # ===== HTML Pages =====
     @app.route("/", methods=["GET"])

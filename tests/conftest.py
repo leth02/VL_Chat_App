@@ -33,7 +33,6 @@ def app():
     }, __name__)
 
     with app.app_context():
-        init_SQLAlchemy()
         get_db().executescript(data_sql) # this line will be removed like db_df, db_path
         yield app
 
@@ -49,6 +48,9 @@ def test_db(app):
         db.drop_all()
         db.session.remove()
         os.remove(os.path.join("tests", TEST_DB))
+
+    # Initialize test database
+    init_SQLAlchemy()
 
     # Populate testing data for users table
     password_hash_1 = hash_pw("password_hash_1")
