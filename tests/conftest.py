@@ -3,7 +3,7 @@ import os
 import tempfile
 
 from message_app import create_app
-from message_app.db.db import DB as db
+from message_app.db.db import init_SQLAlchemy, DB as db
 from message_app.model import User
 from message_app.utils import hash_pw
 
@@ -49,11 +49,8 @@ def test_db(app):
         db.session.remove()
         os.remove(os.path.join("tests", TEST_DB))
 
-    # Attach the application to SQLAlchemy
-    db.init_app(app)
-
-    # Creates a testing database and all tables for that database.
-    db.create_all()
+    # Initialize test database
+    init_SQLAlchemy()
 
     # Populate testing data for users table
     password_hash_1 = hash_pw("password_hash_1")

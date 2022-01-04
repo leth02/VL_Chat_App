@@ -6,30 +6,17 @@ from flask_sqlalchemy import SQLAlchemy
 # Create an SQLAlchemy instance that is used throughout the application. As we create a Flask instance
 # dynamically by using factory pattern, we cannot pass it here (DB = SQLAlchemy(app)) because the app
 # instance has not existed. Inside the factory function to create a Flask app instance, we need to call
-# get_db_SQLAlchemy function which in turns will call DB.init_app(current_app) to initialize the use of
-# the app with this database setup.
+# init_SQLAlchemy function which in turns will call DB.init_app(current_app) to initialize the use of
+# the app with this database setup and call DB.create_all() to create the tables.
 DB = SQLAlchemy()
 
-# Connect to the database
-# This function returns a database connection, which is used to execute the commands read from the file.
-# The g name stands for “global”, but that is referring to the data being global within a context.
-# The data on g is lost after the context ends. Flask provides the g object for this purpose.
-# g is a simple namespace object that has the same lifetime as an application context.
-# db is an attribute of object g. We will store the connection to our database to g.db
-def get_db_SQLAlchemy():
-    if '_db' not in g:
-        DB.init_app(current_app)
-        g._db = DB
-    return g._db
+# Initialize the database
+def init_SQLAlchemy() -> None:
+    # Explicitly register tables' information
+    from message_app.model import User
 
-# Close the database connection
-# We close the connection to our database and remove it from the g object
-def close_db_SQLALchemy(e=None):
-    if '_db' in g:
-        db = g.pop('_db')
-        if db is not None:
-            db.session.remove()
-
+    DB.init_app(current_app)
+    DB.create_all()
 
 # Connect to the database
 # This function returns a database connection, which is used to execute the commands read from the file.
@@ -89,4 +76,3 @@ def init_db():
 # Register the close_db function with the application instance
 def init_app(app):
     app.teardown_appcontext(close_db) # This line will be removed after changing to SQLAlchemy
-    app.teardown_appcontext(close_db_SQLALchemy)

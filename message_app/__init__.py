@@ -1,6 +1,6 @@
 from flask import Flask, render_template, session, redirect, url_for
 import os
-from message_app.db.db import get_db_SQLAlchemy
+from message_app.db.db import init_SQLAlchemy
 
 # The function accepts a name as an argument. Leaving the name by default (app=Flask(__name__)) automatically
 # includes the package name in the path for SQLALCHEMY_DATABASE_URI, which creates confusion when
@@ -25,7 +25,7 @@ def create_app(test_config=None, name=__name__):
     # Create a connection to the database
     with app.app_context():
         # Connect to the database using SQLAlchemy
-        get_db_SQLAlchemy()
+        init_SQLAlchemy()
 
         # Connect to the database using sqlite3.connect()
         from message_app.db import db
