@@ -1,20 +1,12 @@
-import os
-from hashlib import sha256
-from collections import namedtuple
-from typing import NamedTuple
+import bcrypt
 
-# Hashing return type
-HASHING_PACKAGE = namedtuple("Hashing_Package", ["password_hash", "password_salt"])
+# Hash function using brcypt
+# Function returns the password_hash
+def hash_pw(password: str) -> bytes:
+    salt = bcrypt.gensalt()
+    password_hash = bcrypt.hashpw(bytes(password, 'utf8'), salt)
 
-# Hash function using sha256
-# Function returns the password_hash and password_salt
-def hashing(password: str, salt=None) -> NamedTuple:
-    if not salt:
-        salt = os.urandom(5)
+    return password_hash
 
-    password += str(salt)
-    h = sha256()
-    h.update(bytes(password, "utf8"))
-    password = h.hexdigest()
-
-    return HASHING_PACKAGE(password, salt)
+def check_pw(password: str, hashed_password: bytes) -> bool:
+    return bcrypt.checkpw(bytes(password, 'utf8'), hashed_password)

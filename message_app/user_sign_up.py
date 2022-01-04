@@ -1,5 +1,5 @@
 from flask import Blueprint, request, session, redirect, url_for
-from message_app.utils import hashing
+from message_app.utils import hash_pw
 from message_app.model import User
 
 user_sign_up = Blueprint("user_sign_up", __name__)
@@ -26,8 +26,8 @@ def api_user_signup():
             raise Exception(session["error"])
         else:
             # Hash the password
-            password, salt = hashing(password)
-            new_user = User(username=username, email=email, password_hash=password, password_salt=salt)
+            password_hash = hash_pw(password)
+            new_user = User(username=username, email=email, password_hash=password_hash)
 
             # Add user to the database
             User.insert(new_user)

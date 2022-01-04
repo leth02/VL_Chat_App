@@ -1,11 +1,11 @@
 import pytest
 import os
-import sys
 import tempfile
 
 from message_app import create_app
 from message_app.db.db import DB as db
 from message_app.model import User
+from message_app.utils import hash_pw
 
 # Name of the testing database
 TEST_DB = os.path.join("test_message_app_db.sqlite3")
@@ -56,9 +56,12 @@ def test_db(app):
     db.create_all()
 
     # Populate testing data for users table
-    User.insert(User(username="username1", email="email1@test.com", password_hash="password_hash_1", password_salt="password_salt_1"))
-    User.insert(User(username="username2", email="email2@test.com", password_hash="password_hash_2", password_salt="password_salt_2"))
-    User.insert(User(username="username3", email="email3@test.com", password_hash="password_hash_3", password_salt="password_salt_3"))
+    password_hash_1 = hash_pw("password_hash_1")
+    password_hash_2 = hash_pw("password_hash_2")
+    password_hash_3 = hash_pw("password_hash_3")
+    User.insert(User(username="username1", email="email1@test.com", password_hash=password_hash_1))
+    User.insert(User(username="username2", email="email2@test.com", password_hash=password_hash_2))
+    User.insert(User(username="username3", email="email3@test.com", password_hash=password_hash_3))
 
     yield db
     tear_down()
