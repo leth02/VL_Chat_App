@@ -7,5 +7,24 @@
 
     <body>
         <h1>Place holder for the sign up page</h1>
+        <h2>New User Registration</h2>
+
+        <div class="container">
+            <form name="register" action="{{url_for('api_user_signup')}}" method="POST">>
+                <label for="username"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="username" required>
+                <br>
+                <label for="email"><b>Email</b></label>
+                <input type="text" placeholder="Enter Email" name="email" required>
+                <br>
+                <label for="password"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required>
+                <br>
+                <label for="confirmPassword"><b>Confirm Password</b></label>
+                <input type="password" placeholder="Enter Confirm Password" name="confirmPassword" required>
+                <br class="clear">
+                <input class="btn-submit" type="submit" name="submit">
+            </form>
+        </div>
     </body>
 </html>

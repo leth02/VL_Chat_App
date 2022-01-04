@@ -10,7 +10,6 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(120))
-    password_salt = db.Column(db.String(120))
 
     def __eq__(self, other_user: User) -> bool:
         # Compare two users using its username
@@ -22,8 +21,7 @@ class User(db.Model):
             "id": self.id,
             "username": self.username,
             "email": self.email,
-            "password_hash": self.password_hash,
-            "password_salt": self.password_salt
+            "password_hash": self.password_hash
         }
         return json.dumps(data)
 

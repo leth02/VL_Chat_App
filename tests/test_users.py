@@ -11,7 +11,7 @@ class TestUserModel:
     # Selection is already included in the User.delete() function, so we don't have to
     # create a test for it.
     def test_basic_commands(self, test_db):
-        test_user = User(username="test1", email="test1@test.com", password_hash="password_hash_1", password_salt="password_salt_1")
+        test_user = User(username="test1", email="test1@test.com", password_hash="password_hash_1")
 
         # Add the user to the database
         User.insert(test_user)
@@ -31,8 +31,8 @@ class TestUserModel:
     # Test adding a duplicated username
     # The test adds two users with duplicated username to users table. It is supposed to raise an Integrity Error
     def test_invalid_username(self, test_db):
-        test_user1 = User(username="test", email="test1@test.com", password_hash="password_hash_1", password_salt="password_salt_1")
-        test_user2 = User(username="test", email="test2@test.com", password_hash="password_hash_1", password_salt="password_salt_1")
+        test_user1 = User(username="test", email="test1@test.com", password_hash="password_hash_1")
+        test_user2 = User(username="test", email="test2@test.com", password_hash="password_hash_1")
         User.insert(test_user1)
 
         with pytest.raises(IntegrityError):
@@ -41,8 +41,8 @@ class TestUserModel:
     # Test adding a duplicated email
     # The test adds two users with duplicated email to users table. It is supposed to raise an Integrity Error
     def test_invalid_email(self, test_db):
-        test_user1 = User(username="test1", email="test@test.com", password_hash="password_hash_1", password_salt="password_salt_1")
-        test_user2 = User(username="test2", email="test@test.com", password_hash="password_hash_1", password_salt="password_salt_1")
+        test_user1 = User(username="test1", email="test@test.com", password_hash="password_hash_1")
+        test_user2 = User(username="test2", email="test@test.com", password_hash="password_hash_1")
         User.insert(test_user1)
 
         with pytest.raises(IntegrityError):
@@ -51,13 +51,12 @@ class TestUserModel:
     # Test Json
     # Add a new user to the database. Select that user using the username, then compare the to_json of both user
     def test_user_to_json(self, test_db):
-        test_user = User(username="test1", email="test1@test.com", password_hash="password_hash_1", password_salt="password_salt_1")
+        test_user = User(username="test1", email="test1@test.com", password_hash="password_hash_1")
         User.insert(test_user)
         test_data = {
             "id": User.get_last_user_id(),
             "username": "test1",
             "email": "test1@test.com",
-            "password_hash": "password_hash_1",
-            "password_salt": "password_salt_1"
+            "password_hash": "password_hash_1"
         }
         assert json.loads(test_user.to_json()) == test_data

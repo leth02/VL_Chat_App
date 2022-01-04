@@ -1,6 +1,6 @@
 from flask import Blueprint, request, session, redirect, url_for
 from message_app.model import User
-from message_app.utils import hashing
+from message_app.utils import check_pw
 
 user_sign_in = Blueprint("user_sign_in", __name__)
 
@@ -24,12 +24,8 @@ def api_user_signin():
             raise Exception(session["error"])
 
         user_password_hash = user_data.password_hash
-        salt = user_data.password_salt
 
-        # Hash the password
-        user_password_input_hash = hashing(user_password_input, salt).password_hash
-
-        if user_password_input_hash == user_password_hash:
+        if check_pw(user_password_input, user_password_hash):
             session["user"] = username
             return redirect(url_for("messages"))
         else:
