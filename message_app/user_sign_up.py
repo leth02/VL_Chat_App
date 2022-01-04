@@ -27,7 +27,7 @@ def api_user_signup():
         else:
             # Hash the password
             password_hash = hash_pw(password)
-            new_user = User(username=username, email=email, password_hash=password)
+            new_user = User(username=username, email=email, password_hash=password_hash)
 
             # Add user to the database
             User.insert(new_user)
