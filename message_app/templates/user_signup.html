@@ -6,23 +6,20 @@
     </head>
 
     <body>
-        <h2>New User Registration</h2>
-
-        <div class="container">
-            <form name="register" action="{{url_for('user_sign_up.api_user_signup')}}" method="POST">>
-                <label for="username"><b>Username</b></label>
-                <input type="text" placeholder="Enter Username" name="username" required>
-                <br>
-                <label for="email"><b>Email</b></label>
-                <input type="text" placeholder="Enter Email" name="email" required>
-                <br>
-                <label for="password"><b>Password</b></label>
-                <input type="password" placeholder="Enter Password" name="password" required>
-                <br>
-                <label for="confirmPassword"><b>Confirm Password</b></label>
-                <input type="password" placeholder="Enter Confirm Password" name="confirmPassword" required>
-                <br class="clear">
-                <input class="btn-submit" type="submit" name="submit">
+        <h1>Welcome to VL Messaging</h1>
+        <h3>Let's create an account</h3>
+        <div>
+            <form action="{{url_for('user_sign_up.api_user_signup')}}" method="POST" style="display: flex; flex-direction: column; width: 300px;">
+                <label for="username">Username or email address</label>
+                <input type="text" name="username" id="username">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password">
+                <label for="confirmPassword">ConfirmPassword</label>
+                <input type="password" name="confirmPassword" id="confirmPassword">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email">
+                
+                <button type="submit">Sign up</button>
             </form>
         </div>
     </body>

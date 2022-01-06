@@ -1,0 +1,48 @@
+#conversation-container {
+    width: 19%;
+    border-right: 1px rgba(0, 0, 0, 0.6);
+}
+
+.conversation-card__container {
+    margin: 10px 0;
+}
+
+#message-container {
+    width: 69%;
+    border-right: 1px rgba(0, 0, 0, 0.6)
+}
+
+.msg-item {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 0;
+    margin: 20px 0;
+    width: 100%;
+}
+
+.msg-item__meta {
+    display: flex;
+}
+
+.msg-item__sender-id {
+    font-weight: bold;
+    display: flex;
+    margin-right: 10px;
+}
+
+.msg-item__sent-time {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.msg-item__bubble {
+    display: inline-block;
+    max-width: 100%;
+    padding: 0;
+    position: relative;
+}
+
+.msg-item__bubble-body {
+    margin: 4px 0 4px 80px;
+    color: rgba(0, 0, 0, 0.9);
+}
