@@ -40,7 +40,11 @@ def create_app(test_config=None, name=__name__):
     # ===== HTML Pages =====
     @app.route("/", methods=["GET"])
     def index():
-        return render_template("index.html")
+        # If a session exists, redirect to message page
+        if "user" in session:
+            return redirect(url_for("messages"))
+        else:
+            return render_template("index.html")
 
 
     @app.route("/messages", methods=["GET"])
@@ -55,9 +59,9 @@ def create_app(test_config=None, name=__name__):
 
     @app.route("/signin", methods=["GET"])
     def user_signin():
-        # If a session exists, redirect to index page instead of login page
+        # If a session exists, redirect to message page
         if "user" in session:
-            return redirect(url_for("index"))
+            return redirect(url_for("messages"))
         else:
             return render_template("user_signin.html")
 

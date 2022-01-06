@@ -6,32 +6,15 @@
     </head>
 
     <body>
-<<<<<<< HEAD
-        <h1>Login</h1>
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <h3></h3>
-                <form name="login" action="{{url_for('user_sign_in.api_user_signin')}}" method="post">
-                    <label for="username"><b>Username</b></label>
-                    <input type="text" placeholder="Enter Username" name="username" required>
-                    <br>
-                    <label for="password"><b>Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="password" required>
-                    <br class="clear">
-                    <input class="btn-submit" type="submit" name="submit" value="Login">
-                </form>
-            </div>
-=======
         <h1>Sign in to VL Messaging</h1>
         <div>
-            <form action="/api/signin" method="POST">
+            <form action="{{url_for('user_sign_in.api_user_signin')}}" method="POST">
                 <label for="username">Username or email address</label>
                 <input type="text" name="username" id="username">
                 <label for="password">Password</label>
                 <input type="password" name="password" id="password">
                 <button type="submit">Sign in</button>
             </form>
->>>>>>> Add basic authentication pages
         </div>
     </body>
 </html>
