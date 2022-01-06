@@ -15,12 +15,20 @@ users_conversations = db.Table(
     db.Column("seen", db.Boolean, default=False)
 )
 
+# SQLAlchemy model for users table
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(120))
+
+    # create one-to-many relationships with ConversationRequest model
+    # backref: declear reference property for ConversationRequest's instances.
+    # We can then call instance_example.initiator/instance.example.receiver to get
+    # the initiator/receiver of that instance_example.
+    initiators = db.relationship("ConversationRequest", backref="initiator", foreign_keys="ConversationRequest.initiator_id")
+    receivers = db.relationship("ConversationRequest", backref="receiver", foreign_keys="ConversationRequest.receiver_id")
 
     def __eq__(self, other_user: User) -> bool:
         # Compare two users using its username
@@ -169,3 +177,106 @@ class Messages(db.Model):
         # Get last message ID
         id = Messages.query.order_by(Messages.id.desc()).first().id
         return id
+# SQLAlchemy model for conversation_request table
+class ConversationRequest(db.Model):
+    __tablename__ = 'conversation_request'
+    id = db.Column(db.Integer, primary_key=True)
+    initiator_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
+    accepted = db.Column(db.Integer, nullable=False, default=0)
+    request_time = db.Column(db.Integer, nullable=False)
+    accepted_time = db.Column(db.Integer)
+
+    def __eq__(self, other_request: CoversationRequest) -> bool:
+        # Compare two users using its username
+        return other_request.id == self.id
+
+    # Return a json encoding of the user data
+    def to_json(self) -> str:
+        data = {
+            "id": self.id,
+            "initiator_id": self.initiator_id,
+            "receiver_id": self.receiver_id,
+            "accepted": self.accepted,
+            "request_time": self.request_time,
+            "accepted_time": self.accepted_time
+        }
+        return json.dumps(data)
+
+#    def accept(self, time: int) -> None:
+#        # Accept a conversation request
+#        self.accepted = 1
+#        self.accepted_time = time
+#        db.seesion.commit()
+#
+#    def reject(self) -> None:
+#        # Reject a conversation request
+#        self.accepted = 0
+#        db.session.commit()
+
+    #------------------------Class Methods-------------------------
+
+    @classmethod
+    def get_all_requests(cls, receiver_id: int) -> List:
+        # query all the conversation request that receiver_id received
+        all_requests = ConversationRequest.query.filter(
+                ConversationRequest.receiver_id == receiver_id,
+                ConversationRequest.accepted == 0
+                ).order_by(ConversationRequest.id.asc()).all()
+
+        all_requests_to_dict = []
+
+        for request in all_requests:
+            all_requests_to_dict.append({
+                    "id": request.id,
+                    "initiator_id": request.initiator_id,
+                    "receiver_id": request.receiver_id,
+                    "accepted": request.accepted,
+                    "request_time": request.request_time,
+                    "accepted_time": request.accepted_time
+                })
+        return all_requests_to_dict
+
+    @classmethod
+    def get_request_by_users(cls, initiator_id: int, receiver_id: int) -> Union[ConversationRequest, None]:
+        # query request with specific initiator and receiver
+        request = ConversationRequest.query.filter(
+                ConversationRequest.initiator_id == initiator_id,
+                ConversationRequest.receiver_id == receiver_id,
+                ConversationRequest.accepted == 0
+                ).first()
+        return request
+
+    @classmethod
+    def get_request_by_id(cls, request_id: int, accepted: int) -> Union[ConversationRequest, None]:
+        # query request with specific request id
+        request = ConversationRequest.query.filter(
+                ConversationRequest.id == request_id,
+                ConversationRequest.accepted == accepted
+                ).first()
+        return request
+
+    @classmethod
+    def insert(cls, new_request: ConversationRequest) -> None:
+        # Add a new conversation request to the database
+        db.session.add(new_request)
+        db.session.commit()
+
+    @classmethod
+    def accept(cls, request: ConversationRequest, time: int) -> None:
+        ConversationRequest.query.filter(ConversationRequest.id == request.id).update(
+                {
+                    "accepted": 1,
+                    "accepted_time": time
+                    }
+                )
+
+        db.session.commit()
+
+    @classmethod
+    def reject(cls, request: ConversationRequest) -> None:
+        ConversationRequest.query.filter(ConversationRequest.id == request.id).update(
+                {"accepted": 0}
+                )
+        db.session.commit()
+
