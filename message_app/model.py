@@ -248,11 +248,11 @@ class ConversationRequest(db.Model):
         return request
 
     @classmethod
-    def get_request_by_id(cls, request_id: int, accepted: int) -> Union[ConversationRequest, None]:
+    def get_request_by_id(cls, request_id: int) -> Union[ConversationRequest, None]:
         # query request with specific request id
         request = ConversationRequest.query.filter(
                 ConversationRequest.id == request_id,
-                ConversationRequest.accepted == accepted
+                ConversationRequest.accepted == 0
                 ).first()
         return request
 
@@ -276,7 +276,7 @@ class ConversationRequest(db.Model):
     @classmethod
     def reject(cls, request: ConversationRequest) -> None:
         ConversationRequest.query.filter(ConversationRequest.id == request.id).update(
-                {"accepted": 0}
+                {"accepted": 2}
                 )
         db.session.commit()
 

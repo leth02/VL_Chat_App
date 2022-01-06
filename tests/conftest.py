@@ -5,7 +5,7 @@ import time
 
 from message_app import create_app
 from message_app.db.db import init_SQLAlchemy, DB as db
-from message_app.model import User, Messages, Conversations
+from message_app.model import User, Messages, Conversations, ConversationRequest
 from message_app.utils import hash_pw
 
 # Name of the testing database
@@ -90,6 +90,19 @@ def test_db(app):
     # After updating all the foreign ID, an explicitly commit is needed to unlock the database.
     db.session.commit()
 
+    # Populate testing data for request_conversation table
+    ConversationRequest.insert(ConversationRequest(
+        initiator_id = 1,
+        receiver_id = 2,
+        request_time = 12345678
+        ))
+    ConversationRequest.insert(ConversationRequest(
+        initiator_id = 3,
+        receiver_id = 2,
+        accepted = 1,
+        request_time = 12345678
+        ))
+
     yield db
     tear_down()
 
@@ -101,3 +114,4 @@ def test_client(app):
 @pytest.fixture
 def test_runner(app):
     return app.test_cli_runner()
+
