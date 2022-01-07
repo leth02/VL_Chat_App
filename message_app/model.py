@@ -5,7 +5,7 @@ import json
 import time
 from typing import Union, List
 
-# TODO: Optimize all models by removing the duplicated codes. 
+# TODO: Optimize all models by removing the duplicated codes.
 # All the models will be REFACTORED in the future for more functionalities
 # and better understanding. For now, these models are good enough for
 # our upcoming prototype.
