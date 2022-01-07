@@ -5,14 +5,8 @@ import json
 import time
 from typing import Union, List
 
-# TODO: Optimize all models by removing the duplicated codes.
-# All the models will be REFACTORED in the future for more functionalities
-# and better understanding. For now, these models are good enough for
-# our upcoming prototype.
-
-# A join table for the many-to-many relationship between users and conversations tables
-# For now, we don't need to create a model for this table because this table only serves
-# the purpose of joining users and conversations tables (many-to-many relationship)
+# A join table for the many-to-many relationship between users and conversations tables.
+# Create a model for this table is unnecessary.
 users_conversations = db.Table(
     "users_conversations",
     db.Column("id", db.Integer, primary_key=True),
