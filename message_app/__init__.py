@@ -27,37 +27,19 @@ def create_app(test_config=None, name=__name__):
         init_SQLAlchemy()
 
     #================Registering Blueprints==================
-    from . import request_message, user_sign_in, user_sign_up
+    from . import request_message, user_sign_in, user_sign_up, send_message
     app.register_blueprint(request_message.request_messages)
     app.register_blueprint(user_sign_in.user_sign_in)
     app.register_blueprint(user_sign_up.user_sign_up)
+    app.register_blueprint(send_message.send_messages)
 
     # ===== HTML Pages =====
     @app.route("/", methods=["GET"])
     def index():
         # If a session exists, redirect to message page
         if "user" in session:
-            return redirect(url_for("messages"))
+            return redirect(url_for("send_message.messages"))
         else:
             return render_template("index.html")
-
-
-    @app.route("/messages", methods=["GET"])
-    def messages():
-        return render_template("messages.html")
-
-
-    @app.route("/signup", methods=["GET"])
-    def user_signup():
-        return render_template("user_signup.html")
-
-
-    @app.route("/signin", methods=["GET"])
-    def user_signin():
-        # If a session exists, redirect to message page
-        if "user" in session:
-            return redirect(url_for("messages"))
-        else:
-            return render_template("user_signin.html")
 
     return app

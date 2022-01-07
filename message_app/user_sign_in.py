@@ -1,8 +1,16 @@
-from flask import Blueprint, request, session, redirect, url_for
+from flask import Blueprint, request, session, redirect, url_for, render_template
 from message_app.model import User
 from message_app.utils import check_pw
 
 user_sign_in = Blueprint("user_sign_in", __name__)
+
+@user_sign_in.route("/signin", methods=["GET"])
+def user_signin():
+    # If a session exists, redirect to message page
+    if "user" in session:
+        return redirect(url_for("send_messages.messages"))
+    else:
+        return render_template("user_signin.html")
 
 @user_sign_in.route("/api/signin", methods=["POST"])
 def api_user_signin():
@@ -27,7 +35,7 @@ def api_user_signin():
 
         if check_pw(user_password_input, user_password_hash):
             session["user"] = username
-            return redirect(url_for("messages"))
+            return redirect(url_for("send_messages.messages"))
         else:
             session["error"] = "Invalid login credentials. Please try again."
             raise Exception(session["error"])
