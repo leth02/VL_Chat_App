@@ -24,7 +24,7 @@ CREATE TABLE conversation_request (
     id INTEGER PRIMARY KEY,
     initiator_id INTEGER NOT NULL,
     receiver_id INTEGER NOT NULL,
-    accepted INTEGER NOT NULL, -- 1 means accepted; 0 means has not been accepted or has been declined
+    accepted INTEGER NOT NULL, -- 1 means accepted; 0 means has not been accepted or declined; 2 means has been declined
     request_time INTEGER NOT NULL,
     accepted_time INTEGER,
     FOREIGN KEY (initiator_id) REFERENCES users (id),

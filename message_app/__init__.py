@@ -9,7 +9,6 @@ def create_app(test_config=None, name=__name__):
     app = Flask(name)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join("message_app", "db", 'message_app_db.sqlite3'), # This line is for the old use of our database. It WILL BE REMOVED after we change everything to SQLAlchemy.
         SQLALCHEMY_DATABASE_URI=os.path.join("sqlite:///", "db", 'message_app_db.sqlite3'),
 
         # If set to True, Flask-SQLAlchemy will track modifications of objects and emit signals.
@@ -26,10 +25,6 @@ def create_app(test_config=None, name=__name__):
     with app.app_context():
         # Connect to the database using SQLAlchemy
         init_SQLAlchemy()
-
-        # Connect to the database using sqlite3.connect()
-        from message_app.db import db
-        db.init_app(app)
 
     #================Registering Blueprints==================
     from . import request_message, user_sign_in, user_sign_up

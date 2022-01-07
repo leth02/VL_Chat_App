@@ -22,31 +22,13 @@ $ export FLASK_ENV=development
 $ flask run
 ```
 
-**Populate development database**
-
-You can create a new database for development by using the SQL scripts from ```message-app.sql```
-
-Step into the ```./message_app/db``` directory, then run the following command
-
-```
-$ sqlite3 message_app_db.sqlite3
-```
-Note: message_app_db is the name that will be used in deployment, and you can use your favorite name when developing locally.
-
-Then, inside the sqlite shell, run
-
-```
-sqlite> .read message-app.sql
-```
-
-
 ## Testing
 
 ### Check linting
 ```
 $ flake8 .
 ```
- 
+
 ### Run unit tests and integration tests
 
 Tests related to a feature should be grouped into a class (e.g. class TestUserController)
