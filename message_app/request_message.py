@@ -1,26 +1,22 @@
 from flask import Blueprint, render_template, jsonify
-from message_app.db import db
+from message_app.model import *
 
 request_messages = Blueprint("request_messages", __name__)
 
 @request_messages.route("/api/request/send/<int:sender_id>/<int:receiver_id>/<int:request_time>", methods=["POST"])
 def send_request(sender_id, receiver_id, request_time):
     try:
-        request_data = db.query_db(
-                "SELECT * FROM conversation_request WHERE initiator_id=:sender_id AND receiver_id=:receiver_id",
-                {"sender_id": sender_id, "receiver_id": receiver_id},
-                one=True
-                )
-
+        request_data = ConversationRequest.get_request_by_users(sender_id, receiver_id)
         if request_data:
             raise Exception("Request has already been sent")
 
-        db.query_db(
-                "INSERT INTO conversation_request (initiator_id, receiver_id, request_time, accepted) VALUES (:sender_id, :receiver_id,:request_time, :accepted)",
-                {"sender_id": sender_id, "receiver_id": receiver_id, "request_time": request_time, "accepted": 0}
+        new_request = ConversationRequest(
+                initiator_id = sender_id,
+                receiver_id = receiver_id,
+                request_time = request_time
                 )
-        db.get_db().commit()
 
+        ConversationRequest.insert(new_request)
         return "Success", 200
     except Exception as error:
         return {"Error": "Bad Request." + str(error)}, 400
@@ -28,21 +24,11 @@ def send_request(sender_id, receiver_id, request_time):
 @request_messages.route("/api/request/accept/<int:request_id>/<int:accepted_time>", methods=["POST"])
 def accept_request(request_id, accepted_time):
     try:
-        request_data = db.query_db(
-                "SELECT * FROM conversation_request WHERE id=:request_id AND accepted=:accepted",
-                {"request_id": request_id, "accepted": 0},
-                one=True
-                )
-
+        request_data = ConversationRequest.get_request_by_id(request_id)
         if not request_data:
             raise Exception("No request found")
 
-        db.query_db(
-                "UPDATE conversation_request SET accepted=1, accepted_time=:accepted_time  WHERE id=:request_id",
-                {"request_id": request_id, "accepted_time": accepted_time}
-                )
-        db.get_db().commit()
-
+        ConversationRequest.accept(request_data, accepted_time)
         return "Success", 200
     except Exception as error:
         return {"Error": "Bad Request." + str(error)}, 400
@@ -50,21 +36,12 @@ def accept_request(request_id, accepted_time):
 @request_messages.route("/api/request/reject/<int:request_id>", methods=["POST"])
 def reject_request(request_id):
     try:
-        request_data = db.query_db(
-                "SELECT * FROM conversation_request WHERE id=:request_id AND accepted=:accepted",
-                {"request_id": request_id, "accepted": 0},
-                one=True
-                )
+        request_data = ConversationRequest.get_request_by_id(request_id)
 
         if not request_data:
             raise Exception("No request found")
 
-        db.query_db(
-                "UPDATE conversation_request SET accepted=0 WHERE id=:request_id",
-                {"request_id": request_id}
-                )
-
-        db.get_db().commit()
+        ConversationRequest.reject(request_data)
 
         return "Success", 200
 
@@ -74,23 +51,14 @@ def reject_request(request_id):
 @request_messages.route("/api/request/all/<int:user_id>", methods=["GET"])
 def get_all_requests(user_id):
     try:
-        userData = db.query_db(
-                "SELECT * FROM users WHERE id=:user_id",
-                {"user_id": user_id},
-                one=True
-                )
-
-        if not userData:
+        user_data = User.query.filter(User.id == user_id).first()
+        if not user_data:
             raise Exception("No user found")
 
-        request_data = db.query_db(
-                "SELECT * FROM conversation_request WHERE receiver_id=:user_id AND accepted=0",
-                {"user_id": user_id}
-                )
+        request_data = ConversationRequest.get_all_requests(user_data.id)
 
         return jsonify(request_data), 200
 
     except Exception as error:
         return {"Error": "Bad Request." + str(error)}, 400
-
 
