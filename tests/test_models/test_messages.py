@@ -9,7 +9,7 @@ class TestMessagesModel:
     # Selection is already included in the Messages.delete() function, so we don't have to
     # create a test for it.
     def test_basic_commands(self, test_db):
-        m = Messages(content="user3 sends a message to conversation2", seen=False, created_at=time.time())
+        m = Messages(content="user3 sends a message to conversation2")
 
         # Add the message to the database
         Messages.insert(m)

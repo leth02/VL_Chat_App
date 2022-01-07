@@ -77,17 +77,17 @@ def test_db(app):
     conv2.participants.append(user3)
 
     # Messages
-    m1 = Messages(content="user1 sends a message to conversation1", seen=False, created_at=time.time())
+    m1 = Messages(content="user1 sends a message to conversation1")
     Messages.insert(m1)
     m1.sender_id = user1.id
     conv1.messages.append(m1)
 
-    m2 = Messages(content="user2 sends a message to conversation1", seen=False, created_at=time.time())
+    m2 = Messages(content="user2 sends a message to conversation1")
     Messages.insert(m2)
     m2.sender_id = user2.id
     conv1.messages.append(m2)
 
-    # After updating all the foreign ID, an explicitly commit is needed to unlock the database
+    # After updating all the foreign ID, an explicitly commit is needed to unlock the database.
     db.session.commit()
 
     yield db

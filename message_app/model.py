@@ -1,18 +1,24 @@
 
 from __future__ import annotations
-
-from sqlalchemy.orm import relationship
 from message_app.db.db import DB as db
 import json
+import time
 from typing import Union, List
 
-# TODO: Optimize all models by removing the duplicated codes
+# TODO: Optimize all models by removing the duplicated codes. 
+# All the models will be REFACTORED in the future for more functionalities
+# and better understanding. For now, these models are good enough for
+# our upcoming prototype.
 
 # A join table for the many-to-many relationship between users and conversations tables
+# For now, we don't need to create a model for this table because this table only serves
+# the purpose of joining users and conversations tables (many-to-many relationship)
 users_conversations = db.Table(
     "users_conversations",
+    db.Column("id", db.Integer, primary_key=True),
     db.Column("user_id", db.Integer, db.ForeignKey("users.id")),
-    db.Column("conversation_id", db.Integer, db.ForeignKey("conversations.id"))
+    db.Column("conversation_id", db.Integer, db.ForeignKey("conversations.id")),
+    db.Column("seen", db.Boolean, default=False)
 )
 
 class User(db.Model):
@@ -77,15 +83,14 @@ class Conversations(db.Model):
     __tablename__ = 'conversations'
     id = db.Column(db.Integer, primary_key=True)
     participants = db.relationship("User", secondary=users_conversations, backref="conversations", lazy=True)
-    last_message_id = db.Column(db.Integer) # TODO: This one is a ForeignKey
     messages = db.relationship("Messages", backref="conversations")
+    created_at = db.Column(db.Float, default=time.time())
+    last_message_id = db.Column(db.Integer) # This column is a foreignkey
 
     # Return a json encoding of the conversation data
     def to_json(self) -> str:
         data = {
             "id": self.id
-            # "participants": self.participants,
-            # "messages": self.messages
         }
         return json.dumps(data)
 
@@ -125,9 +130,8 @@ class Messages(db.Model):
     __tablename__ = 'messages'
     id = db.Column(db.Integer, primary_key=True)
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    content = db.Column(db.String(255), nullable=False)
-    seen = db.Column(db.Boolean, nullable=False)
-    created_at = db.Column(db.Integer, nullable=False)
+    content = db.Column(db.String(255))
+    created_at = db.Column(db.Integer, default=time.time())
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'))
 
 
