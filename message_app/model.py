@@ -182,7 +182,7 @@ class ConversationRequest(db.Model):
     __tablename__ = 'conversation_request'
     id = db.Column(db.Integer, primary_key=True)
     initiator_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    receiver_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     accepted = db.Column(db.Integer, nullable=False, default=0)
     request_time = db.Column(db.Integer, nullable=False)
     accepted_time = db.Column(db.Integer)

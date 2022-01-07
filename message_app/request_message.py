@@ -11,9 +11,9 @@ def send_request(sender_id, receiver_id, request_time):
             raise Exception("Request has already been sent")
 
         new_request = ConversationRequest(
-                initiator_id = sender_id,
-                receiver_id = receiver_id,
-                request_time = request_time
+                initiator_id=sender_id,
+                receiver_id=receiver_id,
+                request_time=request_time
                 )
 
         ConversationRequest.insert(new_request)

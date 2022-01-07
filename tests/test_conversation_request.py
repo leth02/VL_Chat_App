@@ -7,9 +7,9 @@ class TestConversationRequestModel:
     # Test insert new conversation request to database
     def test_insert(self, test_db):
         test_request = ConversationRequest(
-                initiator_id = 1,
-                receiver_id = 3,
-                request_time = 12345678
+                initiator_id=1,
+                receiver_id=3,
+                request_time=12345678
                 )
 
         # Add the request to the database
@@ -21,8 +21,8 @@ class TestConversationRequestModel:
     # Test insert new conversation request without request_time -> raise error
     def test_no_request_time(self, test_db):
         test_request = ConversationRequest(
-                initiator_id = 1,
-                receiver_id = 3,
+                initiator_id=1,
+                receiver_id=3,
                 )
 
         with pytest.raises(IntegrityError):
@@ -31,9 +31,9 @@ class TestConversationRequestModel:
     # Test convert request to json
     def test_request_to_json(self, test_db):
         test_request = ConversationRequest(
-                initiator_id = 1,
-                receiver_id = 3,
-                request_time = 12345678
+                initiator_id=1,
+                receiver_id=3,
+                request_time=12345678
                 )
         ConversationRequest.insert(test_request)
 
