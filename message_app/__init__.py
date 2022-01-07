@@ -1,6 +1,7 @@
 from flask import Flask, render_template, session, redirect, url_for
 import os
 from message_app.db.db import init_SQLAlchemy
+from message_app.send_message import socketio
 
 # The function accepts a name as an argument. Leaving the name by default (app=Flask(__name__)) automatically
 # includes the package name in the path for SQLALCHEMY_DATABASE_URI, which creates confusion when
@@ -26,6 +27,9 @@ def create_app(test_config=None, name=__name__):
         # Connect to the database using SQLAlchemy
         init_SQLAlchemy()
 
+        # SocketIO
+        socketio.init_app(app)
+
     #================Registering Blueprints==================
     from . import request_message, user_sign_in, user_sign_up, send_message
     app.register_blueprint(request_message.request_messages)
@@ -37,9 +41,9 @@ def create_app(test_config=None, name=__name__):
     @app.route("/", methods=["GET"])
     def index():
         # If a session exists, redirect to message page
-        if "user" in session:
-            return redirect(url_for("send_message.messages"))
-        else:
-            return render_template("index.html")
+        # if "user" in session:
+        #     return redirect(url_for("send_messages.messages"))
+        # else:
+        return render_template("index.html")
 
     return app
