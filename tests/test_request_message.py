@@ -38,12 +38,6 @@ class TestApiSendingRequest:
         assert response.status_code == 200
         assert response.data == b'Success'
 
-    # test rejecting request fail
-    def test_rejecting_request_fail(self, test_client, test_db):
-        response = test_client.post("/api/request/reject/1002")
-        assert response.status_code == 400
-        assert response.data == b'{"Error":"Bad Request.No request found"}\n'
-
     #test get all requests successfully
     @pytest.mark.parametrize(("user_id", "status_code", "result_length"), (
         (2, 200, 1),
