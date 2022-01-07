@@ -1,8 +1,12 @@
-from flask import Blueprint, request, session, redirect, url_for
+from flask import Blueprint, request, session, redirect, url_for, render_template
 from message_app.utils import hash_pw
 from message_app.model import User
 
 user_sign_up = Blueprint("user_sign_up", __name__)
+
+@user_sign_up.route("/signup", methods=["GET"])
+def user_signup():
+    return render_template("user_signup.html")
 
 @user_sign_up.route("/api/signup", methods=["POST"])
 def api_user_signup():
@@ -35,7 +39,7 @@ def api_user_signup():
             # Create a session for this user
             session["user"] = username
 
-        return redirect(url_for("index"))
+        return redirect(url_for("send_messages.messages"))
 
     except Exception as error:
         return {"Error": "Bad request. " + str(error)}, 400

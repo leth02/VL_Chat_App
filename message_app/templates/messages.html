@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<!-- <html>
     <head>
         <title>VL | Messaging</title>
         <meta charset="utf-8">
@@ -20,4 +20,38 @@
     <script src="{{url_for('static', filename='js/messages/main.js')}}"></script>
     <script src="{{url_for('static', filename='js/conversations/main.js')}}"></script>
 
+</html> -->
+        <title>Chat Room</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            var socket = io('http://127.0.0.1:5000/messages');
+
+            socket.on("connect", function(){
+                socket.emit("message_handle", "User has connected")
+            });
+
+            socket.on("message_handle", function(msg){
+                var ul = document.getElementById("messages");
+                var li = document.createElement("li");
+                li.appendChild(document.createTextNode(msg));
+                ul.appendChild(li)
+            });
+
+            socket.on("disconnect", function(){
+                socket.emit("message_handle", "User disconnected")
+            });
+        </script>
+
+        <script>
+            function send_message(){
+                var text_field = document.getElementById("text_field");
+                socket.emit("message_handle", text_field.value)
+            }
+        </script>
+    </head>
+    <body>
+        <ul id="messages"></ul>
+        <input type="text" id="text_field">
+        <button id="send_button" onclick="send_message()">Send</button>
+    </body>
 </html>
