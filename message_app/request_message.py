@@ -28,7 +28,7 @@ def accept_request(request_id, accepted_time):
         if not request_data:
             raise Exception("No request found")
 
-        ConversationRequest.accept(request_data, accepted_time)
+        request_data.accept(accepted_time)
         return "Success", 200
     except Exception as error:
         return {"Error": "Bad Request." + str(error)}, 400
@@ -41,7 +41,7 @@ def reject_request(request_id):
         if not request_data:
             raise Exception("No request found")
 
-        ConversationRequest.reject(request_data)
+        request_data.reject()
 
         return "Success", 200
 

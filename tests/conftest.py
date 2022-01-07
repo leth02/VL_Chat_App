@@ -81,7 +81,7 @@ def test_db(app):
     ConversationRequest.insert(ConversationRequest(
         initiator_id=3,
         receiver_id=2,
-        accepted=1,
+        status="accepted",
         request_time=12345678
         ))
 

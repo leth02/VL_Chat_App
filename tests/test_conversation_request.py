@@ -42,7 +42,7 @@ class TestConversationRequestModel:
             "id": last_request.id,
             "initiator_id": last_request.initiator_id,
             "receiver_id": last_request.receiver_id,
-            "accepted": last_request.accepted,
+            "status": last_request.status,
             "request_time": last_request.request_time,
             "accepted_time": last_request.accepted_time
         }
@@ -58,7 +58,7 @@ class TestConversationRequestModel:
             "id": 1,
             "initiator_id": test_initiator.id,
             "receiver_id": test_receiver.id,
-            "accepted": 0,
+            "status": "pending",
             "request_time": 12345678,
             "accepted_time": None
             }]
@@ -92,14 +92,14 @@ class TestConversationRequestModel:
     # test accept conversation request
     def test_accept(self, test_db):
         test_request = ConversationRequest.get_request_by_id(1)
-        ConversationRequest.accept(test_request, 1234566789)
+        test_request.accept(1234566789)
 
-        assert test_request.accepted == 1
+        assert test_request.status == "accepted"
 
     # test reject conversation request
     def test_reject(self, test_db):
         test_request = ConversationRequest.get_request_by_id(1)
-        ConversationRequest.reject(test_request)
+        test_request.reject()
 
-        assert test_request.accepted == 2
+        assert test_request.status == "rejected"
 

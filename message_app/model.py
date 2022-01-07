@@ -183,7 +183,7 @@ class ConversationRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     initiator_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     receiver_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    accepted = db.Column(db.Integer, nullable=False, default=0)
+    status = db.Column(db.String, nullable=False, default="pending") # 3 status: pending, accepted, rejected
     request_time = db.Column(db.Integer, nullable=False)
     accepted_time = db.Column(db.Integer)
 
@@ -197,22 +197,22 @@ class ConversationRequest(db.Model):
             "id": self.id,
             "initiator_id": self.initiator_id,
             "receiver_id": self.receiver_id,
-            "accepted": self.accepted,
+            "status": self.status,
             "request_time": self.request_time,
             "accepted_time": self.accepted_time
         }
         return json.dumps(data)
 
-#    def accept(self, time: int) -> None:
-#        # Accept a conversation request
-#        self.accepted = 1
-#        self.accepted_time = time
-#        db.seesion.commit()
-#
-#    def reject(self) -> None:
-#        # Reject a conversation request
-#        self.accepted = 0
-#        db.session.commit()
+    def accept(self, time: int) -> None:
+        # Accept a conversation request
+        self.status = "accepted"
+        self.accepted_time = time
+        db.session.commit()
+
+    def reject(self) -> None:
+        # Reject a conversation request
+        self.status = "rejected"
+        db.session.commit()
 
     #------------------------Class Methods-------------------------
 
@@ -221,7 +221,7 @@ class ConversationRequest(db.Model):
         # query all the conversation request that receiver_id received
         all_requests = ConversationRequest.query.filter(
                 ConversationRequest.receiver_id == receiver_id,
-                ConversationRequest.accepted == 0
+                ConversationRequest.status == "pending"
                 ).order_by(ConversationRequest.id.asc()).all()
 
         all_requests_to_dict = []
@@ -231,7 +231,7 @@ class ConversationRequest(db.Model):
                     "id": request.id,
                     "initiator_id": request.initiator_id,
                     "receiver_id": request.receiver_id,
-                    "accepted": request.accepted,
+                    "status": request.status,
                     "request_time": request.request_time,
                     "accepted_time": request.accepted_time
                 })
@@ -243,7 +243,7 @@ class ConversationRequest(db.Model):
         request = ConversationRequest.query.filter(
                 ConversationRequest.initiator_id == initiator_id,
                 ConversationRequest.receiver_id == receiver_id,
-                ConversationRequest.accepted == 0
+                ConversationRequest.status == "pending"
                 ).first()
         return request
 
@@ -252,7 +252,7 @@ class ConversationRequest(db.Model):
         # query request with specific request id
         request = ConversationRequest.query.filter(
                 ConversationRequest.id == request_id,
-                ConversationRequest.accepted == 0
+                ConversationRequest.status == "pending"
                 ).first()
         return request
 
@@ -260,23 +260,5 @@ class ConversationRequest(db.Model):
     def insert(cls, new_request: ConversationRequest) -> None:
         # Add a new conversation request to the database
         db.session.add(new_request)
-        db.session.commit()
-
-    @classmethod
-    def accept(cls, request: ConversationRequest, time: int) -> None:
-        ConversationRequest.query.filter(ConversationRequest.id == request.id).update(
-                {
-                    "accepted": 1,
-                    "accepted_time": time
-                    }
-                )
-
-        db.session.commit()
-
-    @classmethod
-    def reject(cls, request: ConversationRequest) -> None:
-        ConversationRequest.query.filter(ConversationRequest.id == request.id).update(
-                {"accepted": 2}
-                )
         db.session.commit()
 
