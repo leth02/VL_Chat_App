@@ -9,6 +9,7 @@ socketio = SocketIO(cors_allowed_origins='*')
 @send_messages.route("/messages", methods=["GET"])
 def messages():
     # Get all conversations from an user
+    # TODO: Show other usernames instead of conversations' ids on the frontend
     current_user = session["user"]
     conversations = User.select(current_user).conversations
     return render_template("messages.html", username=current_user, conversation_id=0, conversations=conversations)

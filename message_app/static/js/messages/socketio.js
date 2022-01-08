@@ -1,5 +1,5 @@
-
-const socket = io('http://127.0.0.1:5000/messages', { transports: ["websocket"], upgrade: false });
+// Making the Websocket the only connection.
+const socket = io('http://127.0.0.1:5000/messages', { transports: ["websocket"] });
 
 // An event that receives messages from the server and
 // display on the screen
@@ -16,12 +16,14 @@ document.querySelector("#send_message").onclick = () => {
         alert("You must join a conversation first!")
     } else {
         var text_field = document.getElementById("text_field");
-        const d = new Date()
+        const d = new Date();
         socket.emit("message_handler", 
             {"username": username, 
             "message": text_field.value, 
             "conversation_id": conversation,
             "created_at": d.getTime()});
+        text_field.value = "";
+        text_field.focus();
     }
 }
 
@@ -33,7 +35,6 @@ document.querySelectorAll(".select_conversation").forEach(p => {
             leaveConversation(conversation)
         }
         joinConversation(new_conversation)
-        console.log(new_conversation)
         conversation = new_conversation
     }
 });
