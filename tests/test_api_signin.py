@@ -21,7 +21,7 @@ class TestAPISignIn:
         for key in sampleSignInData["valid"].keys():
             valid_user = sampleSignInData["valid"][key]
             resp = test_client.post('/api/signin', data={"username": valid_user["username"], "password": valid_user["password_hash"]})
-            assert resp.status_code == 302     
+            assert resp.status_code == 302
 
     def test_signin_wrong_password(self, sampleSignInData, test_db, test_client):
         wrongPassword = sampleSignInData["invalid"]["wrong_password"]

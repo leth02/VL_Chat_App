@@ -127,6 +127,12 @@ class Conversations(db.Model):
         id = Conversations.query.order_by(Conversations.id.desc()).first().id
         return id
 
+    @classmethod
+    def get_all_conversations_from_an_user(cls, username: str) -> List[int]:
+        current_user_id = User.select(username).id
+        conversations = db.session.query("users_conversations").filter_by(user_id=current_user_id).all()
+        return conversations
+
 
 class Messages(db.Model):
     __tablename__ = 'messages'

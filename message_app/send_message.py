@@ -1,19 +1,17 @@
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask import Blueprint, render_template, session, redirect, url_for
 from message_app.model import Messages, Conversations, User
+from message_app.db.db import DB as db
 
 send_messages = Blueprint("send_messages", __name__)
 socketio = SocketIO(cors_allowed_origins='*')
 
 @send_messages.route("/messages", methods=["GET"])
 def messages():
-    # Info of all other users who accepted the conversation request of the current user
-    user1 = User.select("1").username
-    user2 = User.select("2").username
-    user3 = User.select("3").username
-    users = [user1, user2, user3]
-
-    return render_template("messages.html", username=session["user"], conversation_id=None, users=users)
+    # Get all conversations from an user
+    current_user = session["user"]
+    conversations = User.select(current_user).conversations
+    return render_template("messages.html", username=current_user, conversation_id=0, conversations=conversations)
 
 # An event for joinning a conversation
 @socketio.on("join", namespace="/messages")
@@ -43,8 +41,12 @@ def message_handler(data):
     conversation_id = data["conversation_id"]
     created_at = data["created_at"]
 
-    # Store message to the database
+    # Update the database
     user_id = User.select(username).id
-    Messages.insert(Messages(sender_id=user_id, content=message, created_at=created_at, conversation_id=conversation_id))
+    conversation = Conversations.select(conversation_id)
+    new_message = Messages(sender_id=user_id, content=message, created_at=created_at, conversation_id=conversation_id)
+    Messages.insert(new_message)
+    conversation.last_message_id = new_message.id # Manually set the last_message_id for now
+    db.session.commit()
 
     emit("message_handler", {"username": username, "message": message}, room=conversation_id)
