@@ -1,33 +1,56 @@
-// document.addEventListener('DOMContentLoaded', () => {
-//     var socket = io('http://127.0.0.1:5000/messages');
 
-//     socket.on("connect", function(){
-//         socket.emit("message_handle", {"username": `{{username}}`, "message": "has connected!"})
-//     });
+const socket = io('http://127.0.0.1:5000/messages', { transports: ["websocket"], upgrade: false });
 
-//     socket.on("message_handle", function(data){
-//         console.log(data)
-//         var messages = document.getElementById("messages_container");
-//         var p = document.createElement("p");
-//         p.innerHTML = data.username + ": " + data.message;
-//         messages.append(p);
-//     });
+// An event that receives messages from the server and
+// display on the screen
+socket.on("message_handler", function(data){
+    var messages = document.getElementById("messages_container");
+    var p = document.createElement("p");
+    p.innerHTML = data.username + ": " + data.message;
+    messages.append(p);
+});
 
-//     socket.on("disconnect", function(){
-//         socket.emit("message_handle", "User disconnected")
-//     });
+// Only show text box if user is inside a conversation
+document.querySelector("#send_message").onclick = () => {
+    if (conversation == 0){
+        alert("You must join a conversation first!")
+    } else {
+        var text_field = document.getElementById("text_field");
+        const d = new Date()
+        socket.emit("message_handler", 
+            {"username": username, 
+            "message": text_field.value, 
+            "conversation_id": conversation,
+            "created_at": d.getTime()});
+    }
+}
 
-//     function send_message(){
-//         var text_field = document.getElementById("text_field");
-//         socket.emit("message_handle", {"message": text_field.value, "username": `{{username}}`})
-//     }
-// });
+// User picks a conversation by clicking on the username
+document.querySelectorAll(".select_conversation").forEach(p => {
+    p.onclick = () => {
+        let new_conversation = p.innerHTML
+        if (conversation != "None"){
+            leaveConversation(conversation)
+        }
+        joinConversation(new_conversation)
+        console.log(new_conversation)
+        conversation = new_conversation
+    }
+});
 
-// <!-- Server SocketIO JS -->
-//         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
-        
-//         <!-- Custom Chat JS -->
-//         <script src="{{ url_for('static', filename='js/send_message.js') }}"></script>
+// Join a conversation
+function joinConversation(conversation_id){
+    socket.emit("join", {"username": username, "conversation_id": conversation_id})
 
-//         <!-- Socket IO -->
-//         <script src="{{ url_for('static', filename='js/socketio.js') }}"></script>
+    // Clear messages area
+    document.getElementById("messages_container").innerHTML = '';
+
+    // Auto focus on text box
+    document.getElementById("text_field").value = '';
+    document.getElementById("text_field").focus();
+}
+
+// Leave a conversation
+function leaveConversation(conversation_id){
+    socket.emit("leave", {"username": username, "conversation_id": conversation_id})
+}
