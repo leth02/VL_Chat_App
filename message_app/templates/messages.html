@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<!-- <html>
+<html>
     <head>
         <title>Chat Room</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
     </head>
     <body>
+
+        <!-- Available Users -->
+        <h4>Available User</h4>
+        {% for user in users %}
+            <p id="{{ user }}" class="select_conversation">{{ user }}</p>
+        {% endfor %}
+
         <!-- Conversations -->
         <div id="messages_container">
 
@@ -17,11 +24,9 @@
         <!-- Scripts -->
         <script type="text/javascript">
             var socket = io('http://127.0.0.1:5000/messages');
-            joinConversation()
-            console.log(`{{conversation_id}}`)
+            let conversation = `{{conversation_id}}`
 
             socket.on("message_handler", function(data){
-                console.log(data)
                 var messages = document.getElementById("messages_container");
                 var p = document.createElement("p");
                 p.innerHTML = data.username + ": " + data.message;
@@ -30,16 +35,37 @@
 
             document.querySelector("#send_message").onclick = () => {
                 var text_field = document.getElementById("text_field");
+                const d = new Date()
+                console.log(conversation)
                 socket.emit("message_handler", 
                     {"username": `{{username}}`, 
                     "message": text_field.value, 
-                    "conversation_id": `{{conversation_id}}`});
+                    "conversation_id": conversation,
+                    "created_at": d.getTime()});
             }
 
+            document.querySelectorAll(".select_conversation").forEach(p => {
+                p.onclick = () => {
+                    let new_conversation = p.innerHTML
+                    if (conversation != "None"){
+                        leaveConversation(conversation)
+                    }
+                    joinConversation(new_conversation)
+                    console.log(new_conversation)
+                    conversation = new_conversation
+                }
+            });
+
             // Join a conversation
-            function joinConversation(){
-                socket.emit("join", {"username": `{{username}}`, "conversation_id": `{{conversation_id}}`})
+            function joinConversation(conversation_id){
+                socket.emit("join", {"username": `{{username}}`, "conversation_id": conversation_id})
+            }
+
+            // Leave a conversation
+            function leaveConversation(conversation_id){
+                socket.emit("leave", {"username": `{{username}}`, "conversation_id": conversation_id})
             }
         </script>
+
     </body>
 </html>

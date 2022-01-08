@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, jsonify
 from message_app.model import *
+from message_app.db.db import DB as db
 
 request_messages = Blueprint("request_messages", __name__)
 
@@ -29,6 +30,13 @@ def accept_request(request_id, accepted_time):
             raise Exception("No request found")
 
         request_data.accept(accepted_time)
+
+        # Create new conversation
+        new_conversation = Conversations(created_at=accepted_time)
+        new_conversation.participants.append(request_data.initiator_id) # TODO: Test this later
+        new_conversation.participants.append(request_data.receiver_id) # TODO: Test this later
+        db.session.commit()
+
         return "Success", 200
     except Exception as error:
         return {"Error": "Bad Request." + str(error)}, 400
