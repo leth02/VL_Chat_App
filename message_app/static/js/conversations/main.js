@@ -3,12 +3,9 @@ const CONVERSATION_PANEL_HTML = document.querySelector("#conversation-container"
 
 class ConversationModel {
 
-    constructor(participantId, lastMessage) {
-        this.participantId = participantId;
-        this.lastSenderId = lastMessage.senderId;
-        this.timestamp = lastMessage.timestamp;
-        this.messageContent = lastMessage.content;
-        this.HTMLElement = new ConversationHTMLElement(this);
+    constructor(conversation) {
+        this.conversation = conversation;
+        this.HTMLElement = new ConversationHTMLElement(this.conversation);
     }
 
     show() {
@@ -25,34 +22,12 @@ class ConversationHTMLElement {
     }
 
     generateMarkup() {
-        const lastSenderId = this.conversationObj.lastSenderId;
-        const timestamp = (new Date(this.conversationObj.timestamp)).toString().split(" ").slice(1, 5).join(", ");
-        const content = this.conversationObj.messageContent;
+        const title = this.conversationObj.title;
+
         return (
             `
-            <div class="conversation-card__container">
-                <div class="conversation-card__container">
-                    <div class="conversation-card__rows">
-                        <div class="conversation-card__rows">
-                            <div class="conversation-card__row conversation-card__title-row">
-                                <div class="conversation-card__participant-id">
-                                    ${this.conversationObj.participantId}
-                                </div>
-                                <div class="conversation-card__timestamp">
-                                    ${timestamp}
-                                </div>
-                            </div>
-                            <div class="conversation-card__row converastion-card__body-row">
-                                <div class="conversation-card__message-snippet">
-                                    ${ lastSenderId === currentUserId ? "You: " : ""}
-                                    ${content}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="conversation-card__rows"></div>
-                    </div>
-                </div>
+            <div class="conversation-card__title">
+                ${title}
             </div>
             `
         )
@@ -60,6 +35,7 @@ class ConversationHTMLElement {
 
     show() {
         this.selfEl = document.createElement("div");
+        this.selfEl.className = "conversation-card__container";
         this.selfEl.innerHTML = this.generateMarkup();
         this.parentEl.append(this.selfEl);
     }
@@ -68,12 +44,21 @@ class ConversationHTMLElement {
 
 // Sample conversations
 const conversationArrays = [
-    ["1000002", {senderId: "1000001", timestamp: 1641441872000, content: "Definitely a sample message"}],
-    ["1000003", {senderId: "1000001", timestamp: 1641441813000, content: "Not a sample message"}]
+    {
+        id: 12356788,
+        title: "Title of conversation A" // If more than two other users join this conversation, join their usernames together
+    },
+    {
+        id: 45432343,
+        title: "Title of conversation B" // If more than two other users join this conversation, join their usernames together
+    },
+    {
+        id: 78645645,
+        title: "Luc Vuong, Khuong Long, and 1+ other people" // If more than two other users join this conversation, join their usernames together
+    }
 ];
-console.log(conversationArrays)
+
 for (const c of conversationArrays) {
-    console.log(c);
-    const conversation = new ConversationModel(c[0], c[1]);
+    const conversation = new ConversationModel(c);
     conversation.show();
 }

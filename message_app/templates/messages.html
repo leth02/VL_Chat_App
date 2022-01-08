@@ -3,16 +3,28 @@
     <head>
         <title>VL | Messaging</title>
         <meta charset="utf-8">
+        <link rel="icon" href="{{url_for('static', filename='images/VL-logo-favicon.jpeg')}}">
         <link rel="stylesheet" href="{{url_for('static', filename='css/messages/main.css')}}">
     </head>
 
     <body>
         <div style="display: flex; height: 100vh; overflow: hidden;">
-            <div id="conversation-container">Conversations</div>
-            <div id="message-container" style="width: 70%;">
+            <div id="conversation-container">CONVERSATIONS</div>
+            <div id="message-container">
                 <div id="message-panel"></div>
+                <form class="message-form">
+                    <div class="message-form__message-container">
+                        <div class="message-form__message-content-container">
+                            <div class="message-form__content-editable" contenteditable="true" role="textbox" aria-label="Write a message..." aria-multiline="true">
+                            </div>
+                            <div class="message-form__placeholder" aria-hidden="true">
+                                Write a message...
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div id="participant-info-container" style="width: 20%;">Info of the other participant</div>
+            <div id="participant-info-container" style="width: 200px;">Info of the other participant</div>
         </div>
     </body>
 
