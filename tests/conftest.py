@@ -34,7 +34,6 @@ def test_db(app):
 
     # Initialize test database
     init_SQLAlchemy()
-    db.session.begin()
 
     #============= Populate testing data =======================
 
@@ -97,4 +96,3 @@ def test_client(app):
 @pytest.fixture
 def test_runner(app):
     return app.test_cli_runner()
-

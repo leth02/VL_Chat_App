@@ -17,4 +17,3 @@ def init_SQLAlchemy() -> None:
 
     DB.init_app(current_app)
     DB.create_all()
-

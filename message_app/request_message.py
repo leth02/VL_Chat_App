@@ -61,4 +61,3 @@ def get_all_requests(user_id):
 
     except Exception as error:
         return {"Error": "Bad Request." + str(error)}, 400
-
