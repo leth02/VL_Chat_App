@@ -7,4 +7,4 @@ flask_sqlalchemy
 python-dotenv
 bcrypt
 flask-socketio
-eventlet
+simple-websocket

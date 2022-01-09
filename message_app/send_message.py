@@ -14,17 +14,18 @@ def messages():
     conversations = User.select(current_user).conversations
     return render_template("messages.html", username=current_user, conversation_id=0, conversations=conversations)
 
-# An event for joinning a conversation
+# An socket for joinning a conversation
 @socketio.on("join", namespace="/messages")
 def joining(data):
     username = data["username"]
     conversation_id = data["conversation_id"]
+
     join_room(conversation_id)
 
     # Send a message that inform new user has join the conversation
-    emit("message_handler", {"username": username, "message": " has join the conversation"}, room=conversation_id)
+    emit("message_handler_client", {"username": username, "conversation_id": conversation_id, "join": True}, room=conversation_id)
 
-# An event for leaving a conversation
+# A socket for leaving a conversation
 @socketio.on("leave", namespace="/messages")
 def leaving(data):
     username = data["username"]
@@ -32,10 +33,10 @@ def leaving(data):
     leave_room(conversation_id)
 
     # Send a message that inform an user has left the conversation
-    emit("message_handler", {"username": username, "message": "has left the conversation"}, room=conversation_id)
+    emit("message_handler_client", {"username": username, "conversation_id": conversation_id, "join": False}, room=conversation_id)
 
-# An event that handles sending/receiving messages
-@socketio.on('message_handler', namespace="/messages")
+# A socket that handles sending/receiving messages
+@socketio.on('message_handler_server', namespace="/messages")
 def message_handler(data):
     username = data["username"]
     message = data["message"]
@@ -49,5 +50,6 @@ def message_handler(data):
     Messages.insert(new_message)
     conversation.last_message_id = new_message.id # Manually set the last_message_id for now
     db.session.commit()
+    data["id"] = new_message.id
 
-    emit("message_handler", {"username": username, "message": message}, room=conversation_id)
+    emit("message_handler_client", data, room=conversation_id)

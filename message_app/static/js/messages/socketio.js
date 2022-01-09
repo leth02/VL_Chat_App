@@ -3,29 +3,12 @@ const socket = io('http://127.0.0.1:5000/messages', { transports: ["websocket"] 
 
 // An event that receives messages from the server and
 // display on the screen
-socket.on("message_handler", function(data){
-    var messages = document.getElementById("messages_container");
-    var p = document.createElement("p");
-    p.innerHTML = data.username + ": " + data.message;
-    messages.append(p);
-});
-
-// Only show text box if user is inside a conversation
-document.querySelector("#send_message").onclick = () => {
-    if (conversation == 0){
-        alert("You must join a conversation first!")
-    } else {
-        var text_field = document.getElementById("text_field");
-        const d = new Date();
-        socket.emit("message_handler", 
-            {"username": username, 
-            "message": text_field.value, 
-            "conversation_id": conversation,
-            "created_at": d.getTime()});
-        text_field.value = "";
-        text_field.focus();
+socket.on("message_handler_client", function(data){
+    if (!("join" in data)){
+        const message = new MessageModel(data.id, data.conversation_id, data.username, data.message, false, data.created_at);
+        message.show()
     }
-}
+});
 
 // User picks a conversation by clicking on the username
 document.querySelectorAll(".select_conversation").forEach(p => {
@@ -41,14 +24,9 @@ document.querySelectorAll(".select_conversation").forEach(p => {
 
 // Join a conversation
 function joinConversation(conversation_id){
-    socket.emit("join", {"username": username, "conversation_id": conversation_id})
-
-    // Clear messages area
-    document.getElementById("messages_container").innerHTML = '';
-
-    // Auto focus on text box
-    document.getElementById("text_field").value = '';
-    document.getElementById("text_field").focus();
+    socket.emit("join", {"username": username, "conversation_id": conversation_id});
+    var message_panel = document.getElementById("message-panel");
+    message_panel.innerHTML = "";
 }
 
 // Leave a conversation
