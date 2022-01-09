@@ -1,3 +1,4 @@
+from os import name
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask import Blueprint, render_template, session, redirect, url_for
 from message_app.model import Messages, Conversations, User
@@ -35,8 +36,13 @@ def leaving(data):
     # Send a message that inform an user has left the conversation
     emit("message_handler_client", {"username": username, "conversation_id": conversation_id, "join": False}, room=conversation_id)
 
+# A socket that checks if an user is typing
+@socketio.on("typing", namespace="/messages")
+def is_typing(data):
+    emit("typing", {"username": data["username"]}, broadcast=True, include_self=False)
+
 # A socket that handles sending/receiving messages
-@socketio.on('message_handler_server', namespace="/messages")
+@socketio.on("message_handler_server", namespace="/messages")
 def message_handler(data):
     username = data["username"]
     message = data["message"]

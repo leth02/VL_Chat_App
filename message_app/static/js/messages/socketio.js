@@ -1,24 +1,34 @@
 // Making the Websocket the only connection.
 const socket = io('http://127.0.0.1:5000/messages', { transports: ["websocket"] });
 
-// An event that receives messages from the server and
-// display on the screen
+// An event that receives messages from the server
 socket.on("message_handler_client", function(data){
     if (!("join" in data)){
         const message = new MessageModel(data.id, data.conversation_id, data.username, data.message, false, data.created_at);
-        message.show()
+        FEEDBACK_HTML.innerHTML = "";
+        message.show();
     }
+});
+
+// An event that shows if an user is typing
+socket.on("typing", function(data){
+    FEEDBACK_HTML.innerHTML = data.username + " is typing ....";
 });
 
 // User picks a conversation by clicking on the username
 document.querySelectorAll(".select_conversation").forEach(p => {
     p.onclick = () => {
-        let new_conversation = p.innerHTML
-        if (conversation != "None"){
-            leaveConversation(conversation)
+        let new_conversation = p.getAttribute("conv_id");
+        if (conversation == new_conversation){
+            alert("You are already in the conversation.");
+        } else {
+            // Conversation 0 means the user is not currently in any conversation
+            if (conversation != 0){ 
+                leaveConversation(conversation);
+            }
+            joinConversation(new_conversation);
+            conversation = new_conversation;
         }
-        joinConversation(new_conversation)
-        conversation = new_conversation
     }
 });
 

@@ -1,5 +1,6 @@
 
 const MESSAGE_PANEL_HTML = document.querySelector("#message-panel");
+const FEEDBACK_HTML = document.querySelector("#feedback");
 
 // ===== Messages =====
 class MessageModel {
@@ -89,7 +90,11 @@ for (const m of messageArrays) {
 }
 
 const messagePlaceholder = document.getElementsByClassName("message-form__placeholder")[0];
+
 const textEditor = document.getElementsByClassName("message-form__content-editable")[0];
+textEditor.addEventListener("keypress", function(){
+    socket.emit("typing", {"username": username});
+});
 textEditor.addEventListener("keydown", textEditorHandler);
 function textEditorHandler(event) {
     if (event.keyCode === 13) {
@@ -99,7 +104,6 @@ function textEditorHandler(event) {
             alert("You must join a conversation first!") // TODO: Replace this with something better
         } else {
             var text_field = document.querySelector(".message-form__content-editable");
-            console.log(text_field.innerHTML)
             const d = new Date();
             socket.emit("message_handler_server", 
                 {"username": username, 
