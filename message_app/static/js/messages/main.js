@@ -3,13 +3,12 @@ const MESSAGE_PANEL_HTML = document.querySelector("#message-panel");
 
 // ===== Messages =====
 class MessageModel {
-    constructor(id, conversationId, senderId, receiverId, content, seen, timestamp) {
+    constructor(id, conversationId, sender_name, content, seen, timestamp) {
         this.id = id;
         this.conversationId = conversationId;
-        this.senderId = senderId;
-        this.receiverId = receiverId;
+        this.sender_name = sender_name;
         this.content = content;
-        this.seen = seen;
+        this.seen = seen; // TODO: Implement seen function
         this.timestamp = timestamp;
         this.HTMLElement = new MessageHTMLElement(this);
     }
@@ -49,14 +48,14 @@ class MessageHTMLElement {
     }
 
     generateMarkup() {
-        const senderId = this.messageObj.senderId;
+        const sender_name = this.messageObj.sender_name;
         const sentTime = getTimeString(this.messageObj.timestamp);
         const content = this.messageObj.content;
         return (
             `
             <div class="msg-item">
                 <div class="msg-item__meta">
-                    <div class="msg-item__sender-id">${senderId}</div>
+                    <div class="msg-item__sender-id">${sender_name}</div>
                     <div class="msg-item__sent-time">${sentTime}</div>
                 </div>
 
@@ -79,9 +78,9 @@ let globalNow = new Date();
 
 // Create a sample messages
 const messageArrays = [
-    ["qwefasf213w", "abcxyz123", "1000001", "10000002", "This is a sample message", true, globalNow.getTime() - 86400000*2],
-    ["rerwe342342", "abcxyz678", "1000001", "10000002", "Another sample message", true, globalNow.getTime() - 50400000],
-    ["rwer12323fs", "abcxyz890", "1000002", "10000001", "Definitely a sample message", true, globalNow.getTime() - 7200000],
+    ["qwefasf213w", "abcxyz123", "1000001", "This is a sample message", true, globalNow.getTime() - 86400000*2],
+    ["rerwe342342", "abcxyz678", "1000001", "Another sample message", true, globalNow.getTime() - 50400000],
+    ["rwer12323fs", "abcxyz890", "1000002", "Definitely a sample message", true, globalNow.getTime() - 7200000],
 
 ];
 for (const m of messageArrays) {
@@ -96,7 +95,20 @@ function textEditorHandler(event) {
     if (event.keyCode === 13) {
         event.preventDefault();
 
-        // TODO: add send message handler here
+        if (conversation == 0){
+            alert("You must join a conversation first!") // TODO: Replace this with something better
+        } else {
+            var text_field = document.querySelector(".message-form__content-editable");
+            console.log(text_field.innerHTML)
+            const d = new Date();
+            socket.emit("message_handler_server", 
+                {"username": username, 
+                "message": text_field.innerHTML, 
+                "conversation_id": conversation,
+                "created_at": d.getTime()});
+            text_field.innerHTML = "";
+            text_field.focus();
+        }
 
     } else if (event.keyCode === 8) {
         // if user delete a character, display the placeholder text if there is no character left

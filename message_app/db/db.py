@@ -17,13 +17,3 @@ def init_SQLAlchemy() -> None:
 
     DB.init_app(current_app)
     DB.create_all()
-
-# Init a new database if the database doesn't exist.
-# open_resource() opens a file relative to the flaskr package, which is useful since you won’t necessarily
-# know where that location is when deploying the application later.
-def init_db():
-    db = get_db()
-    path_to_schema = os.path.join("db", 'message-app.sql')
-    with current_app.open_resource(path_to_schema) as f:
-        db.executescript(f.read().decode('utf8'))
-

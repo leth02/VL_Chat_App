@@ -6,3 +6,5 @@ pytest-mock
 flask_sqlalchemy
 python-dotenv
 bcrypt
+flask-socketio
+simple-websocket

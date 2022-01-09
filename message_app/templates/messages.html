@@ -6,10 +6,16 @@
         <link rel="icon" href="{{url_for('static', filename='images/VL-logo-favicon.jpeg')}}">
         <link rel="stylesheet" href="{{url_for('static', filename='css/messages/main.css')}}">
     </head>
-
     <body>
         <div style="display: flex; height: 100vh; overflow: hidden;">
-            <div id="conversation-container">CONVERSATIONS</div>
+
+            <!-- All available conversations -->
+            <div id="conversation-container">CONVERSATIONS
+                {% for conv in conversations %}
+                    <p id="{{ conv.id }}" class="select_conversation">{{ conv.id }}</p>
+                {% endfor %}
+            </div>
+
             <div id="message-container">
                 <div id="message-panel"></div>
                 <form class="message-form">
@@ -25,11 +31,19 @@
                 </form>
             </div>
             <div id="participant-info-container" style="width: 200px;">Info of the other participant</div>
-        </div>
+
+
+        <!-- Socket IO JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            var conversation = `{{ conversation_id }}`;
+            var username = `{{ username }}`
+        </script>
+        <script src="{{ url_for('static', filename='js/messages/socketio.js') }}"> </script>
+
+        <!-- Custom send_message JS -->
+        <script src="{{url_for('static', filename='js/state.js')}}"></script>
+        <script src="{{url_for('static', filename='js/messages/main.js')}}"></script>
+        <script src="{{url_for('static', filename='js/conversations/main.js')}}"></script>
     </body>
-
-    <script src="{{url_for('static', filename='js/state.js')}}"></script>
-    <script src="{{url_for('static', filename='js/messages/main.js')}}"></script>
-    <script src="{{url_for('static', filename='js/conversations/main.js')}}"></script>
-
 </html>

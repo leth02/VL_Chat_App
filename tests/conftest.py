@@ -69,7 +69,7 @@ def test_db(app):
     m2.sender_id = user2.id
     conv1.messages.append(m2)
 
-    # After updating all the foreign ID, an explicitly commit is needed to unlock the database.
+    # # After updating all the foreign ID, an explicitly commit is needed to unlock the database.
     db.session.commit()
 
     # Populate testing data for request_conversation table
@@ -96,4 +96,3 @@ def test_client(app):
 @pytest.fixture
 def test_runner(app):
     return app.test_cli_runner()
-

@@ -127,7 +127,6 @@ class Conversations(db.Model):
         id = Conversations.query.order_by(Conversations.id.desc()).first().id
         return id
 
-
 class Messages(db.Model):
     __tablename__ = 'messages'
     id = db.Column(db.Integer, primary_key=True)
@@ -177,6 +176,8 @@ class Messages(db.Model):
         # Get last message ID
         id = Messages.query.order_by(Messages.id.desc()).first().id
         return id
+
+
 # SQLAlchemy model for conversation_request table
 class ConversationRequest(db.Model):
     __tablename__ = 'conversation_request'
@@ -187,7 +188,7 @@ class ConversationRequest(db.Model):
     request_time = db.Column(db.Integer, nullable=False)
     accepted_time = db.Column(db.Integer)
 
-    def __eq__(self, other_request: CoversationRequest) -> bool:
+    def __eq__(self, other_request: ConversationRequest) -> bool:
         # Compare two users using its username
         return other_request.id == self.id
 
@@ -261,4 +262,3 @@ class ConversationRequest(db.Model):
         # Add a new conversation request to the database
         db.session.add(new_request)
         db.session.commit()
-

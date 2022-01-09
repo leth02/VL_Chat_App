@@ -102,4 +102,3 @@ class TestConversationRequestModel:
         test_request.reject()
 
         assert test_request.status == "rejected"
-
