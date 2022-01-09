@@ -12,12 +12,13 @@
             <!-- All available conversations -->
             <div id="conversation-container">CONVERSATIONS
                 {% for conv in conversations %}
-                    <p id="{{ conv.id }}" class="select_conversation">{{ conv.id }}</p>
+                    <p id="{{ conv.participants }}" class="select_conversation" conv_id="{{ conv.id }}">{{ conv.participants }}</p>
                 {% endfor %}
             </div>
 
             <div id="message-container">
                 <div id="message-panel"></div>
+                <div id="feedback"></div>
                 <form class="message-form">
                     <div class="message-form__message-container">
                         <div class="message-form__message-content-container">
