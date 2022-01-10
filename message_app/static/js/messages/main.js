@@ -1,6 +1,11 @@
 
 const MESSAGE_PANEL_HTML = document.querySelector("#message-panel");
 const FEEDBACK_HTML = document.querySelector("#feedback");
+var UTILS_VARIABLES = {
+    "EMPTY_TEXTBOX": true, // Check if user textbox is empty
+    "TIME_LIMIT": 5, // Time between each check for user typing
+    "TIME_COUNT": 0 // Calculate past time since last check
+}
 
 // ===== Messages =====
 class MessageModel {
