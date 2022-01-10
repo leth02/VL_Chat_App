@@ -36,43 +36,44 @@ def create_app(test_config=None, name=__name__):
         # Some data for real-time testing purpose and will be DELETED before deployment.
         # Delete the current database or comment out this part if there is any conflict
         # Uncomment this part for real-time testing
-        try:
-            # User
-            password_hash_1 = hash_pw("1")
-            password_hash_2 = hash_pw("2")
-            password_hash_3 = hash_pw("3")
-            user1 = User(username="user1", email="email11@test.com", password_hash=password_hash_1)
-            user2 = User(username="user2", email="email22@test.com", password_hash=password_hash_2)
-            user3 = User(username="user3", email="email33@test.com", password_hash=password_hash_3)
-            User.insert(user1)
-            User.insert(user2)
-            User.insert(user3)
+        if not test_config:
+            try:
+                # User
+                password_hash_1 = hash_pw("1")
+                password_hash_2 = hash_pw("2")
+                password_hash_3 = hash_pw("3")
+                user1 = User(username="user1", email="email11@test.com", password_hash=password_hash_1)
+                user2 = User(username="user2", email="email22@test.com", password_hash=password_hash_2)
+                user3 = User(username="user3", email="email33@test.com", password_hash=password_hash_3)
+                User.insert(user1)
+                User.insert(user2)
+                User.insert(user3)
 
-            # Conversations
-            conv1 = Conversations()
-            conv2 = Conversations()
-            Conversations.insert(conv1)
-            Conversations.insert(conv2)
-            conv1.participants.append(user1)
-            conv1.participants.append(user2)
-            conv2.participants.append(user1)
-            conv2.participants.append(user3)
+                # Conversations
+                conv1 = Conversations()
+                conv2 = Conversations()
+                Conversations.insert(conv1)
+                Conversations.insert(conv2)
+                conv1.participants.append(user1)
+                conv1.participants.append(user2)
+                conv2.participants.append(user1)
+                conv2.participants.append(user3)
 
-            # Messages
-            m1 = Messages(content="user1 sends a message to conversation1")
-            Messages.insert(m1)
-            m1.sender_id = user1.id
-            conv1.messages.append(m1)
+                # Messages
+                m1 = Messages(content="user1 sends a message to conversation1")
+                Messages.insert(m1)
+                m1.sender_id = user1.id
+                conv1.messages.append(m1)
 
-            m2 = Messages(content="user2 sends a message to conversation1")
-            Messages.insert(m2)
-            m2.sender_id = user2.id
-            conv1.messages.append(m2)
+                m2 = Messages(content="user2 sends a message to conversation1")
+                Messages.insert(m2)
+                m2.sender_id = user2.id
+                conv1.messages.append(m2)
 
-            # An explicitly commit unlocks the database.
-            db.session.commit()
-        except:
-            pass
+                # An explicitly commit unlocks the database.
+                db.session.commit()
+            except:
+                pass
         #===============END OF THE TEST DATA =================
 
         # SocketIO
