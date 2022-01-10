@@ -12,7 +12,7 @@
             <!-- All available conversations -->
             <div id="conversation-container">CONVERSATIONS
                 {% for conv in conversations %}
-                    <p id="{{ conv.participants }}" class="select_conversation" conv_id="{{ conv.id }}">{{ conv.participants }}</p>
+                    <p id="{{ conv.participants[0].username }} + {{ conv.participants[1].username }}" class="select_conversation" conv_id="{{ conv.id }}">{{ conv.participants[0].username }} + {{ conv.participants[1].username }}</p>
                 {% endfor %}
             </div>
 
