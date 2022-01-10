@@ -49,7 +49,10 @@ class MessageHTMLElement {
     }
 
     generateMarkup() {
-        const sender_name = this.messageObj.sender_name;
+        let sender_name = this.messageObj.sender_name;
+        if (sender_name === username){
+            sender_name = "You"
+        }
         const sentTime = getTimeString(this.messageObj.timestamp);
         const content = this.messageObj.content;
         return (
