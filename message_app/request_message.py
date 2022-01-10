@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, jsonify
 from message_app.model import *
+from message_app.db.db import DB as db
 
 request_messages = Blueprint("request_messages", __name__)
 
@@ -61,3 +62,14 @@ def get_all_requests(user_id):
 
     except Exception as error:
         return {"Error": "Bad Request." + str(error)}, 400
+
+@request_messages.route("/api/request/get_people/<int:user_id>", methods=["GET"])
+def get_people(user_id):
+    # get all users except user_id
+    try:
+        data = User.find_people(user_id)
+
+        return jsonify(data), 200
+
+    except Exception as error:
+        return {"Error": "Bad request." + str(error)}, 400

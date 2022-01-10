@@ -60,3 +60,9 @@ class TestApiSendingRequest:
         assert response.status_code == status_code
         assert response.data == response_message
 
+    # test get all people api
+    def test_get_people(self, test_client, test_db):
+        response = test_client.get("/api/request/get_people/2")
+        assert response.status_code == 200
+        assert len(json.loads(response.data)) == 2
+
