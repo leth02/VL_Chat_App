@@ -31,7 +31,7 @@ def messages():
         conv_id = conv.id
 
         # time.time() * 1000 because time function in Python returns time in seconds, while JS returns time in milliseconds
-        status = "active" if time.time()*1000 - last_active_time < LAST_ACTIVE_INTERVAL else "away"
+        status = "active" if (time.time() * 1000 - last_active_time < LAST_ACTIVE_INTERVAL) else "away"
         data = {
             "title": receiver_name,
             # "last_active_time": last_active_time, # This key shows exact how long the user has been away
