@@ -39,7 +39,7 @@ def leaving(data):
 # A socket that checks if an user is typing
 @socketio.on("typing", namespace="/messages")
 def is_typing(data):
-    emit("typing", {"username": data["username"]}, broadcast=True, include_self=False)
+    emit("typing", data, broadcast=True, include_self=False)
 
 # A socket that handles sending/receiving messages
 @socketio.on("message_handler_server", namespace="/messages")

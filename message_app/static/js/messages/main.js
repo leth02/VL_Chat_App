@@ -1,6 +1,11 @@
 
 const MESSAGE_PANEL_HTML = document.querySelector("#message-panel");
 const FEEDBACK_HTML = document.querySelector("#feedback");
+var UTILS_VARIABLES = {
+    "EMPTY_TEXTBOX": true, // Check if user textbox is empty
+    "TIME_LIMIT": 5, // Time between each check for user typing
+    "TIME_COUNT": 0 // Calculate past time since last check
+}
 
 // ===== Messages =====
 class MessageModel {
@@ -92,9 +97,24 @@ for (const m of messageArrays) {
 const messagePlaceholder = document.getElementsByClassName("message-form__placeholder")[0];
 
 const textEditor = document.getElementsByClassName("message-form__content-editable")[0];
+
+// Set EMPTY_TEXTBOX to true when a user writes in the textbox
 textEditor.addEventListener("keypress", function(){
-    socket.emit("typing", {"username": username});
+    UTILS_VARIABLES.EMPTY_TEXTBOX = false;
+    UTILS_VARIABLES.TIME_COUNT = 0;
+    
 });
+
+if (textEditor.innerHTML == ""){
+    UTILS_VARIABLES.EMPTY_TEXTBOX = true;
+}
+
+// Give Feedback to other users in the room if an user is typing
+// An user is typing when their focus is on the textbox and their textbox is not empty
+if (UTILS_VARIABLES.EMPTY_TEXTBOX){
+    socket.emit("typing", {"username": username, "is_typing": true});
+}
+
 textEditor.addEventListener("keydown", textEditorHandler);
 function textEditorHandler(event) {
     if (event.keyCode === 13) {

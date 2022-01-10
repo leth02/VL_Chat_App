@@ -12,7 +12,11 @@ socket.on("message_handler_client", function(data){
 
 // An event that shows if an user is typing
 socket.on("typing", function(data){
-    FEEDBACK_HTML.innerHTML = data.username + " is typing ....";
+    if (data.is_typing){
+        FEEDBACK_HTML.innerHTML = data.username + " is typing ....";
+    } else {
+        FEEDBACK_HTML.innerHTML = "";
+    }
 });
 
 // User picks a conversation by clicking on the username
