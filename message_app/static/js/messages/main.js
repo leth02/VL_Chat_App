@@ -1,9 +1,6 @@
 
 const MESSAGE_PANEL_HTML = document.querySelector("#message-panel");
 const FEEDBACK_HTML = document.querySelector("#feedback");
-let UTILS_VARIABLES = {
-    "EMPTY_TEXTBOX": true // Check if user textbox is empty
-}
 
 // ===== Messages =====
 class MessageModel {
