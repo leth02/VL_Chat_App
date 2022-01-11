@@ -96,19 +96,29 @@ const messagePlaceholder = document.getElementsByClassName("message-form__placeh
 
 const textEditor = document.getElementsByClassName("message-form__content-editable")[0];
 
+
 // Give Feedback to other users in the room if an user is typing
-// The function will be called every 2 seconds
-setInterval(isTyping, 2000);
+// After a user starts typing, the function will be called every 3 seconds, and
+// it will stop after user stops typing
+let check_user_is_typing_interval = NaN;
+textEditor.addEventListener("keydown", function(){
+    if (isNaN(check_user_is_typing_interval)){
+        check_user_is_typing_interval = setInterval(isTyping, 3000);
+    }
+});
+
 function isTyping(){
     // An user is typing when their focus is on the textbox and their textbox is not empty
     if (textEditor.textContent.length > 0 && document.activeElement === textEditor){
         socket.emit("typing", {"username": username, "is_typing": true});
     } else {
         socket.emit("typing", {"username": username, "is_typing": false});
+        clearInterval(check_user_is_typing_interval);
+        check_user_is_typing_interval = NaN;
     }
 }
 
-textEditor.addEventListener("keydown", textEditorHandler);
+textEditor.addEventListener("keydown", textEditorHandler)
 
 function textEditorHandler(event) {
     if (event.keyCode === 13) {
