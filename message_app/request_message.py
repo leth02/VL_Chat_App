@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify
+from flask import Blueprint, render_template, jsonify, session
 from message_app.model import *
 from message_app.db.db import DB as db
 
@@ -73,3 +73,11 @@ def get_people(user_id):
 
     except Exception as error:
         return {"Error": "Bad request." + str(error)}, 400
+
+@request_messages.route("/request/people", methods=["GET"])
+def render_people():
+    if "user" in session:
+        return render_template("people_list.html", user=session["user"])
+    else:
+        return render_template("index.html")
+

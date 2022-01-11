@@ -37,7 +37,7 @@ def api_user_signup():
             User.insert(new_user)
 
             # Create a session for this user
-            session["user"] = username
+            session["user"] = (new_user.id, username)
 
         return redirect(url_for("send_messages.messages"))
 

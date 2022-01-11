@@ -160,7 +160,7 @@ class User(db.Model):
         no_request_users = db.session.query(User.id, User.username).filter(
                 and_(
                     not_(User.id.in_(request_users_id)),
-                    User.id != 2
+                    User.id != user_id
                     )
                 ).all()
 
