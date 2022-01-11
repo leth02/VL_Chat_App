@@ -3,6 +3,7 @@ from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask import Blueprint, render_template, session
 from message_app.model import Messages, Conversations, User
 from message_app.db.db import DB
+import json
 
 send_messages = Blueprint("send_messages", __name__)
 socketio = SocketIO(cors_allowed_origins='*')
@@ -16,7 +17,7 @@ def messages():
     # Get all conversations from an user
     current_user = session["user"]
     conversations = User.select(current_user).conversations
-    receivers = []
+    available_conversations = []
     for conv in conversations:
         # receiver_name works for a group having only 2 people.
         # TODO: Implement receiver_name for a group having more than 2 people
@@ -32,15 +33,14 @@ def messages():
         # time.time() * 1000 because time function in Python returns time in seconds, while JS returns time in milliseconds
         status = "active" if time.time()*1000 - last_active_time < LAST_ACTIVE_INTERVAL else "away"
         data = {
-            "receiver_name": receiver_name,
-            "last_active_time": last_active_time,
-            "conv_id": conv_id,
-            "status": status
+            "title": receiver_name,
+            # "last_active_time": last_active_time, # This key shows exact how long the user has been away
+            "id": str(conv_id),
+            "conversation_status": status
         }
-        receivers.append(data)
+        available_conversations.append(data)
 
-
-    return render_template("messages.html", username=current_user, conversation_id=0, receivers=receivers)
+    return render_template("messages.html", username=current_user, conversation_id=0, available_conversations=available_conversations)
 
 # An socket for joinning a conversation
 @socketio.on("join", namespace="/messages")
