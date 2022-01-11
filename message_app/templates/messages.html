@@ -15,7 +15,11 @@
         <div style="display: flex; height: 100vh; overflow: hidden;">
 
             <!-- All available conversations -->
-            <div id="conversation-container">CONVERSATIONS
+            <div id="conversation-container">
+                <div>
+                    <a href="/request/people">Find People</a>
+                </div>
+                CONVERSATIONS
                 {% for conv in conversations %}
                     <p id="{{ conv.participants[0].username }} + {{ conv.participants[1].username }}" class="select_conversation" conv_id="{{ conv.id }}">{{ conv.participants[0].username }} + {{ conv.participants[1].username }}</p>
                 {% endfor %}
