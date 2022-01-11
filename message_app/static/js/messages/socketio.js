@@ -20,8 +20,8 @@ socket.on("typing", function(data){
 });
 
 // User picks a conversation by clicking on the username
-document.querySelectorAll(".select_conversation").forEach(p => {
-    p.onclick = () => {
+document.querySelectorAll(".select_conversation").forEach(div => {
+    div.onclick = () => {
         let new_conversation = p.getAttribute("conv_id");
         if (conversation == new_conversation){
             alert("You are already in the conversation.");

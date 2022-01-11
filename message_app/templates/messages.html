@@ -15,12 +15,7 @@
         <div style="display: flex; height: 100vh; overflow: hidden;">
 
             <!-- All available conversations -->
-            <div id="conversation-container">CONVERSATIONS
-                {% for receiver in receivers %}
-                    <p id="{{ receiver.receiver_name }} - {{ receiver.status }}" class="select_conversation" conv_id="{{ receiver.conv_id }}">{{ receiver.receiver_name }} - {{ receiver.status }}</p>
-                {% endfor %}
-            </div>
-
+            <div id="conversation-container">CONVERSATIONS</div>
             <div id="message-container">
                 <div id="message-panel"></div>
                 <div id="feedback"></div>
@@ -42,8 +37,9 @@
         <!-- Socket IO JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
         <script type="text/javascript">
-            var conversation = `{{ conversation_id }}`;
-            var username = `{{ username }}`
+            let conversation = `{{ conversation_id }}`;
+            let username = `{{ username }}`;
+            let available_conversations = JSON.parse('{{ available_conversations|tojson|safe }}');
         </script>
         <script src="{{ url_for('static', filename='js/messages/socketio.js') }}"> </script>
 
