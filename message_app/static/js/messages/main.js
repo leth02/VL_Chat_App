@@ -49,7 +49,10 @@ class MessageHTMLElement {
     }
 
     generateMarkup() {
-        const sender_name = this.messageObj.sender_name;
+        let sender_name = this.messageObj.sender_name;
+        if (sender_name === username){
+            sender_name = "You"
+        }
         const sentTime = getTimeString(this.messageObj.timestamp);
         const content = this.messageObj.content;
         return (
@@ -92,10 +95,31 @@ for (const m of messageArrays) {
 const messagePlaceholder = document.getElementsByClassName("message-form__placeholder")[0];
 
 const textEditor = document.getElementsByClassName("message-form__content-editable")[0];
-textEditor.addEventListener("keypress", function(){
-    socket.emit("typing", {"username": username});
+
+
+// Give Feedback to other users in the room if an user is typing
+// After a user starts typing, the function will be called every 3 seconds, and
+// it will stop after user stops typing
+let check_user_is_typing_interval = NaN;
+textEditor.addEventListener("keydown", function(){
+    if (isNaN(check_user_is_typing_interval)){
+        check_user_is_typing_interval = setInterval(isTyping, 3000);
+    }
 });
-textEditor.addEventListener("keydown", textEditorHandler);
+
+function isTyping(){
+    // An user is typing when their focus is on the textbox and their textbox is not empty
+    if (textEditor.textContent.length > 0 && document.activeElement === textEditor){
+        socket.emit("typing", {"username": username, "is_typing": true});
+    } else {
+        socket.emit("typing", {"username": username, "is_typing": false});
+        clearInterval(check_user_is_typing_interval);
+        check_user_is_typing_interval = NaN;
+    }
+}
+
+textEditor.addEventListener("keydown", textEditorHandler)
+
 function textEditorHandler(event) {
     if (event.keyCode === 13) {
         event.preventDefault();
