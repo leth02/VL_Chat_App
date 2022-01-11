@@ -69,12 +69,12 @@ class TestConversationRequestModel:
     def test_get_request_by_users(self, test_db):
         test_receiver = User.select("username2")
         test_initiator = User.select("username1")
-        test_request = ConversationRequest.get_request_by_users(test_initiator.id, test_receiver.id)
+        test_request = ConversationRequest.get_request_by_users(test_initiator.id, test_receiver.id, "pending")
 
         assert test_request.id == 1
 
         # no request found -> return None
-        test_request2 = ConversationRequest.get_request_by_users(1000, 10001)
+        test_request2 = ConversationRequest.get_request_by_users(1000, 10001, "pending")
 
         assert test_request2 == None
 
@@ -102,3 +102,13 @@ class TestConversationRequestModel:
         test_request.reject()
 
         assert test_request.status == "rejected"
+
+    # test reject conversation request
+    def test_delete(self, test_db):
+        test_request_before_delete = ConversationRequest.get_request_by_id(1)
+        deleted_request = ConversationRequest.delete(1)
+        test_request_after_delete = ConversationRequest.get_request_by_id(1)
+
+        assert deleted_request == test_request_before_delete
+        assert test_request_after_delete == None
+

@@ -328,13 +328,13 @@ class ConversationRequest(db.Model):
         return all_requests_list
 
     @classmethod
-    def get_request_by_users(cls, initiator_id: int, receiver_id: int) -> Union[ConversationRequest, None]:
+    def get_request_by_users(cls, initiator_id: int, receiver_id: int, status: str) -> Union[ConversationRequest, None]:
         """Return latest pending conversation request between two users"""
         request = ConversationRequest.query.filter(
                 ConversationRequest.initiator_id == initiator_id,
                 ConversationRequest.receiver_id == receiver_id,
-                ConversationRequest.status == "pending"
-                ).first()
+                ConversationRequest.status == status
+                ).order_by(ConversationRequest.id.desc()).first()
         return request
 
     @classmethod
@@ -349,3 +349,13 @@ class ConversationRequest(db.Model):
     def insert(cls, new_request: ConversationRequest) -> None:
         db.session.add(new_request)
         db.session.commit()
+
+    @classmethod
+    def delete(cls, request_id: int) -> Union[ConversationRequest, None]:
+        # Delete and return an user from the database. Return None if the user doesn't exist
+        request = ConversationRequest.get_request_by_id(request_id)
+        if request:
+            db.session.delete(request)
+            db.session.commit()
+        return request
+

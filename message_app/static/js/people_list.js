@@ -38,10 +38,11 @@ class PeopleHTMLElement{
                         <div class="person-infor">${this.peopleObj.username}</div>
                         <div class="person-button">
                             <button type="button" onclick="acceptRequest(this)">Accept</button>
+                            <button type="button" onclick="rejectRequest(this)">Reject</button>
                         </div>
                     </div>
                     `
-                )
+                );
             }else if(request_status == "accepted"){
                 return (
                     `
@@ -52,7 +53,7 @@ class PeopleHTMLElement{
                         </div>
                     </div>
                     `
-                )
+                );
             }else{
                 return (
                     `
@@ -63,7 +64,7 @@ class PeopleHTMLElement{
                         </div>
                     </div>
                     `
-                )
+                );
             }
         }else if(is_receiver){
             if(request_status == "pending"){
@@ -76,7 +77,7 @@ class PeopleHTMLElement{
                         </div>
                     </div>
                     `
-                )
+                );
             }else if(request_status == "accepted"){
                 return (
                     `
@@ -87,7 +88,7 @@ class PeopleHTMLElement{
                         </div>
                     </div>
                     `
-                )
+                );
             }else{
                 return (
                     `
@@ -98,7 +99,7 @@ class PeopleHTMLElement{
                         </div>
                     </div>
                     `
-                )
+                );
             }
         }else{
             return (
@@ -110,7 +111,7 @@ class PeopleHTMLElement{
                     </div>
                 </div>
                 `
-            )
+            );
         }
     }
 
@@ -123,11 +124,6 @@ class PeopleHTMLElement{
 
 const tableElement = document.querySelector(".people-table");
 const user_id = tableElement.id.split("-")[1];
-// let people = fetch(BASE_URL + `/api/request/get_people/${user_id}`)
-// .then(response => {
-//     console.log(response.json());
-//     return response.json();
-// });
 
 async function fetchData() {
     const response = await fetch(BASE_URL + `/api/request/get_people/${user_id}`)
@@ -148,3 +144,58 @@ async function populateData(){
 }
 
 populateData();
+
+async function requestMessage(buttonElement){
+    const person_id = buttonElement.parentElement.parentElement.id.split("-")[1];
+    const request_time = Date.now();
+    let sendResponse = await fetch(BASE_URL + `/api/request/send/${user_id}/${person_id}/${request_time}`, {
+        method: "POST"
+    });
+
+    if (sendResponse.status === 200){
+        buttonElement.innerHTML = "cancel request";
+        buttonElement.setAttribute("onclick", "cancelRequest(this)");
+    }
+}
+
+async function acceptRequest(buttonElement){
+    const parent_button_elememt = buttonElement.parentElement
+    const person_id = parent_button_elememt.parentElement.id.split("-")[1];
+    const accepted_time = Date.now();
+    let sendResponse = await fetch(BASE_URL + `/api/request/accept/${person_id}/${user_id}/${accepted_time}`, {
+        method: "POST"
+    });
+
+    if (sendResponse.status === 200){
+        parent_button_elememt.removeChild(buttonElement);
+        parent_button_elememt.firstElementChild.innerHTML = "friend";
+        parent_button_elememt.firstElementChild.removeAttribute("onclick");
+    }
+}
+
+async function cancelRequest(buttonElement){
+    const person_id = buttonElement.parentElement.parentElement.id.split("-")[1];
+    const request_time = Date.now();
+    let sendResponse = await fetch(BASE_URL + `/api/request/cancel/${user_id}/${person_id}`, {
+        method: "POST"
+    });
+
+    if (sendResponse.status === 200){
+        buttonElement.innerHTML = "request message";
+        buttonElement.setAttribute("onclick", "requestMessage(this)");
+    }
+}
+
+async function rejectRequest(buttonElement){
+    const parent_button_elememt = buttonElement.parentElement
+    const person_id = parent_button_elememt.parentElement.id.split("-")[1];
+    let sendResponse = await fetch(BASE_URL + `/api/request/reject/${person_id}/${user_id}`, {
+        method: "POST"
+    });
+
+    if (sendResponse.status === 200){
+        parent_button_elememt.removeChild(buttonElement);
+        parent_button_elememt.firstElementChild.innerHTML = "request message";
+        parent_button_elememt.firstElementChild.setAttribute("onclick", "requestMessage(this)");
+    }
+}
