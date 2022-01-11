@@ -47,3 +47,26 @@ function joinConversation(conversation_id){
 function leaveConversation(conversation_id){
     socket.emit("leave", {"username": username, "conversation_id": conversation_id})
 }
+
+// Update user's last_active time
+function update_last_active(){
+    let d = new Date();
+    data = {
+        "username": username,
+        "last_active_time": d.getTime()
+    };
+    socket.emit("last_active", data)
+}
+
+// update user's last_active after user logged in
+update_last_active();
+
+
+// Set interval to update user's last_active every 10 minutes
+const interval = 600 * 1000; // 10 minutes
+setInterval(update_last_active, interval)
+
+// Before the user closes the window, update their active_time
+window.addEventListener("beforeunload", function(){
+    update_last_active();
+})
