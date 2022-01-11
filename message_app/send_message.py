@@ -3,7 +3,6 @@ from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask import Blueprint, render_template, session
 from message_app.model import Messages, Conversations, User
 from message_app.db.db import DB
-import json
 
 send_messages = Blueprint("send_messages", __name__)
 socketio = SocketIO(cors_allowed_origins='*')
