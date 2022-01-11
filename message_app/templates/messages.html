@@ -11,8 +11,8 @@
 
             <!-- All available conversations -->
             <div id="conversation-container">CONVERSATIONS
-                {% for conv in conversations %}
-                    <p id="{{ conv.participants[0].username }} + {{ conv.participants[1].username }}" class="select_conversation" conv_id="{{ conv.id }}">{{ conv.participants[0].username }} + {{ conv.participants[1].username }}</p>
+                {% for receiver in receivers %}
+                    <p id="{{ receiver.receiver_name }} - {{ receiver.status }}" class="select_conversation" conv_id="{{ receiver.conv_id }}">{{ receiver.receiver_name }} - {{ receiver.status }}</p>
                 {% endfor %}
             </div>
 

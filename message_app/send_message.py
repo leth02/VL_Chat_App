@@ -1,19 +1,46 @@
-from os import name
+import time
 from flask_socketio import SocketIO, emit, join_room, leave_room
-from flask import Blueprint, render_template, session, redirect, url_for
+from flask import Blueprint, render_template, session
 from message_app.model import Messages, Conversations, User
-from message_app.db.db import DB as db
+from message_app.db.db import DB
 
 send_messages = Blueprint("send_messages", __name__)
 socketio = SocketIO(cors_allowed_origins='*')
 
+# An interval that decides user's status (ACTIVE or AWAY)
+# user's last_active_time < LAST_ACTIVE_INTERVAL means the user is active and vice versa
+LAST_ACTIVE_INTERVAL = 600 * 1000 # 600000 milliseconds or 10 minutes
+
 @send_messages.route("/messages", methods=["GET"])
 def messages():
     # Get all conversations from an user
-    # TODO: Show other usernames instead of conversations' ids on the frontend
     current_user = session["user"]
     conversations = User.select(current_user).conversations
-    return render_template("messages.html", username=current_user, conversation_id=0, conversations=conversations)
+    receivers = []
+    for conv in conversations:
+        # receiver_name works for a group having only 2 people.
+        # TODO: Implement receiver_name for a group having more than 2 people
+        participants = conv.participants
+        if participants[0].username == current_user:
+            receiver_name = participants[1].username
+            last_active_time = participants[1].last_active_time
+        else:
+            receiver_name = participants[0].username
+            last_active_time = participants[0].last_active_time
+        conv_id = conv.id
+
+        # time.time() * 1000 because time function in Python returns time in seconds, while JS returns time in milliseconds
+        status = "active" if time.time()*1000 - last_active_time < LAST_ACTIVE_INTERVAL else "away"
+        data = {
+            "receiver_name": receiver_name,
+            "last_active_time": last_active_time,
+            "conv_id": conv_id,
+            "status": status
+        }
+        receivers.append(data)
+
+
+    return render_template("messages.html", username=current_user, conversation_id=0, receivers=receivers)
 
 # An socket for joinning a conversation
 @socketio.on("join", namespace="/messages")
@@ -55,7 +82,16 @@ def message_handler(data):
     new_message = Messages(sender_id=user_id, content=message, created_at=created_at, conversation_id=conversation_id)
     Messages.insert(new_message)
     conversation.last_message_id = new_message.id # Manually set the last_message_id for now
-    db.session.commit()
+    DB.session.commit()
     data["id"] = new_message.id
 
     emit("message_handler_client", data, room=conversation_id)
+
+# A socket that updates user's last_active_time
+@socketio.on("last_active", namespace="/messages")
+def last_active(data):
+    username = data["username"]
+    last_active_time = data["last_active_time"]
+    current_user = User.select(username)
+    current_user.last_active_time = last_active_time
+    DB.session.commit()
