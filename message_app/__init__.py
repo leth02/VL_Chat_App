@@ -1,17 +1,29 @@
-from flask import Flask, render_template, session, redirect, url_for
 import os
-from message_app.db.db import init_SQLAlchemy
-from message_app.send_message import socketio
+from time import strftime
 
+from flask import Flask, render_template, session, redirect, url_for, request
+
+from .db.db import init_SQLAlchemy
+from .send_message import socketio
 # Import for real-time testing purpose and will be DELETED before deployment.
-from message_app.model import User, Messages, Conversations
-from message_app.utils import hash_pw
-from message_app.db.db import DB as db
+from .model import User, Messages, Conversations
+from .utils import hash_pw
+from .db.db import DB as db
+from .logger import configure_logging, get_logger
+
+
+log = get_logger(__name__)
+
+# we configure the logging level and format
+# configure_logging()
+
 
 # The function accepts a name as an argument. Leaving the name by default (app=Flask(__name__)) automatically
 # includes the package name in the path for SQLALCHEMY_DATABASE_URI, which creates confusion when
 # setting up the path for testing database.
 def create_app(test_config=None, name=__name__):
+    log.info("Initialize message app")
+
     app = Flask(name)
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -25,11 +37,13 @@ def create_app(test_config=None, name=__name__):
 
     # if test config is passed, update app to use that config object
     if test_config:
+        log.info("Process test config")
         app.config.update(test_config)
 
     # Create a connection to the database
     with app.app_context():
         # Connect to the database using SQLAlchemy
+        log.info("Initialize database")
         init_SQLAlchemy()
 
         # ================Test Data=============================
@@ -77,6 +91,7 @@ def create_app(test_config=None, name=__name__):
         #===============END OF THE TEST DATA =================
 
         # SocketIO
+        log.info("Initialize websocket")
         socketio.init_app(app)
 
     #================Registering Blueprints==================
@@ -94,5 +109,12 @@ def create_app(test_config=None, name=__name__):
             return redirect(url_for("send_messages.messages"))
         else:
             return render_template("index.html")
+
+    @app.after_request
+    def after_request(response):
+        timestamp = strftime("[%Y-%b-%d %H:%M")
+        log.info("{} {} {} {} {} {}".format(timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status))
+
+        return response
 
     return app
