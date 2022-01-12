@@ -46,31 +46,6 @@ class ConversationHTMLElement {
     }
 }
 
-
-// Sample conversations
-// const conversationArrays = [
-//     {
-//         id: 12356788,
-//         title: "Title of conversation A", // If more than two other users join this conversation, join their usernames together
-//         conversation_status: "Active"
-//     },
-//     {
-//         id: 45432343,
-//         title: "Title of conversation B", // If more than two other users join this conversation, join their usernames together
-//         conversation_status: "Away"
-//     },
-//     {
-//         id: 78645645,
-//         title: "Luc Vuong, Khuong Long, and 1+ other people", // If more than two other users join this conversation, join their usernames together
-//         conversation_status: "Active"
-//     }
-// ];
-
-// for (const c of conversationArrays) {
-//     const conversation = new ConversationModel(c);
-//     conversation.show();
-// }
-
 // ========= Conversation Container ===================================
 
 loadConversationContainer(available_conversations) // Load conversation container when user accesses the messages page
@@ -129,12 +104,4 @@ function joinConversation(conversation_id){
 // Leave a conversation
 function leaveConversation(conversation_id){
     socket.emit("leave", {"username": username, "conversation_id": conversation_id})
-}
-
-// Reload the conversation panel every 3 minutes to update users' status
-const conversationsPanel = document.getElementsByClassName("message-form__content-editable")[0];
-
-function reloadConversationsPanel(){
-    // Reload conversations panel to get new users' status update
-    
 }
