@@ -94,7 +94,13 @@ class TestConversationRequestModel:
         test_request = ConversationRequest.get_request_by_id(1)
         test_request.accept(1234566789)
 
+        last_conversation = Conversations.query.order_by(Conversations.id.desc()).first()
+        receiver = test_request.receiver
+        initiator = test_request.initiator
+
         assert test_request.status == "accepted"
+        assert receiver in last_conversation.participants
+        assert initiator in last_conversation.participants
 
     # test reject conversation request
     def test_reject(self, test_db):

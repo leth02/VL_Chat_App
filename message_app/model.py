@@ -299,6 +299,14 @@ class ConversationRequest(db.Model):
     def accept(self, time: int) -> None:
         self.status = "accepted"
         self.accepted_time = time
+
+        initiator = self.initiator
+        receiver = self.receiver
+
+        conversation = Conversations()
+        conversation.participants.append(initiator)
+        conversation.participants.append(receiver)
+
         db.session.commit()
 
     def reject(self) -> None:
