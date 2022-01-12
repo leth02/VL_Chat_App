@@ -4,7 +4,7 @@ from message_app.config import SERVER_ENV
 
 if __name__ == "__main__":
     # Because we use socketio, we will not use `flask run` to initialize the app
-    # Instead, we use `python main.py` 
+    # Instead, we use `python main.py`
     # We pass the app instance to socketio instance, and call the custom `run()` method of socketio.
     # This function will call `app.run()` (equivalent to using `flask run`) on behalf of developer.
     # With that being said, the run Flask app will not have the debug setting set like when we use `flask run`.
