@@ -21,20 +21,26 @@ class TestApiSendingRequest:
 
     # test accepting request successfully
     def test_accepting_request(self, test_client, test_db):
-        response = test_client.post("/api/request/accept/1/123456")
+        response = test_client.post("/api/request/accept/1/2/123456")
         assert response.status_code == 200
         assert response.data == b'Success'
 
 
     # test accepting request fail
     def test_accepting_request_fail(self, test_client, test_db):
-        response = test_client.post("/api/request/accept/1002/123456")
+        response = test_client.post("/api/request/accept/1002/1003/123456")
         assert response.status_code == 400
         assert response.data == b'{"Error":"Bad Request.No request found"}\n'
 
     # test reject request successfully
     def test_rejecting_request(self, test_client, test_db):
-        response = test_client.post("/api/request/reject/1")
+        response = test_client.post("/api/request/reject/1/2")
+        assert response.status_code == 200
+        assert response.data == b'Success'
+
+    # test cancel request successfully
+    def test_canceling_request(self, test_client, test_db):
+        response = test_client.post("/api/request/cancel/1/2")
         assert response.status_code == 200
         assert response.data == b'Success'
 
@@ -59,4 +65,10 @@ class TestApiSendingRequest:
         response = test_client.get(f"/api/request/all/{user_id}")
         assert response.status_code == status_code
         assert response.data == response_message
+
+    # test get all people api
+    def test_get_people(self, test_client, test_db):
+        response = test_client.get("/api/request/get_people/2")
+        assert response.status_code == 200
+        assert len(json.loads(response.data)) == 2
 
