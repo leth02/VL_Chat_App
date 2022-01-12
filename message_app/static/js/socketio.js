@@ -33,8 +33,8 @@ function update_last_active(){
 update_last_active();
 
 // Set interval to update user's last_active every 10 minutes
-const maximum_away_time_still_count_as_active_interval = 10 * 60 * 1000; // 10 minutes
-setInterval(update_last_active, maximum_away_time_still_count_as_active_interval);
+const update_last_active_time_interval = 10 * 60 * 1000; // 10 minutes
+setInterval(update_last_active, update_last_active_time_interval);
 
 // Before the user closes the window, update their active_time
 window.addEventListener("beforeunload", function(){

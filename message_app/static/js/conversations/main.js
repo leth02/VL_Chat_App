@@ -50,7 +50,8 @@ class ConversationHTMLElement {
 
 loadConversationContainer(available_conversations); // Load conversation container when user accesses the messages page
 // Reload the conversation container every 3 minutes to update users' status
-const conversation_container_refresh_interval = 3 * 60 * 1000;
+// const conversation_container_refresh_interval = 3 * 60 * 1000;
+const conversation_container_refresh_interval = 5 * 1000;
 setInterval(updateConversationContainer, conversation_container_refresh_interval);
 
 socket.on("update_conversations_container", function(updated_conversations){
