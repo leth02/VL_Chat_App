@@ -7,3 +7,4 @@ load_dotenv()
 log = logging.getLogger(__name__)
 
 LOG_LEVEL = os.getenv("LOG_LEVEL")
+SERVER_ENV = os.getenv("SERVER_ENV")
