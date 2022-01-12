@@ -24,6 +24,7 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(120))
+    last_active_time = db.Column(db.Integer, default=0)
 
     # create one-to-many relationships with ConversationRequest model
     # backref: declear reference property for ConversationRequest's instances.

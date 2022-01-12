@@ -20,9 +20,6 @@
                     <a href="/request/people">Find People</a>
                 </div>
                 CONVERSATIONS
-                {% for conv in conversations %}
-                    <p id="{{ conv.participants[0].username }} + {{ conv.participants[1].username }}" class="select_conversation" conv_id="{{ conv.id }}">{{ conv.participants[0].username }} + {{ conv.participants[1].username }}</p>
-                {% endfor %}
             </div>
 
             <div id="message-container">
@@ -44,12 +41,13 @@
 
         </div>
         <!-- Socket IO JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+        <script src="{{ url_for('static', filename='js/socketio_source.js') }}"></script>
         <script type="text/javascript">
-            var conversation = `{{ conversation_id }}`;
-            var username = `{{ username }}`
+            let conversation = `{{ conversation_id }}`;
+            let username = `{{ username }}`;
+            let availableConversations = JSON.parse('{{ available_conversations|tojson|safe }}');
         </script>
-        <script src="{{ url_for('static', filename='js/messages/socketio.js') }}"> </script>
+        <script src="{{ url_for('static', filename='js/socketio.js') }}"> </script>
 
         <!-- Custom send_message JS -->
         <script src="{{url_for('static', filename='js/state.js')}}"></script>
