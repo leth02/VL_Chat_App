@@ -3,10 +3,26 @@
     <head>
         <title>VL | Index</title>
         <meta charset="utf-8">
+        <link rel="icon" href="{{url_for('static', filename='images/VL-logo-favicon.jpeg')}}">
+        <style>
+            a {
+                border-radius: 40px;
+                font-size: 14px;
+                padding: 7px 16px;
+                background: #23272a;
+                color: #fff;
+                text-decoration: none;
+            }
+            a:hover {
+                color: #23272a;
+                background: #fff;
+                border: 1px solid #23272a;
+            }
+        </style>
     </head>
 
     <body>
-        <h1>Place holder for the index page</h1>
+        <h1>Welcome to VL Messaging</h1>
         <a href="/signin">Sign in</a>
         <a href="/signup">Sign up</a>
     </body>

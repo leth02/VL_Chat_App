@@ -1,20 +1,35 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>VL | Sign in</title>
+        <title>VL | Log in</title>
         <meta charset="utf-8">
+        <link rel="icon" href="{{url_for('static', filename='images/VL-logo-favicon.jpeg')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/minor/main.css')}}">
     </head>
 
     <body>
-        <h1>Sign in to VL Messaging</h1>
-        <div>
-            <form action="{{url_for('user_sign_in.api_user_signin')}}" method="POST">
-                <label for="username">Username or email address</label>
-                <input type="text" name="username" id="username">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password">
-                <button type="submit">Sign in</button>
-            </form>
-        </div>
+        <form action="{{url_for('user_sign_in.api_user_signin')}}" method="POST">
+            <div class="login-container">
+                <div style="display: flex; align-items: center; flex-direction: column;">
+                    <h3>Welcome back!</h3>
+                </div>
+
+                <div style="width: 100%; text-align: left;">
+                    <div>
+                        <h5>Username or email address</h5>
+                        <div style="display: flex;">
+                            <input type="text" name="username" id="username">
+                        </div>
+                    </div>
+                    <div>
+                        <h5>Password</h5>
+                        <div style="display: flex;">
+                            <input type="password" name="password" id="password">
+                        </div>
+                    </div>
+                    <button class="login-button" type="submit">Login</button>
+                </div>
+            </div>
+        </form>
     </body>
 </html>

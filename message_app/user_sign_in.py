@@ -42,3 +42,10 @@ def api_user_signin():
 
     except Exception as error:
         return {"Error": "Bad request. " + str(error)}, 400
+
+
+@user_sign_in.route('/api/logout', methods=["POST"])
+def api_user_logout():
+    session.pop("user")
+
+    return redirect(url_for("user_sign_in.user_signin"))

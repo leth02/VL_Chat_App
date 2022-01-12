@@ -7,6 +7,11 @@
         <link rel="stylesheet" href="{{url_for('static', filename='css/messages/main.css')}}">
     </head>
     <body>
+        <div id="header">
+            <form action="/api/logout" method="post">
+                <button>Log out</button>
+            </form>
+        </div>
         <div style="display: flex; height: 100vh; overflow: hidden;">
 
             <!-- All available conversations -->
