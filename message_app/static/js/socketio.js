@@ -26,15 +26,15 @@ function update_last_active(){
         "username": username,
         "last_active_time": d.getTime()
     };
-    socket.emit("last_active", data)
+    socket.emit("last_active", data);
 }
 
 // update user's last_active after user logged in
 update_last_active();
 
 // Set interval to update user's last_active every 10 minutes
-const interval = 10 * 60 * 1000; // 10 minutes
-setInterval(update_last_active, interval)
+const maximum_away_time_still_count_as_active_interval = 10 * 60 * 1000; // 10 minutes
+setInterval(update_last_active, maximum_away_time_still_count_as_active_interval);
 
 // Before the user closes the window, update their active_time
 window.addEventListener("beforeunload", function(){

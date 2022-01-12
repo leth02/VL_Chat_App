@@ -48,9 +48,10 @@ class ConversationHTMLElement {
 
 // ========= Conversation Container ===================================
 
-loadConversationContainer(available_conversations) // Load conversation container when user accesses the messages page
+loadConversationContainer(available_conversations); // Load conversation container when user accesses the messages page
 // Reload the conversation container every 3 minutes to update users' status
-setInterval(updateConversationContainer, 3 * 60 * 1000)
+const conversation_container_refresh_interval = 3 * 60 * 1000;
+setInterval(updateConversationContainer, conversation_container_refresh_interval);
 
 socket.on("update_conversations_container", function(updated_conversations){
     loadConversationContainer(updated_conversations);
@@ -103,5 +104,5 @@ function joinConversation(conversation_id){
 
 // Leave a conversation
 function leaveConversation(conversation_id){
-    socket.emit("leave", {"username": username, "conversation_id": conversation_id})
+    socket.emit("leave", {"username": username, "conversation_id": conversation_id});
 }
