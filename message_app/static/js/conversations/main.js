@@ -55,7 +55,7 @@ for (const c of available_conversations) {
 }
 
 // Reload the conversation container every 3 minutes to update users' status
-const conversation_container_refresh_interval = 3 * 1000;
+const conversation_container_refresh_interval = 3 * 60 * 1000;
 setInterval(updateConversationContainer, conversation_container_refresh_interval);
 
 socket.on("update_conversations_container", function(updated_conversations){
