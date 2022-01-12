@@ -13,7 +13,7 @@ socketio = SocketIO(cors_allowed_origins='*')
 
 # An interval that decides user's status (ACTIVE or AWAY)
 # user's last_active_time < LAST_ACTIVE_INTERVAL means the user is active and vice versa
-LAST_ACTIVE_INTERVAL = 600 * 1000 # 600000 milliseconds or 10 minutes
+LAST_ACTIVE_INTERVAL = 10 * 60 * 1000 # 600000 milliseconds or 10 minutes
 
 @send_messages.route("/messages", methods=["GET"])
 def messages():
@@ -37,6 +37,7 @@ def messages():
         status = "active" if (time.time() * 1000 - last_active_time < LAST_ACTIVE_INTERVAL) else "away"
         data = {
             "title": receiver_name,
+            "receiver_name": receiver_name,
             # "last_active_time": last_active_time, # This key shows exact how long the user has been away
             "id": str(conv_id),
             "conversation_status": status
@@ -45,7 +46,9 @@ def messages():
 
     return render_template("messages.html", username=current_user, conversation_id=0, available_conversations=available_conversations)
 
-# An socket for joinning a conversation
+# ================== Sockets for Conversations Container ==========================
+
+# Joinning a conversation
 @socketio.on("join", namespace="/messages")
 def joining(data):
     username = data["username"]
@@ -56,7 +59,7 @@ def joining(data):
     # Send a message that inform new user has join the conversation
     emit("message_handler_client", {"username": username, "conversation_id": conversation_id, "join": True}, room=conversation_id)
 
-# A socket for leaving a conversation
+# Leaving a conversation
 @socketio.on("leave", namespace="/messages")
 def leaving(data):
     username = data["username"]
@@ -65,6 +68,27 @@ def leaving(data):
 
     # Send a message that inform an user has left the conversation
     emit("message_handler_client", {"username": username, "conversation_id": conversation_id, "join": False}, room=conversation_id)
+
+# Updating current_user's last_active_time
+@socketio.on("last_active", namespace="/messages")
+def last_active(data):
+    username = data["username"]
+    last_active_time = data["last_active_time"]
+    current_user = User.select(username)
+    current_user.last_active_time = last_active_time
+    DB.session.commit()
+
+# Updating other users' status (Only work for conversation of 2 users)
+@socketio.on("update_conversations_container", namespace="/messages")
+def update_conversations_container(conversations):
+    for c in conversations:
+        receiver = User.select(c["receiver_name"])
+        new_status = "active" if time.time()*1000 - receiver.last_active_time < LAST_ACTIVE_INTERVAL else "away"
+        c["conversation_status"] = new_status
+    emit("update_conversations_container", conversations)
+
+
+# ================== Sockets for Messages Container ==========================
 
 # A socket that checks if an user is typing
 @socketio.on("typing", namespace="/messages")
@@ -89,12 +113,3 @@ def message_handler(data):
     data["id"] = new_message.id
 
     emit("message_handler_client", data, room=conversation_id)
-
-# A socket that updates user's last_active_time
-@socketio.on("last_active", namespace="/messages")
-def last_active(data):
-    username = data["username"]
-    last_active_time = data["last_active_time"]
-    current_user = User.select(username)
-    current_user.last_active_time = last_active_time
-    DB.session.commit()

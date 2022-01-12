@@ -19,35 +19,6 @@ socket.on("typing", function(data){
     }
 });
 
-// User picks a conversation by clicking on the username
-document.querySelectorAll(".select_conversation").forEach(div => {
-    div.onclick = () => {
-        let new_conversation = p.getAttribute("conv_id");
-        if (conversation == new_conversation){
-            alert("You are already in the conversation.");
-        } else {
-            // Conversation 0 means the user is not currently in any conversation
-            if (conversation != 0){ 
-                leaveConversation(conversation);
-            }
-            joinConversation(new_conversation);
-            conversation = new_conversation;
-        }
-    }
-});
-
-// Join a conversation
-function joinConversation(conversation_id){
-    socket.emit("join", {"username": username, "conversation_id": conversation_id});
-    var message_panel = document.getElementById("message-panel");
-    message_panel.innerHTML = "";
-}
-
-// Leave a conversation
-function leaveConversation(conversation_id){
-    socket.emit("leave", {"username": username, "conversation_id": conversation_id})
-}
-
 // Update user's last_active time
 function update_last_active(){
     let d = new Date();
@@ -61,9 +32,8 @@ function update_last_active(){
 // update user's last_active after user logged in
 update_last_active();
 
-
 // Set interval to update user's last_active every 10 minutes
-const interval = 600 * 1000; // 10 minutes
+const interval = 10 * 60 * 1000; // 10 minutes
 setInterval(update_last_active, interval)
 
 // Before the user closes the window, update their active_time

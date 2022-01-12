@@ -41,7 +41,7 @@
             let username = `{{ username }}`;
             let available_conversations = JSON.parse('{{ available_conversations|tojson|safe }}');
         </script>
-        <script src="{{ url_for('static', filename='js/messages/socketio.js') }}"> </script>
+        <script src="{{ url_for('static', filename='js/socketio.js') }}"> </script>
 
         <!-- Custom send_message JS -->
         <script src="{{url_for('static', filename='js/state.js')}}"></script>
