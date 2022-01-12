@@ -46,6 +46,6 @@ def api_user_signin():
 
 @user_sign_in.route('/api/logout', methods=["POST"])
 def api_user_logout():
-    session.pop("user")
+    session.clear()
 
     return redirect(url_for("user_sign_in.user_signin"))
