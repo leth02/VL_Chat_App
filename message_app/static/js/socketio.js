@@ -32,8 +32,8 @@ function update_last_active(){
 // update user's last_active after user logged in
 update_last_active();
 
-// Set interval to update user's last_active every 10 minutes
-const update_last_active_time_interval = 10 * 60 * 1000; // 10 minutes
+// Set interval to update user's last_active every 5 minutes
+const update_last_active_time_interval = 5 * 60 * 1000; // 5 minutes
 setInterval(update_last_active, update_last_active_time_interval);
 
 // Before the user closes the window, update their active_time
