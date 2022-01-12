@@ -126,14 +126,12 @@ const tableElement = document.querySelector(".people-table");
 const user_id = tableElement.id.split("-")[1];
 
 async function fetchData() {
-    const response = await fetch(BASE_URL + `/api/request/get_people/${user_id}`)
-    .then(res => {
-        return res.json();
-    });
-    return response;
+    const response = await fetch(BASE_URL + `/api/request/get_people/${user_id}`);
+    const data = await response.json();
+    return data;
 }
 
-async function populateData(){
+async function getSuggestedFriends(){
     let data = await fetchData();
 
     for (const d of data){
@@ -143,7 +141,7 @@ async function populateData(){
     }
 }
 
-populateData();
+getSuggestedFriends();
 
 async function requestMessage(buttonElement){
     const person_id = buttonElement.parentElement.parentElement.id.split("-")[1];
