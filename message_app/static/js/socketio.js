@@ -10,7 +10,7 @@ socket.on("message_handler_client", function(data){
     }
 });
 
-// An event that shows if an user is typing
+// An event that shows if a user is typing
 socket.on("typing", function(data){
     if (data.is_typing){
         FEEDBACK_HTML.innerHTML = data.username + " is typing ....";

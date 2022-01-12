@@ -7,13 +7,13 @@ from message_app.db.db import DB
 send_messages = Blueprint("send_messages", __name__)
 socketio = SocketIO(cors_allowed_origins='*')
 
-# An interval that decides user's status (ACTIVE or AWAY)
-# user's last_active_time < LAST_ACTIVE_INTERVAL means the user is active and vice versa
+# # Define the amount of time a user can be active/inactive on the frontend
+# before we actually update their status on the server
 LAST_ACTIVE_INTERVAL = 10 * 60 * 1000 # 600000 milliseconds or 10 minutes
 
 @send_messages.route("/messages", methods=["GET"])
 def messages():
-    # Get all conversations from an user
+    # Get conversations of the current user
     # TODO: Show other usernames instead of conversations' ids on the frontend
     current_user = session["user"][1]
     conversations = User.select(current_user).conversations
@@ -30,7 +30,6 @@ def messages():
             last_active_time = participants[0].last_active_time
         conv_id = conv.id
 
-        # time.time() * 1000 because time function in Python returns time in seconds, while JS returns time in milliseconds
         status = "active" if (time.time() * 1000 - last_active_time < LAST_ACTIVE_INTERVAL) else "away"
         data = {
             "title": receiver_name,
@@ -87,7 +86,7 @@ def update_conversations_container(conversations):
 
 # ================== Sockets for Messages Container ==========================
 
-# A socket that checks if an user is typing
+# A socket that checks if a user is typing
 @socketio.on("typing", namespace="/messages")
 def is_typing(data):
     emit("typing", data, broadcast=True, include_self=False)

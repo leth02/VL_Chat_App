@@ -78,24 +78,9 @@ class MessageHTMLElement {
     }
 }
 
-let globalNow = new Date();
-
-// Create a sample messages
-const messageArrays = [
-    ["qwefasf213w", "abcxyz123", "1000001", "This is a sample message", true, globalNow.getTime() - 86400000*2],
-    ["rerwe342342", "abcxyz678", "1000001", "Another sample message", true, globalNow.getTime() - 50400000],
-    ["rwer12323fs", "abcxyz890", "1000002", "Definitely a sample message", true, globalNow.getTime() - 7200000],
-
-];
-for (const m of messageArrays) {
-    const message = new MessageModel(m[0], m[1], m[2], m[3], m[4], m[5], m[6]);
-    message.show();
-}
-
 const messagePlaceholder = document.getElementsByClassName("message-form__placeholder")[0];
 
 const textEditor = document.getElementsByClassName("message-form__content-editable")[0];
-
 
 // Give Feedback to other users in the room if an user is typing
 // After a user starts typing, the function will be called every 3 seconds, and

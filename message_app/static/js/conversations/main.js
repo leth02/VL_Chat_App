@@ -49,53 +49,53 @@ class ConversationHTMLElement {
 // ========= Conversation Container ===================================
 
 // Load conversation container when user accesses the messages page
-for (const c of available_conversations) {
+for (const c of availableConversations) {
     const conversation = new ConversationModel(c);
     conversation.show();
 }
 
 // Reload the conversation container every 3 minutes to update users' status
-const conversation_container_refresh_interval = 3 * 60 * 1000;
-setInterval(updateConversationContainer, conversation_container_refresh_interval);
+const conversationContainerRefreshInterval = 3 * 60 * 1000;
+setInterval(updateConversationContainer, conversationContainerRefreshInterval);
 
-socket.on("update_conversations_container", function(updated_conversations){
-    loadConversationContainer(updated_conversations);
-    available_conversations = updated_conversations;
+socket.on("update_conversations_container", function(updatedConversations){
+    loadConversationContainer(updatedConversations);
+    availableConversations = updatedConversations;
 });
 
 function updateConversationContainer(){
-    socket.emit("update_conversations_container", available_conversations);
+    socket.emit("update_conversations_container", availableConversations);
 }
 
-function loadConversationContainer(all_conversations){
+function loadConversationContainer(allConversations){
     // Load conversation container to get new users' status update
     const conversation_container = document.getElementById("conversation-container");
     let conversations = conversation_container.childNodes;
-    let all_conversations_idx = 0; // Keeping track of all_conversation index is needed in case of new conversation was added during the loading process
+    let allConversationsIdx = 0; // Keeping track of all_conversation index is needed in case of new conversation was added during the loading process
     let child_container = NaN;
     let child_title = NaN;
     for (let i=1;i<conversations.length;i++){
         child_container = conversations[i];
         child_title = child_container.firstElementChild;
-        if (child_container.conv_id === all_conversations[all_conversations_idx].conv_id){
-            if (child_container.conv_status !== all_conversations[all_conversations_idx].conversation_status){
-                child_container.conv_status = all_conversations[all_conversations_idx].conversation_status;
-                child_title.conv_status = all_conversations[all_conversations_idx].conversation_status;
-                child_title.innerHTML = all_conversations[all_conversations_idx].title + " - " + all_conversations[all_conversations_idx].conversation_status;
+        if (child_container.conv_id === allConversations[allConversationsIdx].conv_id){
+            if (child_container.conv_status !== allConversations[allConversationsIdx].conversation_status){
+                child_container.conv_status = allConversations[allConversationsIdx].conversation_status;
+                child_title.conv_status = allConversations[allConversationsIdx].conversation_status;
+                child_title.innerHTML = allConversations[allConversationsIdx].title + " - " + allConversations[allConversationsIdx].conversation_status;
             }
-            all_conversations_idx ++;
+            allConversationsIdx ++;
         }
     }
 
-    available_conversations = all_conversations
+    availableConversations = allConversations
 }
 
 // ========= Joining/Leaving a conversation =============================
 
 // Join a conversation
 function joinConversation(conversation_id, conversation_title){
-    let new_conversation = conversation_id;
-    if (conversation == new_conversation){
+    let newConversation = conversation_id;
+    if (conversation == newConversation){
         alert("You are already in the conversation.");
     } else {
         // Conversation 0 means the user is not currently in any conversation
@@ -103,9 +103,9 @@ function joinConversation(conversation_id, conversation_title){
             leaveConversation(conversation);
         }
         socket.emit("join", {"username": username, "conversation_id": conversation_id});
-        let message_panel = document.getElementById("message-panel");
-        message_panel.innerHTML = "You are in conversation with " + conversation_title;
-        conversation = new_conversation;
+        let messagePanel = document.getElementById("message-panel");
+        messagePanel.innerHTML = "You are in conversation with " + conversation_title;
+        conversation = newConversation;
     }
 }
 
