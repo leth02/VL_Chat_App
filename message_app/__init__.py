@@ -5,7 +5,6 @@ from flask import Flask, render_template, session, redirect, url_for, request
 
 from .db.db import init_SQLAlchemy
 from .send_message import socketio
-
 from .utils import hash_pw
 from .db.db import DB as db
 from .logger import configure_logging, get_logger
