@@ -125,23 +125,22 @@ class PeopleHTMLElement{
 const tableElement = document.querySelector(".people-table");
 const user_id = tableElement.id.split("-")[1];
 
-async function fetchData() {
+async function getSuggestedFriends() {
     const response = await fetch(BASE_URL + `/api/request/get_people/${user_id}`);
     const data = await response.json();
     return data;
 }
 
-async function getSuggestedFriends(){
-    let data = await fetchData();
+async function populateSuggestedFriends(){
+    let data = await getSuggestedFriends();
 
     for (const d of data){
-        console.log(d.user_id);
         const person = new PeopleModel(d.user_id, d.username, d.request_id, d.is_receiver, d.is_sender, d.request_status);
         person.show();
     }
 }
 
-getSuggestedFriends();
+populateSuggestedFriends();
 
 async function requestMessage(buttonElement){
     const person_id = buttonElement.parentElement.parentElement.id.split("-")[1];
