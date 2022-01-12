@@ -130,3 +130,11 @@ function joinConversation(conversation_id){
 function leaveConversation(conversation_id){
     socket.emit("leave", {"username": username, "conversation_id": conversation_id})
 }
+
+// Reload the conversation panel every 3 minutes to update users' status
+const conversationsPanel = document.getElementsByClassName("message-form__content-editable")[0];
+
+function reloadConversationsPanel(){
+    // Reload conversations panel to get new users' status update
+    
+}

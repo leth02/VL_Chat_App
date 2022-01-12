@@ -9,7 +9,11 @@ socketio = SocketIO(cors_allowed_origins='*')
 
 # An interval that decides user's status (ACTIVE or AWAY)
 # user's last_active_time < LAST_ACTIVE_INTERVAL means the user is active and vice versa
+<<<<<<< HEAD
 LAST_ACTIVE_INTERVAL = 10 * 60 * 1000 # 600000 milliseconds or 10 minutes
+=======
+LAST_ACTIVE_INTERVAL = 600 * 1000 # 600000 milliseconds or 10 minutes
+>>>>>>> 05f7f2f3bea52b781b4f3d29574dcddf93c6f37c
 
 @send_messages.route("/messages", methods=["GET"])
 def messages():
@@ -109,3 +113,12 @@ def message_handler(data):
     data["id"] = new_message.id
 
     emit("message_handler_client", data, room=conversation_id)
+
+# A socket that updates user's last_active_time
+@socketio.on("last_active", namespace="/messages")
+def last_active(data):
+    username = data["username"]
+    last_active_time = data["last_active_time"]
+    current_user = User.select(username)
+    current_user.last_active_time = last_active_time
+    DB.session.commit()
