@@ -79,7 +79,7 @@ def last_active(data):
 def update_conversations_container(conversations):
     for c in conversations:
         receiver = User.select(c["receiver_name"])
-        new_status = "active" if time.time()*1000 - receiver.last_active_time < LAST_ACTIVE_INTERVAL else "away"
+        new_status = "active" if time.time() * 1000 - receiver.last_active_time < LAST_ACTIVE_INTERVAL else "away"
         c["conversation_status"] = new_status
     emit("update_conversations_container", conversations)
 
