@@ -34,7 +34,7 @@ class User(db.Model):
         # Compare two users using its username
         return other_user.username == self.username
 
-    # Return a json encoding of the user data
+
     def to_json(self) -> str:
         data = {
             "id": self.id,
@@ -44,8 +44,6 @@ class User(db.Model):
         }
         return json.dumps(data)
 
-
-    #================Class Methods==================
 
     @classmethod
     def insert(cls, new_user: User) -> None:
@@ -64,22 +62,25 @@ class User(db.Model):
 
     @classmethod
     def select(cls, username: str) -> Union[User, None]:
-        # Get an user from the database using username. Return None if the user doesn't exist
-        # The method selects only one user for now, but it CAN BE IMPROVED later on.
-        # TODO: Select multiple users with multiple conditions
         user = User.query.filter_by(username=username).first()
         return user
 
     @classmethod
+    def select_v2(cls, filter_option: dict):
+        """Allow querying users with more filter options"""
+        pass
+
+    @classmethod
     def select_all(cls) -> List:
+        # TODO: This method should be deprecated when add Channel
         all_users = User.query.all()
         return all_users
 
     @classmethod
     def get_last_user_id(cls) -> int:
-        # Get last user ID
         id = User.query.order_by(User.id.desc()).first().id
         return id
+
 
 class Conversations(db.Model):
     __tablename__ = 'conversations'
@@ -89,7 +90,7 @@ class Conversations(db.Model):
     created_at = db.Column(db.Float, default=time.time())
     last_message_id = db.Column(db.Integer) # This column is a foreignkey
 
-    # Return a json encoding of the conversation data
+
     def to_json(self) -> str:
         data = {
             "id": self.id
@@ -97,7 +98,6 @@ class Conversations(db.Model):
         return json.dumps(data)
 
 
-    #================Class Methods==================
     @classmethod
     def insert(cls, new_conversation: Conversations) -> None:
         # Add a new user to the database
@@ -106,7 +106,6 @@ class Conversations(db.Model):
 
     @classmethod
     def delete(cls, conversation_id: int) -> Union[Conversations, None]:
-        # Delete and return an user from the database. Return None if the user doesn't exist
         conversation = Conversations.select(conversation_id)
         if conversation:
             db.session.delete(conversation)
@@ -115,17 +114,19 @@ class Conversations(db.Model):
 
     @classmethod
     def select(cls, conversation_id: int) -> Union[Conversations, None]:
-        # Get an user from the database using username. Return None if the user doesn't exist
-        # The method selects only one user for now, but it CAN BE IMPROVED later on.
-        # TODO: Select multiple users with multiple conditions
         conversation = Conversations.query.filter_by(id=conversation_id).first()
         return conversation
 
     @classmethod
+    def select_v2(cls, filter_option: dict):
+        """Allow querying conversations with more filter options"""
+        pass
+
+    @classmethod
     def get_last_conversation_id(cls) -> int:
-        # Get last conversation ID
         id = Conversations.query.order_by(Conversations.id.desc()).first().id
         return id
+
 
 class Messages(db.Model):
     __tablename__ = 'messages'
@@ -136,7 +137,6 @@ class Messages(db.Model):
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'))
 
 
-    # Return a json encoding of the user data
     def to_json(self) -> str:
         data = {
             "id": self.id,
@@ -147,16 +147,13 @@ class Messages(db.Model):
         return json.dumps(data)
 
 
-    #================Class Methods==================
     @classmethod
     def insert(cls, new_conversation: Messages) -> None:
-        # Add a new user to the database
         db.session.add(new_conversation)
         db.session.commit()
 
     @classmethod
     def delete(cls, message_id: int) -> Union[Messages, None]:
-        # Delete and return an user from the database. Return None if the user doesn't exist
         message = Messages.select(message_id)
         if message:
             db.session.delete(message)
@@ -165,15 +162,16 @@ class Messages(db.Model):
 
     @classmethod
     def select(cls, message_id: int) -> Union[Messages, None]:
-        # Get an user from the database using username. Return None if the user doesn't exist
-        # The method selects only one user for now, but it CAN BE IMPROVED later on.
-        # TODO: Select multiple users with multiple conditions
         message = Messages.query.filter_by(id=message_id).first()
         return message
 
     @classmethod
+    def select_v2(cls, filter_option: dict):
+        """Allow querying messages with more filter options"""
+        pass
+
+    @classmethod
     def get_last_message_id(cls) -> int:
-        # Get last message ID
         id = Messages.query.order_by(Messages.id.desc()).first().id
         return id
 
@@ -192,7 +190,6 @@ class ConversationRequest(db.Model):
         # Compare two users using its username
         return other_request.id == self.id
 
-    # Return a json encoding of the user data
     def to_json(self) -> str:
         data = {
             "id": self.id,
@@ -205,30 +202,27 @@ class ConversationRequest(db.Model):
         return json.dumps(data)
 
     def accept(self, time: int) -> None:
-        # Accept a conversation request
         self.status = "accepted"
         self.accepted_time = time
         db.session.commit()
 
     def reject(self) -> None:
-        # Reject a conversation request
         self.status = "rejected"
         db.session.commit()
 
-    #------------------------Class Methods-------------------------
 
     @classmethod
     def get_all_requests(cls, receiver_id: int) -> List:
-        # query all the conversation request that receiver_id received
+        """Return conversation requests sent to a user"""
         all_requests = ConversationRequest.query.filter(
                 ConversationRequest.receiver_id == receiver_id,
                 ConversationRequest.status == "pending"
                 ).order_by(ConversationRequest.id.asc()).all()
 
-        all_requests_to_dict = []
+        all_requests_list = []
 
         for request in all_requests:
-            all_requests_to_dict.append({
+            all_requests_list.append({
                     "id": request.id,
                     "initiator_id": request.initiator_id,
                     "receiver_id": request.receiver_id,
@@ -236,11 +230,11 @@ class ConversationRequest(db.Model):
                     "request_time": request.request_time,
                     "accepted_time": request.accepted_time
                 })
-        return all_requests_to_dict
+        return all_requests_list
 
     @classmethod
     def get_request_by_users(cls, initiator_id: int, receiver_id: int) -> Union[ConversationRequest, None]:
-        # query request with specific initiator and receiver
+        """Return latest pending conversation request between two users"""
         request = ConversationRequest.query.filter(
                 ConversationRequest.initiator_id == initiator_id,
                 ConversationRequest.receiver_id == receiver_id,
@@ -250,7 +244,6 @@ class ConversationRequest(db.Model):
 
     @classmethod
     def get_request_by_id(cls, request_id: int) -> Union[ConversationRequest, None]:
-        # query request with specific request id
         request = ConversationRequest.query.filter(
                 ConversationRequest.id == request_id,
                 ConversationRequest.status == "pending"
@@ -259,6 +252,5 @@ class ConversationRequest(db.Model):
 
     @classmethod
     def insert(cls, new_request: ConversationRequest) -> None:
-        # Add a new conversation request to the database
         db.session.add(new_request)
         db.session.commit()
