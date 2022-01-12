@@ -14,7 +14,8 @@ LAST_ACTIVE_INTERVAL = 10 * 60 * 1000 # 600000 milliseconds or 10 minutes
 @send_messages.route("/messages", methods=["GET"])
 def messages():
     # Get all conversations from an user
-    current_user = session["user"]
+    # TODO: Show other usernames instead of conversations' ids on the frontend
+    current_user = session["user"][1]
     conversations = User.select(current_user).conversations
     available_conversations = []
     for conv in conversations:

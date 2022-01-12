@@ -4,6 +4,8 @@ from message_app.db.db import DB as db
 import json
 import time
 from typing import Union, List
+from sqlalchemy import func, desc, asc, not_, and_
+from sqlalchemy.sql import label
 
 # A join table for the many-to-many relationship between users and conversations tables.
 # Create a model for this table is unnecessary.
@@ -82,6 +84,99 @@ class User(db.Model):
         id = User.query.order_by(User.id.desc()).first().id
         return id
 
+    @classmethod
+    def find_people(cls, user_id: str) -> List:
+        # query all requests that send to user_id
+        sub_query = db.session.query(
+                ConversationRequest,
+                label("latest_request", func.max(ConversationRequest.request_time))
+                ).filter(ConversationRequest.receiver_id == user_id).group_by(ConversationRequest.initiator_id).subquery()
+
+        #query all users that send request to user_id
+        sender_query = db.session.query(
+                User.id,
+                User.username,
+                sub_query.c.id,
+                sub_query.c.initiator_id,
+                sub_query.c.receiver_id,
+                sub_query.c.status,
+                sub_query.c.request_time
+                ).join(sub_query, User.id == sub_query.c.initiator_id).order_by(asc(User.id)).all()
+
+        # query all request that user_id send
+        sub_query_2 = db.session.query(
+                ConversationRequest,
+                label("latest_request", func.max(ConversationRequest.request_time))
+                ).filter(ConversationRequest.initiator_id == user_id).group_by(ConversationRequest.receiver_id).subquery()
+
+        #query all users that receive request from user_id
+        receiver_query = db.session.query(
+                User.id,
+                User.username,
+                sub_query_2.c.id,
+                sub_query_2.c.initiator_id,
+                sub_query_2.c.receiver_id,
+                sub_query_2.c.status,
+                sub_query_2.c.request_time
+                ).join(sub_query_2, User.id == sub_query_2.c.receiver_id).order_by(asc(User.id)).all()
+
+        all_request_users = sender_query + receiver_query
+        dic = {}
+        request_users_id = []
+
+        # filter conversation request between user_id with another, choose the
+        # request that has latest request_time
+        for i in all_request_users:
+            is_receiver = i[0] == i[4]
+            key = tuple(sorted([i[3], i[4]]))
+
+            if i[0] not in request_users_id:
+                request_users_id.append(i[0])
+
+            if key not in dic:
+                dic[key] = {
+                        "user_id": i[0],
+                        "username": i[1],
+                        "request_id": i[2],
+                        "request_status": i[5],
+                        "request_time": i[6],
+                        "is_sender": not is_receiver,
+                        "is_receiver": is_receiver
+                        }
+            else:
+                if dic[key]["request_time"] < i[6]:
+                    dic[key] = {
+                            "user_id": i[0],
+                            "username": i[1],
+                            "request_id": i[2],
+                            "request_status": i[5],
+                            "request_time": i[6],
+                            "is_sender": not is_receiver,
+                            "is_receiver": is_receiver
+                            }
+
+        result = list(dic.values())
+
+        # query all the users that do not have any request to/from user_id
+        no_request_users = db.session.query(User.id, User.username).filter(
+                and_(
+                    not_(User.id.in_(request_users_id)),
+                    User.id != user_id
+                    )
+                ).all()
+
+        for i in no_request_users:
+            result.append({
+                "user_id": i[0],
+                "username": i[1],
+                "request_id": None,
+                "request_status": None,
+                "request_time": None,
+                "is_sender": None,
+                "is_receiver": None
+                })
+
+        return result
 
 class Conversations(db.Model):
     __tablename__ = 'conversations'
@@ -205,6 +300,14 @@ class ConversationRequest(db.Model):
     def accept(self, time: int) -> None:
         self.status = "accepted"
         self.accepted_time = time
+
+        initiator = self.initiator
+        receiver = self.receiver
+
+        conversation = Conversations()
+        conversation.participants.append(initiator)
+        conversation.participants.append(receiver)
+
         db.session.commit()
 
     def reject(self) -> None:
@@ -234,13 +337,13 @@ class ConversationRequest(db.Model):
         return all_requests_list
 
     @classmethod
-    def get_request_by_users(cls, initiator_id: int, receiver_id: int) -> Union[ConversationRequest, None]:
+    def get_request_by_users(cls, initiator_id: int, receiver_id: int, status: str) -> Union[ConversationRequest, None]:
         """Return latest pending conversation request between two users"""
         request = ConversationRequest.query.filter(
                 ConversationRequest.initiator_id == initiator_id,
                 ConversationRequest.receiver_id == receiver_id,
-                ConversationRequest.status == "pending"
-                ).first()
+                ConversationRequest.status == status
+                ).order_by(ConversationRequest.id.desc()).first()
         return request
 
     @classmethod
@@ -255,3 +358,13 @@ class ConversationRequest(db.Model):
     def insert(cls, new_request: ConversationRequest) -> None:
         db.session.add(new_request)
         db.session.commit()
+
+    @classmethod
+    def delete(cls, request_id: int) -> Union[ConversationRequest, None]:
+        # Delete and return an user from the database. Return None if the user doesn't exist
+        request = ConversationRequest.get_request_by_id(request_id)
+        if request:
+            db.session.delete(request)
+            db.session.commit()
+        return request
+

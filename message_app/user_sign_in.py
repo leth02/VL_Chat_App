@@ -34,7 +34,7 @@ def api_user_signin():
         user_password_hash = user_data.password_hash
 
         if check_pw(user_password_input, user_password_hash):
-            session["user"] = username
+            session["user"] = (user_data.id, username)
             return redirect(url_for("send_messages.messages"))
         else:
             session["error"] = "Invalid login credentials. Please try again."
