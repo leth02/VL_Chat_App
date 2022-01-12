@@ -8,17 +8,19 @@
     </head>
     <body>
         <div id="header">
-            <form action="/api/logout" method="post">
-                <button>Log out</button>
-            </form>
+            <div>
+                <a style="padding: 2px 5px; border-radius: 4px; font-size: 14px; padding: 2px 5px; background: #23272a;color: #fff; text-decoration: none;margin-right: 10px;" href="/request/people">Find People</a>
+            </div>
+            <div>
+                <form action="/api/logout" method="post">
+                    <button style="cursor: pointer;">Log out</button>
+                </form>
+            </div>
         </div>
         <div style="display: flex; height: 100vh; overflow: hidden;">
 
             <!-- All available conversations -->
             <div id="conversation-container">
-                <div>
-                    <a href="/request/people">Find People</a>
-                </div>
                 CONVERSATIONS
             </div>
 
