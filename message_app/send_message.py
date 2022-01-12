@@ -9,7 +9,7 @@ socketio = SocketIO(cors_allowed_origins='*')
 
 # An interval that decides user's status (ACTIVE or AWAY)
 # user's last_active_time < LAST_ACTIVE_INTERVAL means the user is active and vice versa
-LAST_ACTIVE_INTERVAL = 10 * 60 * 1000 # 600000 milliseconds or 10 minutes
+LAST_ACTIVE_INTERVAL = 10 * 1000 # 600000 milliseconds or 10 minutes
 
 @send_messages.route("/messages", methods=["GET"])
 def messages():

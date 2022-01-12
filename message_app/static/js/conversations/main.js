@@ -55,7 +55,7 @@ for (const c of available_conversations) {
 }
 
 // Reload the conversation container every 3 minutes to update users' status
-const conversation_container_refresh_interval = 3 * 60 * 1000;
+const conversation_container_refresh_interval = 3 * 1000;
 setInterval(updateConversationContainer, conversation_container_refresh_interval);
 
 socket.on("update_conversations_container", function(updated_conversations){
@@ -78,9 +78,11 @@ function loadConversationContainer(all_conversations){
         child_container = conversations[i];
         child_title = child_container.firstElementChild;
         if (child_container.conv_id === all_conversations[all_conversations_idx].conv_id){
-            child_container.conv_status = all_conversations[all_conversations_idx].conversation_status;
-            child_title.conv_status = all_conversations[all_conversations_idx].conversation_status;
-            child_title.innerHTML = all_conversations[all_conversations_idx].title + " - " + all_conversations[all_conversations_idx].conversation_status;
+            if (child_container.conv_status !== all_conversations[all_conversations_idx].conversation_status){
+                child_container.conv_status = all_conversations[all_conversations_idx].conversation_status;
+                child_title.conv_status = all_conversations[all_conversations_idx].conversation_status;
+                child_title.innerHTML = all_conversations[all_conversations_idx].title + " - " + all_conversations[all_conversations_idx].conversation_status;
+            }
             all_conversations_idx ++;
         }
     }
