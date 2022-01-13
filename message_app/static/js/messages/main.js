@@ -1,7 +1,4 @@
 
-const MESSAGE_PANEL_HTML = document.querySelector("#message-panel");
-const FEEDBACK_HTML = document.querySelector("#feedback");
-
 // ===== Messages =====
 class MessageModel {
     constructor(id, conversationId, sender_name, content, seen, timestamp) {
@@ -114,11 +111,26 @@ function textEditorHandler(event) {
         } else {
             var text_field = document.querySelector(".message-form__content-editable");
             const d = new Date();
+            const timestamp = d.getTime();
+
+            // Send the image if exists
+            const imageFile = document.getElementById("send-image").files[0];
+            if (imageFile){
+                socket.emit("image_handler_server", {
+                    "sender_name": username,
+                    "conversation_id": conversation,
+                    "mode": "sending",
+                    "image_name": imageFile.name,
+                    "image": imageFile,
+                    "created_at": timestamp
+                    });
+            }
+
             socket.emit("message_handler_server", 
                 {"username": username, 
                 "message": text_field.innerHTML, 
                 "conversation_id": conversation,
-                "created_at": d.getTime()});
+                "created_at": timestamp});
             text_field.innerHTML = "";
             text_field.focus();
         }
