@@ -1,6 +1,5 @@
 
 from __future__ import annotations
-from email.policy import default
 from message_app.db.db import DB as db
 import json
 import time

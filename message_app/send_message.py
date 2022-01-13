@@ -1,4 +1,3 @@
-from io import BytesIO
 import os
 import time
 from flask_socketio import SocketIO, emit, join_room, leave_room
