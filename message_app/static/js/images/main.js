@@ -50,7 +50,6 @@ class ImageHTMLElement {
 
     show() {
         this.selfEl = document.createElement("div");
-        // this.selfEl.setAttribute("onclick", "showRegularImageSize("+this.imageObj.regular_source+")");
         this.selfEl.innerHTML = this.generateMarkup();
         this.parentEl.append(this.selfEl);
     }
