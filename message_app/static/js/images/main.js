@@ -35,11 +35,6 @@ class ImageHTMLElement {
         return (
             `
             <div class="msg-item" onclick=showRegularImageSize("${regularSource}")>
-                <div class="msg-item__meta">
-                    <div class="msg-item__sender-id">${sender_name}</div>
-                    <div class="msg-item__sent-time">${sentTime}</div>
-                </div>
-
                 <div class="msg-item__bubble">
                     <img src="${thumbnailSource}" alt="${sender_name}'s photo" width="${width}" height="${height}">
                 </div>

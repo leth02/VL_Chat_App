@@ -1,5 +1,6 @@
 
 from __future__ import annotations
+from email.policy import default
 from message_app.db.db import DB as db
 import json
 import time
@@ -231,7 +232,7 @@ class Messages(db.Model):
     content = db.Column(db.String(255))
     created_at = db.Column(db.Integer, default=time.time())
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'))
-
+    attachment_name = db.Column(db.String, default="")
 
     def to_json(self) -> str:
         data = {

@@ -13,7 +13,8 @@ socket.on("message_handler_client", function(data){
 // An event that receives images from the server
 socket.on("image_handler_client", function(data){
     const image = new ImageModel(data.conversation_id, data.sender_name, data.thumbnail_source, data.regular_source , data.width, data.height, false, data.timestamp);
-    image.show()
+    image.show();
+    document.getElementById("send-image").value = "";
 });
 
 // An event that shows if a user is typing

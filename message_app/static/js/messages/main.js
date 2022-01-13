@@ -109,28 +109,31 @@ function textEditorHandler(event) {
         if (conversation == 0){
             alert("You must join a conversation first!") // TODO: Replace this with something better
         } else {
-            var text_field = document.querySelector(".message-form__content-editable");
+            let text_field = document.querySelector(".message-form__content-editable");
             const d = new Date();
             const timestamp = d.getTime();
 
             // Send the image if exists
             const imageFile = document.getElementById("send-image").files[0];
+            let imageName = "";
             if (imageFile){
                 socket.emit("image_handler_server", {
                     "sender_name": username,
                     "conversation_id": conversation,
-                    "mode": "sending",
                     "image_name": imageFile.name,
                     "image": imageFile,
                     "created_at": timestamp
-                    });
+                });
+                imageName = imageFile.name;
             }
 
-            socket.emit("message_handler_server", 
-                {"username": username, 
+            socket.emit("message_handler_server", {
+                "username": username, 
                 "message": text_field.innerHTML, 
                 "conversation_id": conversation,
-                "created_at": timestamp});
+                "created_at": timestamp,
+                "attachment_name": imageName
+            });
             text_field.innerHTML = "";
             text_field.focus();
         }

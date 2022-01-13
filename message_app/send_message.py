@@ -103,11 +103,12 @@ def message_handler(data):
     message = data["message"]
     conversation_id = data["conversation_id"]
     created_at = data["created_at"]
+    attachment_name = data["attachment_name"]
 
     # Update the database
     user_id = User.select(username).id
     conversation = Conversations.select(conversation_id)
-    new_message = Messages(sender_id=user_id, content=message, created_at=created_at, conversation_id=conversation_id)
+    new_message = Messages(sender_id=user_id, content=message, created_at=created_at, conversation_id=conversation_id, attachment_name=attachment_name)
     Messages.insert(new_message)
     conversation.last_message_id = new_message.id # Manually set the last_message_id for now
     DB.session.commit()
@@ -118,53 +119,41 @@ def message_handler(data):
 # A socket that handles sending/receiving images
 @socketio.on("image_handler_server", namespace="/messages")
 def image_handler(data):
-    # The data is a dictionary with six keys:
+    # The data is a dictionary with five keys:
     # "sender_name": The username of the sender
     # "conversation_id": The current conversation's id
-    # "mode":  "mode" accepts two values, "sending" and "opening".
-    #          When the value is "sending", the function will resize the image,
-    #          store both versions, and send the resized version to the conversation 
-    #          When the value is "opening", the function will send the regular image
-    #          to the Conversations
     # "image_name": The name of the image
     # "image": The image as a binary file.
     # "timestamp": The time that user sent this image
 
     sender_name = data["sender_name"] # This variable will be used in the future to handle duplicated name issue
     conversation_id = data["conversation_id"]
-    mode = data["mode"]
-    image_name = data["image_name"].replace(" ", "_")
+    image_name = data["image_name"]
     image = data["image"]
     image_path = os.path.join(IMAGE_STORAGE_PATH, "regular_" + image_name)
 
-    if mode == "sending":
-        # Store the regular image to the system
-        with open(image_path , "wb") as f:
-            f.write(image)
+    # Store the regular image to the system
+    with open(image_path, "wb") as f:
+        f.write(image)
 
-        # Resize the image
-        resized_image = Image.open(image_path)
-        resized_image.thumbnail(THUMBNAIL_MAX_SIZE)
+    # Resize the image
+    resized_image = Image.open(image_path)
+    resized_image.thumbnail(THUMBNAIL_MAX_SIZE)
 
-        # Store resized version to the system
-        resized_path = os.path.join(IMAGE_STORAGE_PATH, "thumbnail_" + image_name)
-        resized_image.save(resized_path)
+    # Store resized version to the system
+    resized_path = os.path.join(IMAGE_STORAGE_PATH, "thumbnail_" + image_name)
+    resized_image.save(resized_path)
 
-        return_data = {
-            "conversation_id": conversation_id,
-            "sender_name": sender_name,
-            "regular_source": os.path.join("static", "user_images", "regular_" + image_name).replace("\\", "&#47;"),
-            "thumbnail_source": os.path.join("static", "user_images", "thumbnail_" + image_name),
-            "width": resized_image.width,
-            "height": resized_image.height,
-            "timestamp": data["created_at"]
-        }
-        emit("image_handler_client", return_data, room=conversation_id)
-
-    elif mode == "opening":
-        image = Image.open(image_path)
-
-
+    return_data = {
+        "conversation_id": conversation_id,
+        "sender_name": sender_name,
+        "regular_source": os.path.join("static", "user_images", "regular_" + image_name).replace("\\", "&#47;").replace(" ", "&#32;"), # Replace escape character with their codes
+        "thumbnail_source": os.path.join("static", "user_images", "thumbnail_" + image_name).replace("\\", "&#47;").replace(" ", "&#32;"), # Replace escape character with their codes
+        "width": resized_image.width,
+        "height": resized_image.height,
+        "timestamp": data["created_at"]
+    }
+    emit("image_handler_client", return_data, room=conversation_id)
 
 # A socket that updates user's last_active_time
 @socketio.on("last_active", namespace="/messages")
