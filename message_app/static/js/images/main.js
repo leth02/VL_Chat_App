@@ -1,14 +1,11 @@
 // ===== Images =====
-class ImageModel {
-    constructor(conversationId, sender_name, thumbnail_source, regular_source, width, height, seen, timestamp) {
-        this.conversationId = conversationId;
-        this.sender_name = sender_name;
+class ImageModel extends MessageModel{
+    constructor(id, conversationId, sender_name, content, seen, timestamp, thumbnail_source, regular_source, width, height) {
+        super(id, conversationId, sender_name, content, seen, timestamp)
         this.thumbnail_source = thumbnail_source;
         this.regular_source = regular_source;
         this.width = width;
         this.height = height;
-        this.seen = seen; // TODO: Implement seen function
-        this.timestamp = timestamp;
         this.HTMLElement = new ImageHTMLElement(this);
     }
 
@@ -26,17 +23,27 @@ class ImageHTMLElement {
     }
 
     generateMarkup() {
-        const sender_name = this.imageObj.sender_name;
-        const sentTime = getTimeString(this.imageObj.timestamp);
-        const regularSource = this.imageObj.regular_source;
-        const thumbnailSource = this.imageObj.thumbnail_source;
-        const width = this.imageObj.width;
-        const height = this.imageObj.height;
+        let sender_name = this.imageObj.sender_name;
+        if (sender_name === username){
+            sender_name = "You"
+        }
+        let sentTime = getTimeString(this.imageObj.timestamp);
+        let content = this.imageObj.content;
+        let regularSource = this.imageObj.regular_source;
+        let thumbnailSource = this.imageObj.thumbnail_source;
+        let width = this.imageObj.width;
+        let height = this.imageObj.height;
         return (
             `
-            <div class="msg-item" onclick=showRegularImageSize("${regularSource}")>
+            <div class="msg-item">
+                <div class="msg-item__meta">
+                    <div class="msg-item__sender-id">${sender_name}</div>
+                    <div class="msg-item__sent-time">${sentTime}</div>
+                </div>
+
                 <div class="msg-item__bubble">
-                    <img src="${thumbnailSource}" alt="${sender_name}'s photo" width="${width}" height="${height}">
+                    <img src="${thumbnailSource}" alt="${sender_name}'s photo" width="${width}" height="${height}" onclick=showRegularImageSize("${regularSource}")>
+                    <div class="msg-item__bubble-body">${content}</div>
                 </div>
             </div>
             `

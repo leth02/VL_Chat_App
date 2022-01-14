@@ -50,8 +50,8 @@ class MessageHTMLElement {
         if (sender_name === username){
             sender_name = "You"
         }
-        const sentTime = getTimeString(this.messageObj.timestamp);
-        const content = this.messageObj.content;
+        let sentTime = getTimeString(this.messageObj.timestamp);
+        let content = this.messageObj.content;
         return (
             `
             <div class="msg-item">
@@ -115,25 +115,18 @@ function textEditorHandler(event) {
 
             // Send the image if exists
             const imageFile = document.getElementById("send-image").files[0];
-            let imageName = "";
-            if (imageFile){
-                socket.emit("image_handler_server", {
-                    "sender_name": username,
-                    "conversation_id": conversation,
-                    "image_name": imageFile.name,
-                    "image": imageFile,
-                    "created_at": timestamp
-                });
-                imageName = imageFile.name;
-            }
-
-            socket.emit("message_handler_server", {
+            let data = {
                 "username": username, 
                 "message": text_field.innerHTML, 
                 "conversation_id": conversation,
-                "created_at": timestamp,
-                "attachment_name": imageName
-            });
+                "created_at": timestamp
+            };
+
+            if (imageFile){
+                data.image_name = imageFile.name;
+                data.image = imageFile;
+            }
+            socket.emit("message_handler_server", data)
             text_field.innerHTML = "";
             text_field.focus();
         }
