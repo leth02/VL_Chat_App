@@ -1,6 +1,3 @@
-// Making the Websocket the only connection.
-const socket = io('http://127.0.0.1:5000/messages', { transports: ["websocket"] });
-
 // An event that receives messages from the server
 socket.on("message_handler_client", function(data){
     // For a normal message, data is an object having five properties:
@@ -42,23 +39,51 @@ socket.on("typing", function(data){
 });
 
 // Update user's last_active time
-function update_last_active(){
-    let d = new Date();
+function updateUserLastActiveTime(newTime=d.getTime(), isClosing=false){
     data = {
         "username": username,
-        "last_active_time": d.getTime()
+        "last_active_time": newTime,
+        "is_closing": isClosing
     };
-    socket.emit("last_active", data);
+    socket.emit("last_active_time", data);
 }
 
-// update user's last_active after user logged in
-update_last_active();
+// ==================================== User's Status ====================================
+let timer = 0;
+let isIdle = false;
+let d = new Date();
+let autoUpdate = 0;
 
-// Set interval to update user's last_active every 5 minutes
-const update_last_active_time_interval = 5 * 60 * 1000; // 5 minutes
-setInterval(update_last_active, update_last_active_time_interval);
+// After user logged in
+updateUserLastActiveTime(); // update user's last_active_time
+autoUpdate = setInterval(updateUserLastActiveTime(), 90000); // Automatically update user's last_activate_time every 1.5 minutes
 
-// Before the user closes the window, update their active_time
-window.addEventListener("beforeunload", function(){
-    update_last_active();
-})
+// Events that reset the timer
+window.onload = resetTimer;
+window.onmousemove = resetTimer;
+window.onmousedown = resetTimer;
+window.ontouchstart = resetTimer;
+window.onclick = resetTimer;
+window.onkeypress = resetTimer;
+
+function resetTimer(){
+    // If the current state is idle
+    if (isIdle){
+        updateUserLastActiveTime(d.getTime()); // Change the status to active
+        idle = false;
+        autoUpdate = setInterval(updateUserLastActiveTime(), 90000); // Enable automatic update user's last_active_time
+    }
+
+    // Clear the previous interval
+    clearInterval(timer);
+
+    // Start idle mode after 2 minutes of deactivation
+    timer = setInterval(idleMode, 120000);
+}
+
+function idleMode(){
+    clearInterval(timer);
+    isIdle = true;
+    updateUserLastActiveTime(d.getTime()-120000); // Change the status to away
+    clearInterval(autoUpdate); // Disable automatic update user's last_active_time
+}

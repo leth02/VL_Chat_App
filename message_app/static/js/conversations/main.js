@@ -65,7 +65,6 @@ socket.on("update_conversations_container", function(data){
     let conv = NaN
     while (!stop && idx < conversations.length){
         conv = conversations[idx].firstElementChild;
-        console.log(conv.title, stop, idx)
         if (conv.title === data.username){
             conv.innerHTML = conv.title + " - " + data.status;
             stop = true 

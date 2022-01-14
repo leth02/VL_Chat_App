@@ -1,4 +1,5 @@
 import os
+from sqlite3 import DatabaseError
 import time
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask import Blueprint, render_template, session
@@ -9,16 +10,15 @@ from PIL import Image
 send_messages = Blueprint("send_messages", __name__)
 socketio = SocketIO(cors_allowed_origins='*')
 
-# # Define the amount of time a user can be active/inactive on the frontend
+# Define the amount of time a user can be active/inactive on the frontend
 # before we actually update their status on the server
-LAST_ACTIVE_INTERVAL = 10 * 1000 # 600000 milliseconds or 10 minutes
+LAST_ACTIVE_INTERVAL = 2 * 60 * 1000 # 2 minutes
 IMAGE_STORAGE_PATH = os.path.join("message_app", "static", "user_images")
 THUMBNAIL_MAX_SIZE = (100, 100)
 
 @send_messages.route("/messages", methods=["GET"])
 def messages():
     # Get conversations of the current user
-    # TODO: Show other usernames instead of conversations' ids on the frontend
     current_user = session["user"][1]
     conversations = User.select(current_user).conversations
     available_conversations = []
@@ -160,13 +160,18 @@ def message_handler(data):
     emit("message_handler_client", return_data, room=conversation_id)
 
 # A socket that updates user's last_active_time
-@socketio.on("last_active", namespace="/messages")
-def last_active(data):
+@socketio.on("last_active_time", namespace="/messages")
+def last_active_time(data):
+    # The data is a dictionary with three keys:
+    # username: username
+    # last_active_time: new last_active_time to update in the database
+    # is_closing: a boolean key that track if the user close their browser
     username = data["username"]
     last_active_time = data["last_active_time"]
+    is_closing = data["is_closing"]
     current_user = User.select(username)
     old_status = check_user_status(current_user.last_active_time)
-    new_status = check_user_status(last_active_time)
+    new_status = "away" if is_closing else check_user_status(last_active_time)
     current_user.last_active_time = last_active_time
     DB.session.commit()
 
