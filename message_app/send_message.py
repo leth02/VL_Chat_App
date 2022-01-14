@@ -1,5 +1,4 @@
 import os
-from sqlite3 import DatabaseError
 import time
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask import Blueprint, render_template, session
@@ -184,4 +183,3 @@ def last_active_time(data):
 
 def check_user_status(last_active_time: int) -> str:
     return "active" if (time.time() * 1000 - last_active_time < LAST_ACTIVE_INTERVAL) else "away"
-    
