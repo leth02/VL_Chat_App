@@ -1,7 +1,4 @@
 
-const MESSAGE_PANEL_HTML = document.querySelector("#message-panel");
-const FEEDBACK_HTML = document.querySelector("#feedback");
-
 // ===== Messages =====
 class MessageModel {
     constructor(id, conversationId, sender_name, content, seen, timestamp) {
@@ -53,8 +50,8 @@ class MessageHTMLElement {
         if (sender_name === username){
             sender_name = "You"
         }
-        const sentTime = getTimeString(this.messageObj.timestamp);
-        const content = this.messageObj.content;
+        let sentTime = getTimeString(this.messageObj.timestamp);
+        let content = this.messageObj.content;
         return (
             `
             <div class="msg-item">
@@ -112,13 +109,24 @@ function textEditorHandler(event) {
         if (conversation == 0){
             alert("You must join a conversation first!") // TODO: Replace this with something better
         } else {
-            var text_field = document.querySelector(".message-form__content-editable");
+            let text_field = document.querySelector(".message-form__content-editable");
             const d = new Date();
-            socket.emit("message_handler_server", 
-                {"username": username, 
+            const timestamp = d.getTime();
+
+            // Send the image if exists
+            const imageFile = document.getElementById("send-image").files[0];
+            let data = {
+                "username": username, 
                 "message": text_field.innerHTML, 
                 "conversation_id": conversation,
-                "created_at": d.getTime()});
+                "created_at": timestamp
+            };
+
+            if (imageFile){
+                data.image_name = imageFile.name;
+                data.image = imageFile;
+            }
+            socket.emit("message_handler_server", data)
             text_field.innerHTML = "";
             text_field.focus();
         }

@@ -1,8 +1,10 @@
+import os
 import time
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask import Blueprint, render_template, session
 from message_app.model import Messages, Conversations, User
 from message_app.db.db import DB
+from PIL import Image
 
 send_messages = Blueprint("send_messages", __name__)
 socketio = SocketIO(cors_allowed_origins='*')
@@ -10,6 +12,8 @@ socketio = SocketIO(cors_allowed_origins='*')
 # # Define the amount of time a user can be active/inactive on the frontend
 # before we actually update their status on the server
 LAST_ACTIVE_INTERVAL = 10 * 60 * 1000 # 600000 milliseconds or 10 minutes
+IMAGE_STORAGE_PATH = os.path.join("message_app", "static", "user_images")
+THUMBNAIL_MAX_SIZE = (100, 100)
 
 @send_messages.route("/messages", methods=["GET"])
 def messages():
@@ -94,21 +98,66 @@ def is_typing(data):
 # A socket that handles sending/receiving messages
 @socketio.on("message_handler_server", namespace="/messages")
 def message_handler(data):
+    # The data is a dictionary with six keys:
+    # "username": The username of the sender
+    # "message": The content of the message
+    # "conversation_id": The current conversation's id
+    # "timestamp": The time that user sent this image
+    # "image": The image as a binary file. Value = None if the message doesn't have any attachment
+    # "image_name": The name of the image. Value = "" if the message doesn't have any attachment
     username = data["username"]
     message = data["message"]
     conversation_id = data["conversation_id"]
     created_at = data["created_at"]
+    attachment_name = ""
+    image = None
+
+    if ("image" in data.keys()):
+        image_name = data["image_name"]
+        image = data["image"]
+        attachment_name = str(created_at) + username + image_name # Lower the chance of having duplicated image file
+        image_path = os.path.join(IMAGE_STORAGE_PATH, "regular_" + attachment_name)
+        # Store the regular image to the system
+        with open(image_path, "wb") as f:
+            f.write(image)
+
+        # Resize the image
+        resized_image = Image.open(image_path)
+        resized_image.thumbnail(THUMBNAIL_MAX_SIZE)
+
+        # Store resized version to the system
+        resized_path = os.path.join(IMAGE_STORAGE_PATH, "thumbnail_" + attachment_name)
+        resized_image.save(resized_path)
+
+        image_data = {
+            "regular_source": os.path.join("static", "user_images", "regular_" + attachment_name).replace("\\", "&#47;").replace(" ", "&#32;"), # Replace escape character with their codes
+            "thumbnail_source": os.path.join("static", "user_images", "thumbnail_" + attachment_name).replace("\\", "&#47;").replace(" ", "&#32;"), # Replace escape character with their codes
+            "width": resized_image.width,
+            "height": resized_image.height,
+        }
 
     # Update the database
     user_id = User.select(username).id
     conversation = Conversations.select(conversation_id)
-    new_message = Messages(sender_id=user_id, content=message, created_at=created_at, conversation_id=conversation_id)
+    new_message = Messages(sender_id=user_id, content=message, created_at=created_at, conversation_id=conversation_id, attachment_name=attachment_name)
     Messages.insert(new_message)
     conversation.last_message_id = new_message.id # Manually set the last_message_id for now
     DB.session.commit()
-    data["id"] = new_message.id
 
-    emit("message_handler_client", data, room=conversation_id)
+    # Return data
+    return_data = {
+        "id": new_message.id,
+        "conversation_id": conversation_id,
+        "username": username,
+        "message": message,
+        "created_at": created_at
+    }
+
+    if image:
+        return_data.update(image_data)
+
+
+    emit("message_handler_client", return_data, room=conversation_id)
 
 # A socket that updates user's last_active_time
 @socketio.on("last_active", namespace="/messages")

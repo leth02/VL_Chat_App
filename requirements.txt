@@ -8,3 +8,4 @@ python-dotenv
 bcrypt
 flask-socketio
 eventlet
+pillow

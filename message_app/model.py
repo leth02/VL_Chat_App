@@ -231,7 +231,7 @@ class Messages(db.Model):
     content = db.Column(db.String(255))
     created_at = db.Column(db.Integer, default=time.time())
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversations.id'))
-
+    attachment_name = db.Column(db.String, default="")
 
     def to_json(self) -> str:
         data = {

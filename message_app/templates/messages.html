@@ -28,6 +28,7 @@
                 <div id="message-panel"></div>
                 <div id="feedback"></div>
                 <form class="message-form">
+                    <input type="file" id="send-image" accept=".gif,.jpg,.jpeg,.png"><br>
                     <div class="message-form__message-container">
                         <div class="message-form__message-content-container">
                             <div class="message-form__content-editable" contenteditable="true" role="textbox" aria-label="Write a message..." aria-multiline="true">
@@ -55,5 +56,6 @@
         <script src="{{url_for('static', filename='js/state.js')}}"></script>
         <script src="{{url_for('static', filename='js/messages/main.js')}}"></script>
         <script src="{{url_for('static', filename='js/conversations/main.js')}}"></script>
+        <script src="{{url_for('static', filename='js/images/main.js')}}"></script>
     </body>
 </html>

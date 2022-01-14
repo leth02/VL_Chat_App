@@ -4,9 +4,15 @@ const socket = io('http://127.0.0.1:5000/messages', { transports: ["websocket"] 
 // An event that receives messages from the server
 socket.on("message_handler_client", function(data){
     if (!("join" in data)){
-        const message = new MessageModel(data.id, data.conversation_id, data.username, data.message, false, data.created_at);
+        if ("thumbnail_source" in data){
+            const image = new ImageModel(data.id, data.conversation_id, data.username, data.message, false, data.created_at, data.thumbnail_source, data.regular_source , data.width, data.height);
+            image.show();
+            document.getElementById("send-image").value = "";
+        } else {
+            const message = new MessageModel(data.id, data.conversation_id, data.username, data.message, false, data.created_at);
+            message.show();
+        }
         FEEDBACK_HTML.innerHTML = "";
-        message.show();
     }
 });
 
