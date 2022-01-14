@@ -6,7 +6,7 @@
         <link rel="icon" href="{{url_for('static', filename='images/VL-logo-favicon.jpeg')}}">
         <link rel="stylesheet" href="{{url_for('static', filename='css/messages/main.css')}}">
     </head>
-    <body>
+    <body onbeforeunload="return updateUserLastActiveTime(isClosing=true)">
         <div id="header">
             <div>
                 <a style="padding: 2px 5px; border-radius: 4px; font-size: 14px; padding: 2px 5px; background: #23272a;color: #fff; text-decoration: none;margin-right: 10px;" href="/request/people">Find People</a>
@@ -50,7 +50,7 @@
             let username = `{{ username }}`;
             let availableConversations = JSON.parse('{{ available_conversations|tojson|safe }}');
         </script>
-        <script src="{{ url_for('static', filename='js/socketio.js') }}"> </script>
+        <script src="{{ url_for('static', filename='js/message_html_scripts.js') }}"> </script>
 
         <!-- Custom send_message JS -->
         <script src="{{url_for('static', filename='js/state.js')}}"></script>

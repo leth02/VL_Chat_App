@@ -28,7 +28,7 @@ class ConversationHTMLElement {
 
         return (
             `
-            <div class="conversation-card__title" conv_id=${conv_id} conv_status=${conversation_status}>
+            <div class="conversation-card__title" title=${title} conv_id=${conv_id} conv_status=${conversation_status}>
                 ${title} - ${conversation_status}
             </div>
             `
@@ -54,41 +54,24 @@ for (const c of availableConversations) {
     conversation.show();
 }
 
-// Reload the conversation container every 3 minutes to update users' status
-const conversationContainerRefreshInterval = 3 * 60 * 1000;
-setInterval(updateConversationContainer, conversationContainerRefreshInterval);
-
-socket.on("update_conversations_container", function(updatedConversations){
-    loadConversationContainer(updatedConversations);
-    availableConversations = updatedConversations;
-});
-
-function updateConversationContainer(){
-    socket.emit("update_conversations_container", availableConversations);
-}
-
-function loadConversationContainer(allConversations){
-    // Load conversation container to get new users' status update
+socket.on("update_conversations_container", function(data){
+    // Data is an object having two properties:
+    // username: user's name whose status has been changed
+    // status: new status
     const conversation_container = document.getElementById("conversation-container");
     let conversations = conversation_container.childNodes;
-    let allConversationsIdx = 0; // Keeping track of all_conversation index is needed in case of new conversation was added during the loading process
-    let child_container = NaN;
-    let child_title = NaN;
-    for (let i=1;i<conversations.length;i++){
-        child_container = conversations[i];
-        child_title = child_container.firstElementChild;
-        if (child_container.conv_id === allConversations[allConversationsIdx].conv_id){
-            if (child_container.conv_status !== allConversations[allConversationsIdx].conversation_status){
-                child_container.conv_status = allConversations[allConversationsIdx].conversation_status;
-                child_title.conv_status = allConversations[allConversationsIdx].conversation_status;
-                child_title.innerHTML = allConversations[allConversationsIdx].title + " - " + allConversations[allConversationsIdx].conversation_status;
-            }
-            allConversationsIdx ++;
+    let idx = 1;
+    let stop = false;
+    let conv = NaN
+    while (!stop && idx < conversations.length){
+        conv = conversations[idx].firstElementChild;
+        if (conv.title === data.username){
+            conv.innerHTML = conv.title + " - " + data.status;
+            stop = true 
         }
+        idx ++;
     }
-
-    availableConversations = allConversations
-}
+});
 
 // ========= Joining/Leaving a conversation =============================
 
