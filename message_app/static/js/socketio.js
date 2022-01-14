@@ -3,8 +3,20 @@ const socket = io('http://127.0.0.1:5000/messages', { transports: ["websocket"] 
 
 // An event that receives messages from the server
 socket.on("message_handler_client", function(data){
+    // For a normal message, data is an object having five properties:
+    // id: message's id
+    // conversation_id: current conversation's id
+    // username: the name of the user who sent the message
+    // message: message's content
+    // created_at: message's time
+
     if (!("join" in data)){
         if ("thumbnail_source" in data){
+            // If message contains image, there are four more properties:
+            // regular_source: regular image's source
+            // thumbnail_source: thumbnail image's source
+            // width: thumbnail image's width
+            // height: thumbnail image's height
             const image = new ImageModel(data.id, data.conversation_id, data.username, data.message, false, data.created_at, data.thumbnail_source, data.regular_source , data.width, data.height);
             image.show();
             document.getElementById("send-image").value = "";
@@ -18,6 +30,10 @@ socket.on("message_handler_client", function(data){
 
 // An event that shows if a user is typing
 socket.on("typing", function(data){
+    // Data is an object having two properties:
+    // username: the name of the user currently typing a message
+    // is_typing: boolean
+
     if (data.is_typing){
         FEEDBACK_HTML.innerHTML = data.username + " is typing ....";
     } else {
