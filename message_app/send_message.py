@@ -50,7 +50,7 @@ def messages():
 @send_messages.route("/api/messages/get_ten_messages/<int:conversation_id>/<int:cursor>", methods=["GET"])
 def get_ten_messages(conversation_id, cursor=None):
     # query 11 messages starting from cursor. If numbers of messages return < 11,
-    # there is no message to fetch
+    # there is no more message to fetch next time
     try:
         messages = Messages.getMessages(conversation_id, 11, cursor)
         messages_to_json = {}
@@ -192,3 +192,4 @@ def last_active(data):
     current_user = User.select(username)
     current_user.last_active_time = last_active_time
     DB.session.commit()
+
