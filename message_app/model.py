@@ -272,7 +272,7 @@ class Messages(db.Model):
         return id
 
     @classmethod
-    def getMessages(cls, conversation_id: int, number_of_messages: int, cursor: int) -> List[Messages]:
+    def getMessages(cls, conversation_id: int, number_of_messages: int, cursor: int) -> List:
         messages = []
 
         if cursor == None:
