@@ -15,6 +15,10 @@ jobs:
   test:
     # The OS of the virtual machine (aka runner) that the job will be run on
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: message_app
     # the specific steps that constitute the job
     steps:
       # Copy the code from GitHub to the runner
