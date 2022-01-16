@@ -26,6 +26,7 @@ jobs:
     - name: Change current directory to message app backend
       run: |
         cd message_app
+        pwd
     - name: Install dependencies
       run: |
         pwd
