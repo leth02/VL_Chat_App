@@ -1,7 +1,7 @@
 import os
 import time
 from flask_socketio import SocketIO, emit, join_room, leave_room
-from flask import Blueprint, render_template, session
+from flask import Blueprint, render_template, session, request, jsonify
 from message_app.model import Messages, Conversations, User
 from message_app.db.db import DB
 from PIL import Image
@@ -45,6 +45,31 @@ def messages():
         available_conversations.append(data)
 
     return render_template("messages.html", username=current_user, conversation_id=0, available_conversations=available_conversations)
+
+@send_messages.route("/api/messages/get_ten_messages/<int:conversation_id>", methods=["GET"])
+@send_messages.route("/api/messages/get_ten_messages/<int:conversation_id>/<int:cursor>", methods=["GET"])
+def get_ten_messages(conversation_id, cursor=None):
+    # query 11 messages starting from cursor. If numbers of messages return < 11,
+    # there is no more message to fetch next time
+    try:
+        messages = Messages.getMessages(conversation_id, 11, cursor)
+        messages_to_json = {}
+
+        if len(messages) < 11:
+            messages_to_json = {
+                    "messages": messages,
+                    "next_cursor": None
+                    }
+        else:
+            messages_to_json = {
+                    "messages": messages[0:(len(messages) - 1)],
+                    "next_cursor": messages[len(messages) - 1]["id"]
+                    }
+
+        return jsonify(messages_to_json), 200
+
+    except Exception as error:
+        return {"Error": "Bad Request" + str(error)}, 400
 
 # ================== Sockets for Conversations Container ==========================
 
@@ -167,3 +192,4 @@ def last_active(data):
     current_user = User.select(username)
     current_user.last_active_time = last_active_time
     DB.session.commit()
+

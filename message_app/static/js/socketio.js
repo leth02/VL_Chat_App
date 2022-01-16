@@ -46,3 +46,4 @@ setInterval(update_last_active, update_last_active_time_interval);
 window.addEventListener("beforeunload", function(){
     update_last_active();
 })
+

@@ -271,6 +271,46 @@ class Messages(db.Model):
         id = Messages.query.order_by(Messages.id.desc()).first().id
         return id
 
+    @classmethod
+    def getMessages(cls, conversation_id: int, number_of_messages: int, cursor: int) -> List:
+        messages = []
+
+        if cursor == None:
+            # query the latest messages
+            sub_query = db.session.query(Messages).filter(Messages.conversation_id == conversation_id).order_by(Messages.id.desc()).limit(number_of_messages).subquery()
+            messages = db.session.query(
+                    User.username,
+                    sub_query.c.id,
+                    sub_query.c.sender_id,
+                    sub_query.c.content,
+                    sub_query.c.created_at,
+                    sub_query.c.conversation_id
+                    ).join(sub_query, User.id == sub_query.c.sender_id).all()
+        else:
+            # query messages starting from cursor
+            sub_query = db.session.query(Messages).filter(and_(Messages.conversation_id == conversation_id, Messages.id <= cursor)).order_by(Messages.id.desc()).limit(number_of_messages).subquery()
+            messages = db.session.query(
+                    User.username,
+                    sub_query.c.id,
+                    sub_query.c.sender_id,
+                    sub_query.c.content,
+                    sub_query.c.created_at,
+                    sub_query.c.conversation_id
+                    ).join(sub_query, User.id == sub_query.c.sender_id).all()
+
+        messages_to_dict = []
+
+        for m in messages:
+            messages_to_dict.append({
+                "id": m.id,
+                "sender_id": m.sender_id,
+                "sender_name": m.username,
+                "content": m.content,
+                "created_at": m.created_at,
+                "conversation_id": m.conversation_id
+                })
+
+        return messages_to_dict
 
 # SQLAlchemy model for conversation_request table
 class ConversationRequest(db.Model):

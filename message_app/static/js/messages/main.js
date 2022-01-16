@@ -1,3 +1,4 @@
+const BASE_URL = window.location.origin;
 
 // ===== Messages =====
 class MessageModel {
@@ -72,6 +73,31 @@ class MessageHTMLElement {
         this.selfEl = document.createElement("div");
         this.selfEl.innerHTML = this.generateMarkup();
         this.parentEl.append(this.selfEl);
+    }
+}
+
+async function fetchLatestMessages(conversation_id){
+    const response = await fetch(BASE_URL + `/api/messages/get_ten_messages/${conversation_id}`);
+    const messages = await response.json();
+
+    return messages;
+}
+
+async function populateMessages(){
+    if (conversation != 0){
+        let messages = await fetchLatestMessages(conversation);
+
+        for (const d of messages.messages.reverse()) {
+            const message = new MessageModel(
+                d.id,
+                conversation,
+                d.sender_name,
+                d.content,
+                true,
+                d.created_at
+            );
+            message.show();
+        }
     }
 }
 

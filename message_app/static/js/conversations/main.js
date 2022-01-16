@@ -99,13 +99,14 @@ function joinConversation(conversation_id, conversation_title){
         alert("You are already in the conversation.");
     } else {
         // Conversation 0 means the user is not currently in any conversation
-        if (conversation != 0){ 
+        if (conversation != 0){
             leaveConversation(conversation);
         }
         socket.emit("join", {"username": username, "conversation_id": conversation_id});
         let messagePanel = document.getElementById("message-panel");
         messagePanel.innerHTML = "You are in conversation with " + conversation_title;
         conversation = newConversation;
+        populateMessages();
     }
 }
 
@@ -113,3 +114,4 @@ function joinConversation(conversation_id, conversation_title){
 function leaveConversation(conversation_id){
     socket.emit("leave", {"username": username, "conversation_id": conversation_id});
 }
+

@@ -36,3 +36,19 @@ class TestMessagesModel:
             "conversation_id": 1
         }
         assert json.loads(m.to_json()) == test_data
+
+    def test_get_messages(self, test_db):
+        # test get one message without cursor
+        messages = Messages.getMessages(1, 1, None)
+        assert len(messages) == 1
+        assert messages[0]["id"] == 2
+
+        # test get 1 message with cursor
+        messages = Messages.getMessages(1, 1, 1)
+        assert len(messages) == 1
+        assert messages[0]["id"] == 1
+
+        # test get many messages
+        messages = Messages.getMessages(1, 2, None)
+        assert len(messages) == 2
+
