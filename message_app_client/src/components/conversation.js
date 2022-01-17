@@ -1,99 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-class ConversationCard extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            lastMessageContent: null,
-            conversationStatus: null,
-            title: null,
-            conversationID: null,
-        }
-    }
+function ConversationCard(props){
+    // Props in an object containing 
+    const [lastMessageID, setLastMessageID] = useState(props.props.lastMessageID);
+    const [otherParticipantStatus, setOtherParticipantStatus] = useState(props.props.otherParticipantStatus);
+    const [conversationTitle, setConversationTitle] = useState(props.props.conversationTitle);
+    const [conversationID, setConversationID] = useState(props.props.conversationID);
 
-    componentDidMount(){
-        this.setState({
-            lastMessageContent: this.props.lastMessageContent,
-            conversationStatus: this.props.conversationStatus,
-            title: this.props.title,
-            conversationID: this.props.conversationID
-        });
-    }
+    // TODO: Add websocket here to update otherParticipantStatus and lastMessageID
 
-    componentDidUpdate(prevProps){
-        // Update the state when the conversation has a new lastMessage
-        if (this.props.lastMessageContent !== prevProps.lastMessageContent){
-            this.setState({
-                lastMessageContent: this.props.lastMessageContent
-            });
-        }
-
-        // Update the state when the conversation has a new status
-        if (this.props.conversationStatus !== prevProps.conversationStatus){
-            this.setState({
-                conversationStatus: this.props.conversationStatus
-            });
-        }
-    }
-
-    render() {
-        const title = this.state.title;
-        const conversationStatus = this.state.conversationStatus;
-        const conversationID = this.state.conversationID;
-
-        return (
-            <div className="conversation-card__title" conversation_id={conversationID} conversation_status={conversationStatus}>
-                {title} - {conversationStatus}
-            </div>
-        )
-    }
+    return (
+        <div className="conversation-card__title" conversation_id={conversationID} other_participant_status={otherParticipantStatus}>
+            {conversationTitle} - {otherParticipantStatus}
+        </div>
+    )
 }
 
-class ConversationContainer extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
+function ConversationContainer(props){
+    // Props is an array of objects containing all conversations
+    let conversationCards = [];
+    let allConversations = props.props;
+    allConversations.forEach(conversation => {
+        conversationCards.push(<ConversationCard props={conversation} key={conversation.conversationID}/>)
+    })
 
-    componentDidMount() {
-        for (let i=0;i<this.props.conversations.length;i++){
-            let conversation = this.props.conversations[i];
-            
-            this.setState({
-                [conversation.title]: conversation
-            });
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        if (this.props.conversations !== prevProps.conversations){
-            for (let i=0;i<this.props.conversations.length;i++){
-                let conversation = this.props.conversations[i];
-                
-                this.setState({
-                    [conversation.title]: conversation
-                });
-            }
-        }
-    }
-
-    render() {
-        let conversationCards = [];
-        let allKeys = Object.keys(this.state);
-        for (let i=0; i < allKeys.length; i++){
-            let conversation = this.state[allKeys[i]];
-            conversationCards.push(<ConversationCard {...conversation} key={allKeys[i]}/>)
-        }
-        return <div id="conversation-container">CONVERSATIONS {conversationCards}</div>
-    }
+    return (
+        <div id="conversation-container">CONVERSATIONS {conversationCards}</div>
+    )
 }
 
-class ConversationPanel extends React.Component {
-    render() {
-        return (
-            <div>
-                <ConversationContainer conversations={this.props.conversations}/>
-            </div>
-        )
-    }
+// TODO: IMPLEMENT SearchBar component
+
+function ConversationPanel(props) {
+    // Props is an array of objects containing all conversations
+    // and information about the SearchBar(WILL BE IMPLEMENTED LATER)
+    return (
+        <div>
+            <ConversationContainer props={props.props}/>
+        </div>
+    )
 }
