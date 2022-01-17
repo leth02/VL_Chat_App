@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 
 function ConversationCard(props){
-    // Props in an object containing 
-    const [lastMessageID, setLastMessageID] = useState(props.props.lastMessageID);
-    const [otherParticipantStatus, setOtherParticipantStatus] = useState(props.props.otherParticipantStatus);
-    const [conversationTitle, setConversationTitle] = useState(props.props.conversationTitle);
-    const [conversationID, setConversationID] = useState(props.props.conversationID);
+    // props.lastMessageID: int,
+    // props.otherParticipantStatus: String,
+    // props.conversationTitle: String,
+    // props.conversationID: int
+
+    const [lastMessageID, setLastMessageID] = useState(props.lastMessageID);
+    const [otherParticipantStatus, setOtherParticipantStatus] = useState(props.otherParticipantStatus);
+    const [conversationTitle, setConversationTitle] = useState(props.conversationTitle);
+    const [conversationID, setConversationID] = useState(props.conversationID);
 
     // TODO: Add websocket here to update otherParticipantStatus and lastMessageID
 
@@ -17,11 +21,12 @@ function ConversationCard(props){
 }
 
 function ConversationContainer(props){
-    // Props is an array of objects containing all conversations
+    // props.conversations: Array of objects containing conversation's data
+
     let conversationCards = [];
-    let allConversations = props.props;
+    let allConversations = props.conversations;
     allConversations.forEach(conversation => {
-        conversationCards.push(<ConversationCard props={conversation} key={conversation.conversationID}/>)
+        conversationCards.push(<ConversationCard {...conversation} key={conversation.conversationID}/>)
     })
 
     return (
@@ -29,14 +34,12 @@ function ConversationContainer(props){
     )
 }
 
-// TODO: IMPLEMENT SearchBar component
-
 function ConversationPanel(props) {
-    // Props is an array of objects containing all conversations
-    // and information about the SearchBar(WILL BE IMPLEMENTED LATER)
+    // props.conversations: Array of objects containing conversation's data
+    // props.searchBar: WILL BE IMPLEMENTED LATER
     return (
         <div>
-            <ConversationContainer props={props.props}/>
+            <ConversationContainer {...props}/>
         </div>
     )
 }
