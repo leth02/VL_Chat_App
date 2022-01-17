@@ -5,5 +5,5 @@ VL is an open-source chat application built with Python and JavaScript
 
 | Directory                                | Description      |
 | ---------------------------------------- | ---------------- |
-| [message_app](messge_app)                | Flask API        |
+| [message_app](message_app)               | Flask API        |
 | [message_app_client](message_app_client) | React client app |
