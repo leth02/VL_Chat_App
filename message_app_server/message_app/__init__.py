@@ -22,7 +22,6 @@ def create_app(test_config=None, name=__name__):
     app.config.from_mapping(
         SECRET_KEY='dev',
         SQLALCHEMY_DATABASE_URI=os.path.join("sqlite:///", "db", 'message_app_db.sqlite3'),
-        CORS_HEADERS="Content_Type",
 
         # Disable tracking modification of objects which requires extra memory
         SQLALCHEMY_TRACK_MODIFICATIONS=False

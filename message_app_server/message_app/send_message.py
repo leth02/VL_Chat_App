@@ -1,4 +1,3 @@
-from argparse import Namespace
 import os
 import time
 from flask_socketio import SocketIO, emit, join_room, leave_room
@@ -202,7 +201,6 @@ def message_handler(data):
     if image:
         return_data.update(image_data)
 
-    socketio.emit("updateLastMessageID", {"conversation_id": conversation_id, "sender_name": username, "content": message}, namespace="/messages")
     emit("message_handler_client", return_data, room=conversation_id)
 
 # A socket that updates user's last_active_time
@@ -213,31 +211,3 @@ def last_active(data):
     current_user = User.select(username)
     current_user.last_active_time = last_active_time
     DB.session.commit()
-
-clients = []
-@socketio.on("connect", namespace="/messages")
-def connect():
-    # clients.append(request.namespace)
-    print("hello World")
-
-@socketio.on("test_react", namespace="/messages")
-def test_react(data):
-    conversation_id = 1
-    username = "user1"
-    message = "stupid"
-    emit("updateLastMessageID", {"id": 6, "conversation_id": conversation_id, "sender_name": username, "content": message})
-    # setInterval(foo, 3)
-
-# import threading
-
-# def setInterval(func,time):
-#     e = threading.Event()
-#     while not e.wait(time):
-#         func()
-
-# def foo():
-#     print("hello")
-#     conversation_id = 1
-#     username = "user1"
-#     message = "stupid"
-#     emit("updateLastMessageID", {"id": 6, "conversation_id": conversation_id, "sender_name": username, "content": message})

@@ -1,5 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
+import socket from './state'
 
 async function postData(url = '', data = {}) {
     // Default options are marked with *
@@ -24,9 +24,9 @@ function LastMessage(props){
 
     useEffect(() => {
         // CurrentUserName should be stored in the cookies after user logged in
-        // This line will be DELETED after cookies is fully implemented
+        // This variable will be DELETED after cookies is fully implemented
         let currentUsername = "user2";
-        
+
         // Fetch last message's data
         if (lastMessageID){
             postData("http://localhost:5000/api/last_message_content", { messageID: lastMessageID })
@@ -40,17 +40,11 @@ function LastMessage(props){
 
         // Socket for updating last message
         socket.on("updateLastMessageID", function(message){
-            if (props.conversationID === message.conversation_id && lastMessageID !== message.id){
-                setLastMessageID(message.id);
-                setLastMessageContent(message.content)
-                if (message.sender_name === senderName){
-                    setSenderName("You");
-                } else {
-                    setSenderName(message.sender_name)
-                }
+            if (props.conversationID === message.conversation_id && lastMessageID !== message.last_message_id){
+                setLastMessageID(message.last_message_id);
             }
         });
-    }, [lastMessageID]);
+    }, [lastMessageID, props.conversationID]);
     
     
 
@@ -92,14 +86,14 @@ function ConversationCard(props){
 function ConversationContainer(props){
     // props.conversations: Array of objects containing conversation's data
 
-    let conversationCards = [];
-    let allConversations = props.conversations;
-    allConversations.forEach(conversation => {
-        conversationCards.push(<ConversationCard {...conversation} key={conversation.conversationID}/>)
-    })
+    const renderConversation = (conversation) => {
+        return <ConversationCard {...conversation} key={conversation.conversationID}/>
+    }
 
     return (
-        <div id="conversation-container">CONVERSATIONS {conversationCards}</div>
+        <div id="conversation-container">CONVERSATIONS
+            {props.conversations.map(conversation => renderConversation(conversation))}
+        </div>
     )
 }
 
@@ -113,3 +107,5 @@ function ConversationPanel(props) {
         </div>
     )
 }
+
+export default ConversationPanel
