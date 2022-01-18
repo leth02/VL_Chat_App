@@ -30,7 +30,7 @@ def test_db(app):
         # This function drops all the tables, removes the current connection, and deletes the temporary database file.
         db.drop_all()
         db.session.remove()
-        os.remove(os.path.join("tests", TEST_DB))
+        os.remove(os.path.join("message_app_server/tests", TEST_DB))
 
     # Initialize test database
     init_SQLAlchemy()
