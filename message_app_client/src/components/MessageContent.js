@@ -15,3 +15,4 @@ const MessageContent = (props) => {
 };
 
 export default MessageContent;
+
