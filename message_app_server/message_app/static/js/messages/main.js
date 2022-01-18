@@ -78,7 +78,7 @@ class MessageHTMLElement {
 
 async function fetchLatestMessages(conversation_id){
     const response = await fetch(BASE_URL + `/api/messages/get_ten_messages/${conversation_id}`);
-    const messages = await response.json();
+    const messages = await response.json()
 
     return messages;
 }

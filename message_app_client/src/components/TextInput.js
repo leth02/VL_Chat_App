@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 const TextInput = (props) => {
     return (
-        <div class="message-form__message-container">
-            <div class="message-form__message-content-container">
-                <div class="message-form__content-editable" contenteditable="true" role="textbox" aria-label="Write a message..." aria-multiline="true">
+        <div className="message-form__message-container">
+            <div className="message-form__message-content-container">
+                <div className="message-form__content-editable" contentEditable="true" role="textbox" aria-label="Write a message..." aria-multiline="true">
                 </div>
-                <div class="message-form__placeholder" aria-hidden="true">
+                <div className="message-form__placeholder" aria-hidden="true">
                     Write a message...
                 </div>
             </div>

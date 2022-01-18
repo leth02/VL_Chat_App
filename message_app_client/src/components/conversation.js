@@ -43,3 +43,5 @@ function ConversationPanel(props) {
         </div>
     )
 }
+
+export default ConversationContainer;

@@ -5,7 +5,7 @@ import ConversationInput from './ConversationInput';
 
 const ConversationDetailPanel = (props) => {
     const { conversation_id, username, other_participant_name } = props;
-    const [ messages, setMessages ] = useState(null);
+    const [ messages, setMessages ] = useState([]);
     const apiUrl = `http://localhost:5000/api/messages/get_ten_messages/${conversation_id}`;
 
     const fetchLatestMessagesData = async () => {
@@ -17,7 +17,7 @@ const ConversationDetailPanel = (props) => {
 
     useEffect(() => {
         fetchLatestMessagesData();
-      }, [conversation_id, username]);
+      }, []);
 
     return (
         <>
@@ -40,3 +40,4 @@ const ConversationDetailPanel = (props) => {
 };
 
 export default ConversationDetailPanel;
+
