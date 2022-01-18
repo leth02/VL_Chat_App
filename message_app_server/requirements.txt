@@ -9,3 +9,4 @@ bcrypt
 flask-socketio
 eventlet
 pillow
+flask-cors

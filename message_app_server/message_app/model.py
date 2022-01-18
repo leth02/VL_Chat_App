@@ -64,8 +64,13 @@ class User(db.Model):
         return user
 
     @classmethod
-    def select(cls, username: str) -> Union[User, None]:
-        user = User.query.filter_by(username=username).first()
+    def select(cls, username=None, user_id=None) -> Union[User, None]:
+        user = None
+        if username:
+            user = User.query.filter_by(username=username).first()
+
+        if user_id:
+            user = User.query.filter_by(id=user_id).first()
         return user
 
     @classmethod

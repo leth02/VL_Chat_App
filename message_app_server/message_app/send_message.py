@@ -1,3 +1,4 @@
+from argparse import Namespace
 import os
 import time
 from flask_socketio import SocketIO, emit, join_room, leave_room
@@ -18,7 +19,6 @@ THUMBNAIL_MAX_SIZE = (100, 100)
 @send_messages.route("/messages", methods=["GET"])
 def messages():
     # Get conversations of the current user
-    # TODO: Show other usernames instead of conversations' ids on the frontend
     current_user = session["user"][1]
     conversations = User.select(current_user).conversations
     available_conversations = []
@@ -45,6 +45,27 @@ def messages():
         available_conversations.append(data)
 
     return render_template("messages.html", username=current_user, conversation_id=0, available_conversations=available_conversations)
+
+@send_messages.route("/api/last_message_content", methods=["POST"])
+def api_get_last_message():
+    try:
+        message_id = request.get_json(force=True)["messageID"]
+        last_message = Messages.select(message_id)
+
+        # Message not found:
+        if not last_message:
+            session["error"] = "Invalid message_id."
+            raise Exception(session["error"])
+        else:
+            sender = User.select(user_id=last_message.sender_id)
+            return_value = {
+                "sender_name": sender.username,
+                "content": last_message.content
+            }
+            return jsonify(return_value), 200
+
+    except Exception as error:
+        return {"Error": "Bad request. " + str(error)}, 400
 
 @send_messages.route("/api/messages/get_ten_messages/<int:conversation_id>", methods=["GET"])
 @send_messages.route("/api/messages/get_ten_messages/<int:conversation_id>/<int:cursor>", methods=["GET"])
@@ -181,7 +202,7 @@ def message_handler(data):
     if image:
         return_data.update(image_data)
 
-
+    socketio.emit("updateLastMessageID", {"conversation_id": conversation_id, "sender_name": username, "content": message}, namespace="/messages")
     emit("message_handler_client", return_data, room=conversation_id)
 
 # A socket that updates user's last_active_time
@@ -193,3 +214,30 @@ def last_active(data):
     current_user.last_active_time = last_active_time
     DB.session.commit()
 
+clients = []
+@socketio.on("connect", namespace="/messages")
+def connect():
+    # clients.append(request.namespace)
+    print("hello World")
+
+@socketio.on("test_react", namespace="/messages")
+def test_react(data):
+    conversation_id = 1
+    username = "user1"
+    message = "stupid"
+    emit("updateLastMessageID", {"id": 6, "conversation_id": conversation_id, "sender_name": username, "content": message})
+    # setInterval(foo, 3)
+
+# import threading
+
+# def setInterval(func,time):
+#     e = threading.Event()
+#     while not e.wait(time):
+#         func()
+
+# def foo():
+#     print("hello")
+#     conversation_id = 1
+#     username = "user1"
+#     message = "stupid"
+#     emit("updateLastMessageID", {"id": 6, "conversation_id": conversation_id, "sender_name": username, "content": message})

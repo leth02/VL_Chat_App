@@ -1,8 +1,7 @@
 import os
 from time import strftime
-
 from flask import Flask, render_template, session, redirect, url_for, request
-
+from flask_cors import CORS
 from .db.db import init_SQLAlchemy
 from .send_message import socketio
 from .utils import hash_pw
@@ -23,6 +22,7 @@ def create_app(test_config=None, name=__name__):
     app.config.from_mapping(
         SECRET_KEY='dev',
         SQLALCHEMY_DATABASE_URI=os.path.join("sqlite:///", "db", 'message_app_db.sqlite3'),
+        CORS_HEADERS="Content_Type",
 
         # Disable tracking modification of objects which requires extra memory
         SQLALCHEMY_TRACK_MODIFICATIONS=False
@@ -62,5 +62,8 @@ def create_app(test_config=None, name=__name__):
     #     log.info("{} {} {} {} {} {}".format(timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status))
 
     #     return response
+
+    # Handling Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible.
+    CORS(app)
 
     return app

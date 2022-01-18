@@ -83,23 +83,23 @@ async function fetchLatestMessages(conversation_id){
     return messages;
 }
 
-async function populateMessages(){
-    if (conversation != 0){
-        let messages = await fetchLatestMessages(conversation);
+// async function populateMessages(){
+//     if (conversation != 0){
+//         let messages = await fetchLatestMessages(conversation);
 
-        for (const d of messages.messages.reverse()) {
-            const message = new MessageModel(
-                d.id,
-                conversation,
-                d.sender_name,
-                d.content,
-                true,
-                d.created_at
-            );
-            message.show();
-        }
-    }
-}
+//         for (const d of messages.messages.reverse()) {
+//             const message = new MessageModel(
+//                 d.id,
+//                 conversation,
+//                 d.sender_name,
+//                 d.content,
+//                 true,
+//                 d.created_at
+//             );
+//             message.show();
+//         }
+//     }
+// }
 
 const messagePlaceholder = document.getElementsByClassName("message-form__placeholder")[0];
 
