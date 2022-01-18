@@ -18,7 +18,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: message_app_server/message_app
+        working-directory: message_app_server
     # the specific steps that constitute the job
     steps:
       # Copy the code from GitHub to the runner
