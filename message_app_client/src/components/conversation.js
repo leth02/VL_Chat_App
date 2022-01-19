@@ -45,8 +45,6 @@ function LastMessage(props){
             }
         });
     }, [lastMessageID, props.conversationID]);
-    
-    
 
     return (
         <div className="last-message">
