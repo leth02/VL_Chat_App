@@ -1,19 +1,17 @@
 import './App.css';
-import ConversationDetailPanel from './components/ConversationDetailPanel';
-import ConversationContainer from './components/conversation';
+import ConversationDetailPanel from './components/conversation_detail/ConversationDetailPanel';
 
 function App() {
   return (
     <div>
-      <ConversationContainer conversations={[]}/>
+      <div>This part for list conversations</div>
       <ConversationDetailPanel
-          conversation_id={1}
+          conversationId={1}
           username={"user1"}
-          other_participant_name={"user2"}
+          otherParticipantName={"user2"}
       />
     </div>
   );
 }
 
 export default App;
-

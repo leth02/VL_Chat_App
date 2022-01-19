@@ -4,12 +4,16 @@ import ConversationDetail from './ConversationDetail';
 import ConversationInput from './ConversationInput';
 
 const ConversationDetailPanel = (props) => {
-    const { conversation_id, username, other_participant_name } = props;
+    const { conversationId, username, otherParticipantName } = props;
     const [ messages, setMessages ] = useState([]);
-    const apiUrl = `http://localhost:5000/api/messages/get_ten_messages/${conversation_id}`;
+    const [ isFetchSuccess, setIsFetchSuccess ] = useState(true);
+    const apiUrl = `http://localhost:5000/api/messages/get_ten_messages/${conversationId}`;
 
     const fetchLatestMessagesData = async () => {
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl)
+        .catch(() => {
+            setIsFetchSuccess(false);
+        });
         const messages = await response.json();
 
         setMessages(messages.messages.reverse());
@@ -19,12 +23,16 @@ const ConversationDetailPanel = (props) => {
         fetchLatestMessagesData();
       }, []);
 
+    if (!isFetchSuccess) {
+        return <div>Opps, Something went wrong :(((</div>
+    }
+
     return (
         <>
-            {conversation_id ? (
+            {conversationId ? (
                 <div>
                     <ConversationHeader
-                        other_participant_name={other_participant_name}
+                        otherParticipantName={otherParticipantName}
                     />
                     <ConversationDetail
                         messages={messages}
@@ -40,4 +48,3 @@ const ConversationDetailPanel = (props) => {
 };
 
 export default ConversationDetailPanel;
-

@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Messages from './Message';
 
 const ConversationDetail = (props) => {
     const { messages, username } = props;
 
     const renderMessage = (message) => {
-        const {id, sender_name, content, created_at} = message;
+        const {id, senderName, content, createdAt} = message;
         return (
             <Messages
+                key={id}
                 id={id}
-                sender_name={sender_name}
+                senderName={senderName}
                 content={content}
-                created_at={created_at}
+                createdAt={createdAt}
                 username={username}
             />
         );

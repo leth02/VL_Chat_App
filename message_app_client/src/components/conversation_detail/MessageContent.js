@@ -1,11 +1,11 @@
 import React from "react";
 
 const MessageContent = (props) => {
-    const {content, is_image} = props;
+    const {content, isImage} = props;
 
     return (
         <>
-            {is_image ? (
+            {isImage ? (
                 <div></div>  
             ) : (
                 <div>{content}</div>

@@ -28,7 +28,7 @@ def create_app(test_config=None, name=__name__):
         # Disable tracking modification of objects which requires extra memory
         SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
-    CORS(app)
+    CORS(app, origins=["http://localhost:3000"])
 
     # if test config is passed, make app use that config object
     if test_config:

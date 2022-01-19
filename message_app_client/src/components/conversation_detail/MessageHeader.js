@@ -1,19 +1,19 @@
 import React from "react";
 
 const MessageHeader = (props) => {
-    const { sender_name, sent_time, username } = props;
+    const { senderName, sentTime, username } = props;
 
     return (
         <>
-            {sender_name == username ? (
+            {senderName === username ? (
                 <div>
                     <div>You</div>
-                    <div>{sent_time}</div>
+                    <div>{sentTime}</div>
                 </div>
             ) : (
                 <div>
-                    <div>{sender_name}</div>
-                    <div>{sent_time}</div>
+                    <div>{senderName}</div>
+                    <div>{sentTime}</div>
                 </div>
             )}
         </>

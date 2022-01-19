@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import MessageHeader from './MessageHeader';
 import MessageContent from './MessageContent';
 
 const Messages = (props) => {
-    const {id, sender_name, content, created_at, username} = props;
+    const {id, senderName, content, createdAt, username} = props;
 
     return (
         <>
             <MessageHeader
-                sender_name={sender_name}
-                sent_time={created_at}
-                username={username}
+                senderName={senderName}
+                sentTime={createdAt}
+                userName={username}
             />
             <MessageContent
                 content={content}
-                is_image={false}
+                isImage={false}
             />
         </>
     )
