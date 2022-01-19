@@ -63,6 +63,6 @@ def create_app(test_config=None, name=__name__):
     #     return response
 
     # Handling Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible.
-    CORS(app)
+    CORS(app, origins=["http://localhost:3000"])
 
     return app

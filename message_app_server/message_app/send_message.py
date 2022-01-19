@@ -7,7 +7,7 @@ from message_app.db.db import DB
 from PIL import Image
 
 send_messages = Blueprint("send_messages", __name__)
-socketio = SocketIO(cors_allowed_origins='*')
+socketio = SocketIO(cors_allowed_origins=['http://localhost:3000', 'http://localhost:5000'])
 
 # # Define the amount of time a user can be active/inactive on the frontend
 # before we actually update their status on the server
