@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import socket from './state'
+import socket from '../state'
 
 async function postData(url = '', data = {}) {
     // Default options are marked with *
@@ -29,7 +29,7 @@ function LastMessage(props){
 
         // Fetch last message's data
         if (lastMessageID){
-            postData("http://localhost:5000/api/last_message_content", { messageID: lastMessageID })
+            postData("http://localhost:5000/api/get_message", { messageID: lastMessageID })
                 .then(data => {
                     // Set senderName and content
                     let name = data.sender_name === currentUsername ? "You" : data.sender_name;

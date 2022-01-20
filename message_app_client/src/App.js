@@ -1,23 +1,23 @@
-import logo from './logo.svg';
 import './App.css';
+import ConversationDetailPanel from './components/conversation_detail/ConversationDetailPanel';
+import ConversationPanel from './components/conversation'
+
+// Some test data. This variable will be REPLACED with data from the server later on
+const conversations = {conversations: [
+  {conversationTitle: "test1", conversationID: 1, otherParticipantStatus: "away", lastMessageID: 1},
+  {conversationTitle: "test2", conversationID: 2, otherParticipantStatus: "active", lastMessageID: NaN},
+  {conversationTitle: "test3", conversationID: 3, otherParticipantStatus: "away", lastMessageID: NaN}
+]}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <ConversationPanel {...conversations}/>
+      <ConversationDetailPanel
+          conversationId={1}
+          username={"user1"}
+          otherParticipantName={"user2"}
+      />
     </div>
   );
 }

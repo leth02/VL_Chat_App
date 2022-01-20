@@ -1,0 +1,12 @@
+{
+  "name": "voice-server",
+  "version": "0.0.1",
+  "description": "voice server that handles WebRTC voice calling via WebSocket",
+  "main": "index.js",
+  "author": "Tan Le",
+  "license": "All Rights Reserved",
+  "private": true,
+  "dependencies": {
+    "mediasoup": "3"
+  }
+}

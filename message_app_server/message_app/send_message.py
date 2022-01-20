@@ -7,6 +7,8 @@ from message_app.db.db import DB
 from PIL import Image
 
 send_messages = Blueprint("send_messages", __name__)
+
+# whitelist 'http://localhost:5000' to keep old WebSocket works. It will be deleted after we finish migrating
 socketio = SocketIO(cors_allowed_origins=['http://localhost:3000', 'http://localhost:5000'])
 
 # # Define the amount of time a user can be active/inactive on the frontend
@@ -45,8 +47,9 @@ def messages():
 
     return render_template("messages.html", username=current_user, conversation_id=0, available_conversations=available_conversations)
 
-@send_messages.route("/api/last_message_content", methods=["POST"])
-def api_get_last_message():
+@send_messages.route("/api/get_message", methods=["POST"])
+def api_get_message():
+    # Get message using its id
     try:
         message_id = request.get_json(force=True)["messageID"]
         last_message = Messages.select(message_id)
