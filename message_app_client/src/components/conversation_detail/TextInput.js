@@ -2,7 +2,7 @@ import React from 'react';
 
 const TextInput = (props) => {
     return (
-        <div className="message-form__message-container">
+        <div className="message-form__message-container text-input">
             <div className="message-form__message-content-container">
                 <div className="message-form__content-editable" contentEditable="true" role="textbox" aria-label="Write a message..." aria-multiline="true">
                 </div>

@@ -19,7 +19,7 @@ const ConversationDetail = (props) => {
     };
 
     return (
-        <div>
+        <div className='conversation-detail'>
            {messages.map(m => renderMessage(m))} 
         </div>
     );

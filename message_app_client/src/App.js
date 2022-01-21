@@ -1,6 +1,6 @@
 import './App.css';
 import ConversationDetailPanel from './components/conversation_detail/ConversationDetailPanel';
-import ConversationPanel from './components/conversation'
+import ConversationPanel from './components/conversation_panel/ConversationPanel'
 
 // Some test data. This variable will be REPLACED with data from the server later on
 const conversations = {conversations: [
@@ -11,13 +11,13 @@ const conversations = {conversations: [
 
 function App() {
   return (
-    <div>
-      <ConversationPanel {...conversations}/>
-      <ConversationDetailPanel
+    <div className='container'>
+        <ConversationPanel {...conversations}/>
+        <ConversationDetailPanel
           conversationId={1}
           username={"user1"}
           otherParticipantName={"user2"}
-      />
+        />
     </div>
   );
 }
