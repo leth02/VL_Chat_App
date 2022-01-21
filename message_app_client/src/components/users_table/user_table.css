@@ -1,0 +1,22 @@
+.people-table {
+    height: 100vh;
+    overflow: hidden;
+    padding: 50px;
+}
+.person {
+    display: flex;
+    align-items: stretch;
+    background-color: #f1f1f1;
+    padding: 20px 10px;
+    border-radius: 5px;
+    box-shadow: 1px 2px #C0C0C0;
+    margin: 10px 0;
+}
+.person-infor{
+    flex-grow: 8;
+    text-align:left;
+}
+.person-button{
+    flex-grow: 1;
+    text-align: right;
+}
