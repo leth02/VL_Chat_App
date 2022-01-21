@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import socket from '../../state'
+import { socket } from '../../state'
 
 async function postData(url = '', data = {}) {
     // Default options are marked with *

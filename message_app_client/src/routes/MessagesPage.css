@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  flex-direction: row;
+
+  background-image: url("../static/images/container-background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  height: 100vh;;
+}

@@ -1,24 +1,24 @@
-import './App.css';
-import ConversationDetailPanel from './components/conversation_detail/ConversationDetailPanel';
-import ConversationPanel from './components/conversation_panel/ConversationPanel'
-
-// Some test data. This variable will be REPLACED with data from the server later on
-const conversations = {conversations: [
-  {conversationTitle: "test1", conversationID: 1, otherParticipantStatus: "away", lastMessageID: 1},
-  {conversationTitle: "test2", conversationID: 2, otherParticipantStatus: "active", lastMessageID: NaN},
-  {conversationTitle: "test3", conversationID: 3, otherParticipantStatus: "away", lastMessageID: NaN}
-]}
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginPage from './routes/LoginPage'
+import MessagesPage from './routes/MessagesPage';
+import ErrorPage from "./routes/ErrorPage";
+import { SessionDataContext } from "./contexts/SessionDataContext";
+import { useState } from "react";
 
 function App() {
+  const [conversationID, setConversationID] = useState();
+  const [currentUser, setCurrentUser] = useState();
+
   return (
-    <div className='container'>
-        <ConversationPanel {...conversations}/>
-        <ConversationDetailPanel
-          conversationId={1}
-          username={"user1"}
-          otherParticipantName={"user2"}
-        />
-    </div>
+    <SessionDataContext.Provider value={{ conversationID, setConversationID, currentUser, setCurrentUser }}>
+    <Router>
+      <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/messages" element={<MessagesPage />} />
+          <Route path="*" element={<ErrorPage /> } />
+      </Routes>
+    </Router>
+    </SessionDataContext.Provider>
   );
 }
 

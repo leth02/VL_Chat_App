@@ -60,11 +60,11 @@ def api_get_message():
             raise Exception(session["error"])
         else:
             sender = User.select(user_id=last_message.sender_id)
-            return_value = {
+            payload = {
                 "sender_name": sender.username,
                 "content": last_message.content
             }
-            return jsonify(return_value), 200
+            return jsonify(payload), 200
 
     except Exception as error:
         return {"Error": "Bad request. " + str(error)}, 400

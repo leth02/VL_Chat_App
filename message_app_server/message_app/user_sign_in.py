@@ -1,4 +1,4 @@
-from flask import Blueprint, request, session, redirect, url_for, render_template
+from flask import Blueprint, jsonify, request, session, redirect, url_for, render_template
 from message_app.model import User
 from message_app.utils import check_pw
 
@@ -35,13 +35,14 @@ def api_user_signin():
 
         if check_pw(user_password_input, user_password_hash):
             session["user"] = (user_data.id, username)
-            return redirect(url_for("send_messages.messages"))
+
+            return redirect("http://localhost:3000/messages")
         else:
             session["error"] = "Invalid login credentials. Please try again."
             raise Exception(session["error"])
 
     except Exception as error:
-        return {"Error": "Bad request. " + str(error)}, 400
+        return jsonify({"Error": "Bad request. " + str(error)}), 400
 
 
 @user_sign_in.route('/api/logout', methods=["POST"])
