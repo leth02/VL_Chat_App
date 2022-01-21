@@ -4,7 +4,7 @@ from message_app.db.db import DB as db
 import json
 import time
 from typing import Union, List
-from sqlalchemy import func, desc, asc, not_, and_
+from sqlalchemy import func, desc, asc, not_, and_, true
 from sqlalchemy.sql import label
 
 # A join table for the many-to-many relationship between users and conversations tables.
@@ -64,8 +64,12 @@ class User(db.Model):
         return user
 
     @classmethod
-    def select(cls, username: str) -> Union[User, None]:
-        user = User.query.filter_by(username=username).first()
+    def select(cls, username="*", user_id="*", email="*") -> Union[User, None]:
+        user = User.query.filter(and_(
+                User.username == username if username != "*" else true(),
+                User.id == user_id if user_id != "*" else true(),
+                User.email == email if email != "*" else true()
+            )).first()
         return user
 
     @classmethod

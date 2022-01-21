@@ -1,9 +1,7 @@
 import os
 from time import strftime
-
 from flask import Flask, render_template, session, redirect, url_for, request
 from flask_cors import CORS
-
 from .db.db import init_SQLAlchemy
 from .send_message import socketio
 from .utils import hash_pw
@@ -28,6 +26,8 @@ def create_app(test_config=None, name=__name__):
         # Disable tracking modification of objects which requires extra memory
         SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
+
+    # Handling Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible.
     CORS(app, origins=["http://localhost:3000"])
 
     # if test config is passed, make app use that config object

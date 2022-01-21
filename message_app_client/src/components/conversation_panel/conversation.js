@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import socket from '../state'
+import socket from '../../state'
+import './ConversationPanel.css';
 
 async function postData(url = '', data = {}) {
     // Default options are marked with *
@@ -74,7 +75,7 @@ function ConversationCard(props){
     }
 
     return (
-        <div className="conversation-card__title" conversation_id={props.conversationID} other_participant_status={otherParticipantStatus}>
+        <div className="conversation-card__title conversation-card" conversation_id={props.conversationID} other_participant_status={otherParticipantStatus}>
             {props.conversationTitle} - {otherParticipantStatus}
             <LastMessage {...lastMessageID}/>
         </div>
@@ -89,7 +90,7 @@ function ConversationContainer(props){
     }
 
     return (
-        <div id="conversation-container">CONVERSATIONS
+        <div id="conversation-container" className='conversation-container'>CONVERSATIONS
             {props.conversations.map(conversation => renderConversation(conversation))}
         </div>
     )
@@ -100,7 +101,7 @@ function ConversationPanel(props) {
     // props.searchBar: WILL BE IMPLEMENTED LATER
 
     return (
-        <div>
+        <div className='conversation-panel'>
             <ConversationContainer {...props}/>
         </div>
     )

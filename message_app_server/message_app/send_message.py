@@ -7,7 +7,9 @@ from message_app.db.db import DB
 from PIL import Image
 
 send_messages = Blueprint("send_messages", __name__)
-socketio = SocketIO(cors_allowed_origins='*')
+
+# whitelist 'http://localhost:5000' to keep old WebSocket works. It will be deleted after we finish migrating
+socketio = SocketIO(cors_allowed_origins=['http://localhost:3000', 'http://localhost:5000'])
 
 # # Define the amount of time a user can be active/inactive on the frontend
 # before we actually update their status on the server
@@ -18,7 +20,6 @@ THUMBNAIL_MAX_SIZE = (100, 100)
 @send_messages.route("/messages", methods=["GET"])
 def messages():
     # Get conversations of the current user
-    # TODO: Show other usernames instead of conversations' ids on the frontend
     current_user = session["user"][1]
     conversations = User.select(current_user).conversations
     available_conversations = []
@@ -45,6 +46,28 @@ def messages():
         available_conversations.append(data)
 
     return render_template("messages.html", username=current_user, conversation_id=0, available_conversations=available_conversations)
+
+@send_messages.route("/api/get_message", methods=["POST"])
+def api_get_message():
+    # Get message using its id
+    try:
+        message_id = request.get_json(force=True)["messageID"]
+        last_message = Messages.select(message_id)
+
+        # Message not found:
+        if not last_message:
+            session["error"] = "Invalid message_id."
+            raise Exception(session["error"])
+        else:
+            sender = User.select(user_id=last_message.sender_id)
+            return_value = {
+                "sender_name": sender.username,
+                "content": last_message.content
+            }
+            return jsonify(return_value), 200
+
+    except Exception as error:
+        return {"Error": "Bad request. " + str(error)}, 400
 
 @send_messages.route("/api/messages/get_ten_messages/<int:conversation_id>", methods=["GET"])
 @send_messages.route("/api/messages/get_ten_messages/<int:conversation_id>/<int:cursor>", methods=["GET"])
@@ -181,7 +204,6 @@ def message_handler(data):
     if image:
         return_data.update(image_data)
 
-
     emit("message_handler_client", return_data, room=conversation_id)
 
 # A socket that updates user's last_active_time
@@ -192,4 +214,3 @@ def last_active(data):
     current_user = User.select(username)
     current_user.last_active_time = last_active_time
     DB.session.commit()
-
