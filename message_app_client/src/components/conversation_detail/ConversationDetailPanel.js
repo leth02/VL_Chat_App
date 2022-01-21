@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ConversationHeader from './ConversationHeader';
 import ConversationDetail from './ConversationDetail';
 import ConversationInput from './ConversationInput';
+import './ConversationDetailPanel.css';
 
 const ConversationDetailPanel = (props) => {
     const { conversationId, username, otherParticipantName } = props;
@@ -28,10 +29,10 @@ const ConversationDetailPanel = (props) => {
     }
 
     return (
-        <>
+        <div className='conversation-detail-panel'>
             {conversationId ? (
-                <div>
-                    <ConversationHeader
+                <>
+                    <ConversationHeader 
                         otherParticipantName={otherParticipantName}
                     />
                     <ConversationDetail
@@ -39,11 +40,9 @@ const ConversationDetailPanel = (props) => {
                         username={username}
                     />
                     <ConversationInput/>
-                </div>
-            ) : (
-                <div>Select a conversation</div>
-            )}
-        </>
+                </>
+            ) : <>Select a conversation</>}
+        </div>
     )
 };
 

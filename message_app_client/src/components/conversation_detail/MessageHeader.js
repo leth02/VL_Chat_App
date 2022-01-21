@@ -4,7 +4,7 @@ const MessageHeader = (props) => {
     const { senderName, sentTime, username } = props;
 
     return (
-        <>
+        <div className="message-header">
             {senderName === username ? (
                 <div>
                     <div>You</div>
@@ -16,7 +16,7 @@ const MessageHeader = (props) => {
                     <div>{sentTime}</div>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 

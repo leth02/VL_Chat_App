@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import socket from '../state'
+import socket from '../../state'
 
 async function postData(url = '', data = {}) {
     // Default options are marked with *
@@ -53,57 +53,4 @@ function LastMessage(props){
     )
 }
 
-function ConversationCard(props){
-    // props.lastMessageID: int,
-    // props.otherParticipantStatus: String,
-    // props.conversationTitle: String,
-    // props.conversationID: int
-
-    const [otherParticipantStatus, setOtherParticipantStatus] = useState(props.otherParticipantStatus);
-
-    // Socket for updating otherParticipantStatus
-    socket.on("updateConversationStatus", function(conversation){
-        if (props.conversationID === conversation.conversation_id){
-            setOtherParticipantStatus(conversation.other_participant_status);
-        }
-    });
-
-    const lastMessageID = {
-        lastMessageID: props.lastMessageID,
-        conversationID: props.conversationID
-    }
-
-    return (
-        <div className="conversation-card__title" conversation_id={props.conversationID} other_participant_status={otherParticipantStatus}>
-            {props.conversationTitle} - {otherParticipantStatus}
-            <LastMessage {...lastMessageID}/>
-        </div>
-    )
-}
-
-function ConversationContainer(props){
-    // props.conversations: Array of objects containing conversation's data
-
-    const renderConversation = (conversation) => {
-        return <ConversationCard {...conversation} key={conversation.conversationID}/>
-    }
-
-    return (
-        <div id="conversation-container">CONVERSATIONS
-            {props.conversations.map(conversation => renderConversation(conversation))}
-        </div>
-    )
-}
-
-function ConversationPanel(props) {
-    // props.conversations: Array of objects containing conversation's data
-    // props.searchBar: WILL BE IMPLEMENTED LATER
-
-    return (
-        <div>
-            <ConversationContainer {...props}/>
-        </div>
-    )
-}
-
-export default ConversationPanel
+export default LastMessage;
