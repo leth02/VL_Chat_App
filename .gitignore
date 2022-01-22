@@ -134,3 +134,7 @@ dmypy.json
 # ignore vscode
 .vscode/*
 .history/
+
+# macOS
+.DS_Store
+
