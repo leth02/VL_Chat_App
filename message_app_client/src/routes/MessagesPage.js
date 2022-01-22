@@ -1,8 +1,10 @@
+import { useContext, useState } from 'react';
+
 import './MessagesPage.css';
 import ConversationDetailPanel from '../components/conversation_detail/ConversationDetailPanel';
 import ConversationPanel from '../components/conversation_panel/ConversationPanel';
 import { SessionDataContext } from '../contexts/SessionDataContext';
-import { useContext } from 'react';
+import { ConversationDataContext } from '../contexts/ConversationDataContext';
 
 // Some test data. This variable will be REPLACED with data from the server later on
 const conversations = {conversations: [
@@ -12,16 +14,19 @@ const conversations = {conversations: [
 ]}
 
 function MessagesPage() {
-  const { currentUser } = useContext(SessionDataContext);
+  const [ conversationID, setConversationID ] = useState();
+  const { currentUserID } = useContext(SessionDataContext);
 
   return (
     <div className='container'>
+      <ConversationDataContext.Provider value={{ conversationID, setConversationID }}>
         <ConversationPanel {...conversations}/>
         <ConversationDetailPanel
           conversationId={1}
-          username={currentUser}
+          username={"user1"}
           otherParticipantName={"user2"}
         />
+      </ConversationDataContext.Provider>
     </div>
   );
 }

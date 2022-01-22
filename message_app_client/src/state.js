@@ -1,11 +1,19 @@
 import io from 'socket.io-client';
 
-// Global variables
-export const socket = io('http://127.0.0.1:5000/messages', { transports: ["websocket"] });
+// When needed, we will pass a custom api URL (test env, prod env) using .env
+const apiURL = process.env.API_URL || 'http://127.0.0.1:5000' ;
 
-export const URL = {
-    apiLoginURL: "http://localhost:5000/api/signin",
+export const socket = io(`${apiURL}messages`, { transports: ["websocket"] });
+
+export const getApiRoute = (name) => {
+    return `${apiURL}/${apiRoutes[name]}`;
+}
+export const apiRoutes = {
+    signin: "api/signin",
+    // add more routes here when needed
+};
+
+export const routes = {
     login: "/login",
     messages: "/messages"
-} // This variable contains all the URL
-
+};

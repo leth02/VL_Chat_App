@@ -15,7 +15,7 @@ def user_signin():
 @user_sign_in.route("/api/signin", methods=["POST"])
 def api_user_signin():
     try:
-        params = request.form
+        params = request.get_json(force=True)
         username = params.get("username", "")
         user_password_input = params.get("password", "")
 
@@ -35,14 +35,18 @@ def api_user_signin():
 
         if check_pw(user_password_input, user_password_hash):
             session["user"] = (user_data.id, username)
-
-            return redirect("http://localhost:3000/messages")
+            payload = {
+                "status": "Successful",
+                "sessionCookie": "",
+                "currentUserID": user_data.id
+            }
+            return jsonify(payload), 200
         else:
             session["error"] = "Invalid login credentials. Please try again."
             raise Exception(session["error"])
 
     except Exception as error:
-        return jsonify({"Error": "Bad request. " + str(error)}), 400
+        return jsonify({"error": "Bad request. " + str(error)}), 400
 
 
 @user_sign_in.route('/api/logout', methods=["POST"])

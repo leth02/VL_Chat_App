@@ -1,13 +1,15 @@
 import React, { useContext } from 'react';
-import { URL } from '../state';
+import { useNavigate } from 'react-router-dom';
+
+import { getApiRoute, routes } from '../state';
 import './LoginPage.css';
 import { SessionDataContext } from "../contexts/SessionDataContext";
 
 async function postData(url = '', data = {}) {
   // Default options are marked with *
   const response = await fetch(url, {
-      method: 'POST',
-      mode: 'cors',
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
       headers: {
           'Content-Type': 'application/json',
       },
@@ -17,24 +19,34 @@ async function postData(url = '', data = {}) {
 }
 
 function LoginPage() {
-  const { setCurrentUser } = useContext(SessionDataContext);
+  const { setCurrentUserID } = useContext(SessionDataContext);
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
     const userData = {
       username: event.target.username.value,
       password: event.target.password.value
     }
 
-    postData(URL.apiLoginURL, userData)
-    .then(() => { 
-      setCurrentUser(userData.username);
+    postData(getApiRoute("signin"), userData)
+    .then(data => { 
+      if (data.status === "Successful"){
+        setCurrentUserID(data.currentUserID);
+        // TODO: Set session cookie and/or tokens
+      } else {
+        throw data.Error;
+      }
+    })
+    .then (() => {
+      navigate(routes.messages);
     })
     .catch((error) => { alert(error); });
   }
 
   return (
     <div>
-      <form action="http://localhost:5000/api/signin" onSubmit={handleSubmit} method="POST">
+      <form onSubmit={handleSubmit} method="POST">
         <div className="login-container">
           <div style={ { display: "flex", alignItems: "center", flexDirection: "column"} }>
             <h3>Welcome back!</h3>
