@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-
 import { socket } from '../../state'
 import LastMessage from './LastMessage';
 import { ConversationDataContext } from '../../contexts/ConversationDataContext';
