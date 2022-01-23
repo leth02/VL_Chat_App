@@ -103,7 +103,7 @@ def join_conversation(data):
 
     if (old_conversation_id):
         leave_room(old_conversation_id)
-    
+
     join_room(new_conversation_id)
 
 # Updating current_user's last_active_time
