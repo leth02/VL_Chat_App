@@ -1,5 +1,5 @@
 import React from 'react';
-import attachmentLogo from './attachment_symbol.png' 
+import attachmentLogo from '../../static/images/attachment_symbol.png' 
 
 const ImageInput = (props) => {
     return (

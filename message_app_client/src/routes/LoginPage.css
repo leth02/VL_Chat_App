@@ -1,0 +1,36 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    background: #36393f;
+    color: #b9bbbe;
+    padding: 10px;
+    margin: auto;
+}
+
+.login-container h5 {
+    font-size: 12px;
+    line-height: 16px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.login-container input {
+    width: 100%;
+    font-size: 16px;
+    border-radius: 4px;
+    padding: 10px;
+    height: 4px;
+}
+
+.login-button {
+    font-size: 16px;
+    line-height: 24px;
+    height: 44px;
+    width: 100%;
+    background: #5865f2;
+    border: none;
+    margin-top: 20px;
+    cursor: pointer;
+}

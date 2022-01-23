@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import socket from '../../state'
+import { socket } from '../../state'
 import LastMessage from './LastMessage';
 
 function ConversationCard(props){
@@ -31,4 +31,3 @@ function ConversationCard(props){
 }
 
 export default ConversationCard;
-
