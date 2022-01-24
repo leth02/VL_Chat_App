@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { getApiRoute } from "../../state";
 
-const BASE_URL = getApiRoute("getUsers");
+const BASE_URL = getApiRoute("requestMessage");
 const ActionButton = (props) => {
     const { otherParticipantId, userId } = props;
     const [ status, setStatus ] = useState(props.status);
@@ -10,14 +10,14 @@ const ActionButton = (props) => {
     const handleOnclick = async (buttonType) => {
         if (buttonType === "accept") {
             const accepted_time = Date.now();
-            const acceptedResponse = await fetch(BASE_URL + `/${otherParticipantId}/${userId}/${accepted_time}`, {
+            const acceptedResponse = await fetch(BASE_URL + `/accept/${otherParticipantId}/${userId}/${accepted_time}`, {
                 method: "POST"
             });
             if (acceptedResponse.status === 200) {
                 setStatus("accepted");
             }
         } else if (buttonType === "reject") {
-            const rejectedResponse = await fetch(BASE_URL + `/api/request/reject/${otherParticipantId}/${userId}`, {
+            const rejectedResponse = await fetch(BASE_URL + `/reject/${otherParticipantId}/${userId}`, {
                 method: "POST"
             });
             if (rejectedResponse.status === 200) {
@@ -25,7 +25,7 @@ const ActionButton = (props) => {
             }
         } else if (buttonType === "request message") {
             const requestTime =  Date.now();
-            const requestResponse = await fetch(BASE_URL + `/api/request/send/${userId}/${otherParticipantId}/${requestTime}`, {
+            const requestResponse = await fetch(BASE_URL + `/send/${userId}/${otherParticipantId}/${requestTime}`, {
                 method: "POST"
             });
             if (requestResponse.status === 200) {
@@ -33,7 +33,7 @@ const ActionButton = (props) => {
                 setIsSender(false)
             }
         } else {
-            const cancelResponse = await fetch(BASE_URL + `/api/request/cancel/${userId}/${otherParticipantId}`, {
+            const cancelResponse = await fetch(BASE_URL + `/cancel/${userId}/${otherParticipantId}`, {
                 method: "POST"
             });
             if (cancelResponse.status === 200) {
