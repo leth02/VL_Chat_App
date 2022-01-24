@@ -1,9 +1,9 @@
-.people-table {
+.user-table-detail {
     height: 100vh;
     overflow: hidden;
     padding: 50px;
 }
-.person {
+.table-row {
     display: flex;
     align-items: stretch;
     background-color: #f1f1f1;
@@ -16,7 +16,7 @@
     flex-grow: 8;
     text-align:left;
 }
-.person-button{
+.action-button{
     flex-grow: 1;
     text-align: right;
 }

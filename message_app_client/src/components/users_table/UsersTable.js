@@ -5,9 +5,9 @@ const UsersTable = (props) => {
     const userId = 1;
 
     return (
-        <div>
-            <div>
-                <a href="#">inbox</a>
+        <div className="users-table">
+            <div className="users-table-nav">
+                <a href="/messages">inbox</a>
             </div>
             <UsersTableDetail userId={userId}/>
         </div>

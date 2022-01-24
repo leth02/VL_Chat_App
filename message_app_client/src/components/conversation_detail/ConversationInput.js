@@ -3,10 +3,10 @@ import TextInput from './TextInput';
 
 const ConversationInput = (props) => {
     return (
-        <div className='conversation-input'>
+        <form className='conversation-input'>
             <ImageInput />
             <TextInput />
-        </div>
+        </form>
     )
 };
 

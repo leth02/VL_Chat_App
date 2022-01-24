@@ -7,7 +7,7 @@ const TableRow = (props) => {
     const { username: otherParticipantName, user_id: otherParticipantId, request_status: status, is_sender: isSender } = otherParticipant;
 
     return (
-        <div className="person">
+        <div className="table-row">
             <div className="person-infor">{otherParticipantName}</div>
             <ActionButton
                 otherParticipantId={otherParticipantId}

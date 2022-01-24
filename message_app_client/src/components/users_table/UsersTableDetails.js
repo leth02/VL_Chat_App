@@ -26,7 +26,7 @@ const UsersTableDetail = (props) => {
     }
 
     return (
-        <div className="people-table">
+        <div className="users-table-detail">
            {users.map(user => <TableRow key={user.user_id} userId={userId} otherParticipant={user} />)} 
         </div>
     )
