@@ -101,6 +101,7 @@ def join_conversation(data):
     old_conversation_id = data["oldConversationID"]
     new_conversation_id = data["newConversationID"]
 
+    # if the user is currently in a conversation, leave that conversation.
     if (old_conversation_id):
         leave_room(old_conversation_id)
 

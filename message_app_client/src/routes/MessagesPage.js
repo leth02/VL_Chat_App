@@ -12,7 +12,7 @@ function MessagesPage() {
   const [ conversationID, setConversationID ] = useState(null);
   const [ conversations, setConversations ] = useState([]);
   const { currentUserID } = useContext(SessionDataContext);
-  const APIConversationsURL = getApiRoute("currentUserConversations", currentUserID);
+  const APIConversationsURL = getApiRoute("getConversations") + "/" + currentUserID;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ function MessagesPage() {
       .then(response => response.json())
       .then(data => setConversations(data.conversations))
       .catch(error => {
-        alert(error);
+        console.error(error);
       })
     }
   }, [APIConversationsURL, currentUserID, navigate]);

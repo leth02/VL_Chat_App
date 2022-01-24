@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+
 import { socket } from '../../state'
 import LastMessage from './LastMessage';
 import { ConversationDataContext } from '../../contexts/ConversationDataContext';
@@ -13,6 +14,7 @@ function ConversationCard(props){
     const { conversationID, setConversationID } = useContext(ConversationDataContext)
 
     const joinConversation = () => {
+        // Only join the conversation if the user is not in the conversation
         if (props.conversationID !== conversationID){
             let oldConversationID = conversationID;
             setConversationID(props.conversationID)
