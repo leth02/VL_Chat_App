@@ -4,7 +4,7 @@ import { useState } from "react";
 import { SessionDataContext } from "./Contexts";
 import LoginPage from './routes/LoginPage'
 import MessagesPage from './routes/MessagesPage';
-import UsersTable from "./components/users_table/UsersTable";
+import UsersTable from "./components/usersTable/UsersTable";
 import ErrorPage from "./routes/ErrorPage";
 
 function App() {
