@@ -1,9 +1,7 @@
 .conversation-panel {
-  flex-grow: 1;
-
   display: flex;
+  flex-basis: 22vw;
   flex-direction: column;
-
   text-align: center;
   background-color: white;
   border: 0.5px solid rgb(137, 137, 155);
@@ -30,6 +28,11 @@
   border-radius: 10px;
   padding: 4%;
   margin: 2%;
+  cursor: pointer;
+}
+
+.conversation-card:hover {
+  background-color: #bbd3ff;
 }
 
 .last-message {

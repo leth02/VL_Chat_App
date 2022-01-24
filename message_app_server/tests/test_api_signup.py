@@ -38,4 +38,4 @@ class TestAPISignUp:
 
     def test_valid_signup(self, sampleSignUpData, test_db, test_client):
         resp = test_client.post('/api/signup', data=sampleSignUpData["valid"])
-        assert resp.status_code == 302
+        assert resp.status_code == 200

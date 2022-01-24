@@ -8,7 +8,7 @@ function ConversationPanel(props) {
 
     return (
         <div className='conversation-panel'>
-            <ConversationContainer {...props}/>
+            <ConversationContainer {...{conversations: props.conversations}}/>
         </div>
     )
 }

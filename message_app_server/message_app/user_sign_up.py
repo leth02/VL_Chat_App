@@ -1,4 +1,4 @@
-from flask import Blueprint, request, session, redirect, url_for, render_template
+from flask import Blueprint, jsonify, request, session, redirect, url_for, render_template
 from message_app.utils import hash_pw
 from message_app.model import User
 
@@ -38,8 +38,12 @@ def api_user_signup():
 
             # Create a session for this user
             session["user"] = (new_user.id, username)
-
-        return redirect(url_for("send_messages.messages"))
+            payload = {
+                "status": "Successful",
+                "sessionCookie": "",
+                "currentUserID": new_user.id
+            }
+            return jsonify(payload), 200
 
     except Exception as error:
         return {"Error": "Bad request. " + str(error)}, 400

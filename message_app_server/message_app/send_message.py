@@ -17,17 +17,17 @@ LAST_ACTIVE_INTERVAL = 10 * 60 * 1000 # 600000 milliseconds or 10 minutes
 IMAGE_STORAGE_PATH = os.path.join("message_app", "static", "user_images")
 THUMBNAIL_MAX_SIZE = (100, 100)
 
-@send_messages.route("/messages", methods=["GET"])
-def messages():
+@send_messages.route("/api/get_conversations/<int:user_id>", methods=["GET"])
+def api_get_conversations(user_id):
     # Get conversations of the current user
-    current_user = session["user"][1]
-    conversations = User.select(current_user).conversations
+    current_user = User.select(user_id=user_id)
+    conversations = current_user.conversations
     available_conversations = []
     for conv in conversations:
         # receiver_name works for a group having only 2 people.
         # TODO: Implement receiver_name for a group having more than 2 people
         participants = conv.participants
-        if participants[0].username == current_user:
+        if participants[0].username == current_user.username:
             receiver_name = participants[1].username
             last_active_time = participants[1].last_active_time
         else:
@@ -36,16 +36,15 @@ def messages():
         conv_id = conv.id
 
         status = "active" if (time.time() * 1000 - last_active_time < LAST_ACTIVE_INTERVAL) else "away"
-        data = {
-            "title": receiver_name,
-            "receiver_name": receiver_name,
-            # "last_active_time": last_active_time, # This key shows exact how long the user has been away
-            "id": str(conv_id),
-            "conversation_status": status
+        payload = {
+            "lastMessageID": conv.last_message_id,
+            "otherParticipantStatus": status,
+            "conversationTitle": receiver_name,
+            "conversationID": str(conv_id)
         }
-        available_conversations.append(data)
+        available_conversations.append(payload)
 
-    return render_template("messages.html", username=current_user, conversation_id=0, available_conversations=available_conversations)
+    return jsonify({"conversations": available_conversations}), 200
 
 @send_messages.route("/api/get_message", methods=["POST"])
 def api_get_message():
@@ -97,25 +96,16 @@ def get_ten_messages(conversation_id, cursor=None):
 # ================== Sockets for Conversations Container ==========================
 
 # Joinning a conversation
-@socketio.on("join", namespace="/messages")
-def joining(data):
-    username = data["username"]
-    conversation_id = data["conversation_id"]
+@socketio.on("join_conversation", namespace="/messages")
+def join_conversation(data):
+    old_conversation_id = data["oldConversationID"]
+    new_conversation_id = data["newConversationID"]
 
-    join_room(conversation_id)
+    # if the user is currently in a conversation, leave that conversation.
+    if (old_conversation_id):
+        leave_room(old_conversation_id)
 
-    # Send a message that inform new user has join the conversation
-    emit("message_handler_client", {"username": username, "conversation_id": conversation_id, "join": True}, room=conversation_id)
-
-# Leaving a conversation
-@socketio.on("leave", namespace="/messages")
-def leaving(data):
-    username = data["username"]
-    conversation_id = data["conversation_id"]
-    leave_room(conversation_id)
-
-    # Send a message that inform an user has left the conversation
-    emit("message_handler_client", {"username": username, "conversation_id": conversation_id, "join": False}, room=conversation_id)
+    join_room(new_conversation_id)
 
 # Updating current_user's last_active_time
 @socketio.on("last_active", namespace="/messages")
