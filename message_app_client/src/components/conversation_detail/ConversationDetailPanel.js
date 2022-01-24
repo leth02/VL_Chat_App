@@ -23,7 +23,7 @@ const ConversationDetailPanel = () => {
     }
 
     useEffect(() => {
-        fetchLatestMessagesData();
+        if (conversationID) {fetchLatestMessagesData();}
       }, []);
 
     return (
@@ -36,7 +36,7 @@ const ConversationDetailPanel = () => {
                     />
                     <ConversationInput/>
                 </>
-            ) : <>Select a conversation</>}
+            ) : <div className='no-conversation'>Select a Conversation</div>}
         </div>
     )
 };

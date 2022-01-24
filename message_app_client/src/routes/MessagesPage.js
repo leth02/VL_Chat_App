@@ -35,7 +35,7 @@ function MessagesPage() {
     <div className='container'>
       <ConversationDataContext.Provider value={{ conversationID, setConversationID, otherParticipantName, setOtherParticipantName }}>
         <ConversationPanel {...{conversations: conversations}}/>
-        { conversationID ? (<ConversationDetailPanel />) : <></> }
+        <ConversationDetailPanel />
       </ConversationDataContext.Provider>
     </div>
   );
