@@ -14,16 +14,16 @@ function ConversationCard(props){
     const { conversationID, setConversationID } = useContext(ConversationDataContext)
 
     const joinConversation = () => {
-        // Only join the conversation if the user is not in the conversation
-        if (props.conversationID !== conversationID){
-            let oldConversationID = conversationID;
-            setConversationID(props.conversationID)
-            const payload = {
-                oldConversationID: oldConversationID,
-                newConversationID: props.conversationID
-            }
-            socket.emit("join_conversation", payload)
+        // If a user try to join a conversation they are already in, do nothing
+        if (props.conversationID === conversationID) return;
+
+        let oldConversationID = conversationID;
+        setConversationID(props.conversationID)
+        const payload = {
+            oldConversationID: oldConversationID,
+            newConversationID: props.conversationID
         }
+        socket.emit("join_conversation", payload)
     }
 
     // Socket for updating otherParticipantStatus
