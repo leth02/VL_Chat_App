@@ -1,5 +1,3 @@
-import React from 'react';
-
 const TextInput = (props) => {
     return (
         <div className="text-input">

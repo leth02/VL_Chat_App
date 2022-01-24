@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 
 import { socket } from '../../state'
 import LastMessage from './LastMessage';
-import { ConversationDataContext } from '../../contexts/ConversationDataContext';
+import { ConversationDataContext } from '../../Contexts';
 
 function ConversationCard(props){
     // props.lastMessageID: int,
@@ -11,7 +11,7 @@ function ConversationCard(props){
     // props.conversationID: int
 
     const [otherParticipantStatus, setOtherParticipantStatus] = useState(props.otherParticipantStatus);
-    const { conversationID, setConversationID } = useContext(ConversationDataContext)
+    const { conversationID, setConversationID, setOtherParticipantName } = useContext(ConversationDataContext);
 
     const joinConversation = () => {
         // If a user try to join a conversation they are already in, do nothing
@@ -19,6 +19,7 @@ function ConversationCard(props){
 
         let oldConversationID = conversationID;
         setConversationID(props.conversationID)
+        setOtherParticipantName(props.conversationTitle)
         const payload = {
             oldConversationID: oldConversationID,
             newConversationID: props.conversationID

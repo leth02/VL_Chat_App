@@ -1,19 +1,23 @@
-import React from 'react';
+import { useContext } from 'react';
+
 import Messages from './Message';
+import { SessionDataContext } from '../../Contexts';
 
 const ConversationDetail = (props) => {
-    const { messages, username } = props;
+    const { messages } = props;
+    const { currentUserID } = useContext(SessionDataContext);
 
     const renderMessage = (message) => {
-        const {id, senderName, content, createdAt} = message;
+        const id = message.id;
+        const senderName = message.sender_id === currentUserID ? "You" : message.sender_name;
+        const content = message.content;
+        const createdAt = message.created_at;
         return (
             <Messages
                 key={id}
-                id={id}
                 senderName={senderName}
                 content={content}
                 createdAt={createdAt}
-                username={username}
             />
         );
     };

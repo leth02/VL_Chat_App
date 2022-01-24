@@ -1,4 +1,3 @@
-import React from 'react';
 import attachmentLogo from '../../static/images/attachment_symbol.png' 
 
 const ImageInput = (props) => {
