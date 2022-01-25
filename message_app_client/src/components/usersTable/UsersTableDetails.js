@@ -7,7 +7,7 @@ const UsersTableDetail = (props) => {
     const { userId } = props;
     const [ users, setUsers ] = useState([]);
     const [ isFetchSuccess, setIsFetchSuccess ] = useState(true);
-    const apiUrl = `${getApiRoute}/get_people/${userId}`;
+    const apiUrl = `${BASE_URL}/get_people/${userId}`;
 
     const fetchUsers = async () => {
         const response = await fetch(apiUrl)

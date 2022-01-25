@@ -1,5 +1,6 @@
 import React from "react";
 import UsersTableDetail from "./UsersTableDetails";
+import "./user_table.css";
 
 const UsersTable = (props) => {
     // userID should be stored in the cookies after user logged in

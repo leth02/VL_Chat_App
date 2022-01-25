@@ -1,3 +1,6 @@
+.users-table {
+    padding: 20px;
+}
 .user-table-detail {
     height: 100vh;
     overflow: hidden;
@@ -6,7 +9,7 @@
 .table-row {
     display: flex;
     align-items: stretch;
-    background-color: #f1f1f1;
+    background-color: #92a8d1;
     padding: 20px 10px;
     border-radius: 5px;
     box-shadow: 1px 2px #C0C0C0;
@@ -19,4 +22,14 @@
 .action-button{
     flex-grow: 1;
     text-align: right;
+}
+
+.users-table-nav>a {
+    display: block;
+    text-decoration: none;
+    width: fit-content;
+    padding: 10px;
+    background-color: #92a8d1;
+    color: black;
+    border-radius: 10px;
 }
