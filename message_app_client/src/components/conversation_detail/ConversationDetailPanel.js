@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+
+import './ConversationDetailPanel.css';
 import ConversationHeader from './ConversationHeader';
 import ConversationDetail from './ConversationDetail';
 import ConversationInput from './ConversationInput';
-import './ConversationDetailPanel.css';
+import { ConversationDataContext } from '../../Contexts';
+import { getApiRoute } from '../../state';
 
-const ConversationDetailPanel = (props) => {
-    const { conversationId, username, otherParticipantName } = props;
+const ConversationDetailPanel = () => {
+    const { conversationID } = useContext(ConversationDataContext)
     const [ messages, setMessages ] = useState([]);
-    const [ isFetchSuccess, setIsFetchSuccess ] = useState(true);
-    const apiUrl = `http://localhost:5000/api/messages/get_ten_messages/${conversationId}`;
+    const apiGetTenMessagesURL = getApiRoute("getTenMessages") + "/" + conversationID
 
     const fetchLatestMessagesData = async () => {
-        const response = await fetch(apiUrl)
-        .catch(() => {
-            setIsFetchSuccess(false);
+        const response = await fetch(apiGetTenMessagesURL)
+        .catch((error) => {
+            console.error(error);
         });
         const messages = await response.json();
 
@@ -21,27 +23,20 @@ const ConversationDetailPanel = (props) => {
     }
 
     useEffect(() => {
-        fetchLatestMessagesData();
+        if (conversationID) {fetchLatestMessagesData();}
       }, []);
-
-    if (!isFetchSuccess) {
-        return <div>Opps, Something went wrong :(((</div>
-    }
 
     return (
         <div className='conversation-detail-panel'>
-            {conversationId ? (
+            {conversationID ? (
                 <>
-                    <ConversationHeader 
-                        otherParticipantName={otherParticipantName}
-                    />
+                    <ConversationHeader />
                     <ConversationDetail
                         messages={messages}
-                        username={username}
                     />
                     <ConversationInput/>
                 </>
-            ) : <>Select a conversation</>}
+            ) : <div className='no-conversation'>Select a Conversation</div>}
         </div>
     )
 };

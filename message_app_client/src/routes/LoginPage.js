@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { getApiRoute, routes } from '../state';
 import './LoginPage.css';
-import { SessionDataContext } from "../contexts/SessionDataContext";
+import { getApiRoute, routes } from '../state';
+import { SessionDataContext } from "../Contexts";
 
 async function postData(url = '', data = {}) {
   // Default options are marked with *

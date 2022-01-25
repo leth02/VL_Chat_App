@@ -1,17 +1,17 @@
-import React from 'react';
 import MessageHeader from './MessageHeader';
 import MessageContent from './MessageContent';
 
 const Messages = (props) => {
-    const {id, senderName, content, createdAt, username} = props;
-    const messageCSS = "message" + (senderName === username ? "-yourself" : "-otherParticipant") 
+    const { senderName, content, createdAt } = props;
+
+    // Set CSS class for the message (either message-yourself or message-otherParticipant)
+    const messageCSS = "message" + (senderName === "You" ? "-yourself" : "-otherParticipant")
 
     return (
         <div className={messageCSS}>
             <MessageHeader
                 senderName={senderName}
                 sentTime={createdAt}
-                userName={username}
             />
             <MessageContent
                 content={content}

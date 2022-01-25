@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
-import { SessionDataContext } from "./contexts/SessionDataContext";
+import { SessionDataContext } from "./Contexts";
 import LoginPage from './routes/LoginPage'
 import MessagesPage from './routes/MessagesPage';
 import ErrorPage from "./routes/ErrorPage";

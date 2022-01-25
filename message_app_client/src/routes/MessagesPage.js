@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import './MessagesPage.css';
 import ConversationDetailPanel from '../components/conversation_detail/ConversationDetailPanel';
 import ConversationPanel from '../components/conversation_panel/ConversationPanel';
-import { SessionDataContext } from '../contexts/SessionDataContext';
-import { ConversationDataContext } from '../contexts/ConversationDataContext';
+import { SessionDataContext, ConversationDataContext } from '../Contexts';
 import { getApiRoute, routes } from '../state';
 
 function MessagesPage() {
   const [ conversationID, setConversationID ] = useState(null);
+  const [ otherParticipantName, setOtherParticipantName ] = useState(null);
   const [ conversations, setConversations ] = useState([]);
   const { currentUserID } = useContext(SessionDataContext);
   const APIConversationsURL = getApiRoute("getConversations") + "/" + currentUserID;
@@ -33,13 +33,9 @@ function MessagesPage() {
 
   return (
     <div className='container'>
-      <ConversationDataContext.Provider value={{ conversationID, setConversationID }}>
+      <ConversationDataContext.Provider value={{ conversationID, setConversationID, otherParticipantName, setOtherParticipantName }}>
         <ConversationPanel {...{conversations: conversations}}/>
-        { conversationID ? (<ConversationDetailPanel
-          conversationId={1}
-          username={"user1"}
-          otherParticipantName={"user2"}
-        />) : <></> }
+        <ConversationDetailPanel />
       </ConversationDataContext.Provider>
     </div>
   );

@@ -1,5 +1,3 @@
-import React from "react";
-
 const MessageContent = (props) => {
     const {content, isImage} = props;
 
