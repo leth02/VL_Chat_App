@@ -34,7 +34,7 @@ const UsersTableDetail = (props) => {
     }, [currentUserID, navigate]);
 
     if (!isFetchSuccess) {
-        return <div>Opps, Something went wrong :(((</div>
+        return <div>Failed to load suggested friends :(((</div>
     }
 
     return (
