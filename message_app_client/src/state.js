@@ -19,5 +19,6 @@ export const apiRoutes = {
 
 export const routes = {
     login: "/login",
-    messages: "/messages"
+    messages: "/messages",
+    findUsers: "/find_users"
 };

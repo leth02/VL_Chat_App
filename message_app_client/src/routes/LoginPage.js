@@ -19,7 +19,7 @@ async function postData(url = '', data = {}) {
 }
 
 function LoginPage() {
-  const { setCurrentUserID } = useContext(SessionDataContext);
+  const { setCurrentUserID, currentRoute, setCurrentRoute } = useContext(SessionDataContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -39,7 +39,13 @@ function LoginPage() {
       }
     })
     .then (() => {
-      navigate(routes.messages);
+      if (currentRoute) {
+        navigate(currentRoute);
+        setCurrentRoute(null);
+      } else {
+        navigate(routes.messages);
+      }
+
     })
     .catch((error) => { alert(error); });
   }
@@ -74,3 +80,4 @@ function LoginPage() {
 }
 
 export default LoginPage;
+

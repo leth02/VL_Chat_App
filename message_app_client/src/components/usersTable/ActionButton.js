@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { getApiRoute } from "../../state";
+import { SessionDataContext } from "../../contexts/SessionDataContext";
 
 const BASE_URL = getApiRoute("requestMessage");
 const ActionButton = (props) => {
-    const { otherParticipantId, userId } = props;
+    const { otherParticipantId } = props;
     const [ status, setStatus ] = useState(props.status);
     const [ isSender, setIsSender ] = useState(props.isSender);
+    const { currentUserID: userId } = useContext(SessionDataContext);
 
     const handleOnclick = async (buttonType) => {
         if (buttonType === "accept") {

@@ -11,13 +11,14 @@ function MessagesPage() {
   const [ conversationID, setConversationID ] = useState(null);
   const [ otherParticipantName, setOtherParticipantName ] = useState(null);
   const [ conversations, setConversations ] = useState([]);
-  const { currentUserID } = useContext(SessionDataContext);
+  const { currentUserID, setCurrentRoute } = useContext(SessionDataContext);
   const APIConversationsURL = getApiRoute("getConversations") + "/" + currentUserID;
   const navigate = useNavigate();
 
   useEffect(() => {
     // Navigate user to login site if user hasn't logged in.
     if (!currentUserID) {
+      setCurrentRoute("/messages");
       navigate(routes.login);
       alert("You must login first!");
     } else {
@@ -42,3 +43,4 @@ function MessagesPage() {
 }
 
 export default MessagesPage;
+

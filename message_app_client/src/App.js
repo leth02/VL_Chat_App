@@ -9,9 +9,10 @@ import ErrorPage from "./routes/ErrorPage";
 
 function App() {
   const [currentUserID, setCurrentUserID] = useState(null);
+  const [currentRoute, setCurrentRoute] = useState(null);
 
   return (
-    <SessionDataContext.Provider value={{ currentUserID, setCurrentUserID }}>
+    <SessionDataContext.Provider value={{ currentUserID, setCurrentUserID, currentRoute, setCurrentRoute }}>
     <Router>
       <Routes>
           <Route path="/login" element={<LoginPage />} />

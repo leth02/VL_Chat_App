@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import TableRow from "./TableRow";
-import { getApiRoute } from "../../state";
+import { SessionDataContext } from "../../contexts/SessionDataContext";
+import { useNavigate } from "react-router-dom";
+import { getApiRoute, routes } from "../../state";
 
 const BASE_URL = getApiRoute("requestMessage")
 const UsersTableDetail = (props) => {
     const { userId } = props;
     const [ users, setUsers ] = useState([]);
     const [ isFetchSuccess, setIsFetchSuccess ] = useState(true);
-    const apiUrl = `${BASE_URL}/get_people/${userId}`;
+    const { currentUserID, setCurrentRoute } = useContext(SessionDataContext);
+    const navigate = useNavigate();
+    const apiUrl = `${BASE_URL}/get_people/${currentUserID}`;
 
     const fetchUsers = async () => {
         const response = await fetch(apiUrl)
@@ -20,8 +24,14 @@ const UsersTableDetail = (props) => {
     };
 
     useEffect(() => {
-        fetchUsers();
-    }, []);
+        if (!currentUserID) {
+            setCurrentRoute("/find_users");
+            navigate(routes.login);
+            alert("You must login first!");
+        } else {
+            fetchUsers();
+        }
+    }, [currentUserID, navigate]);
 
     if (!isFetchSuccess) {
         return <div>Opps, Something went wrong :(((</div>
@@ -29,7 +39,7 @@ const UsersTableDetail = (props) => {
 
     return (
         <div className="users-table-detail">
-           {users.map(user => <TableRow key={user.user_id} userId={userId} otherParticipant={user} />)} 
+           {users.map(user => <TableRow key={user.user_id} otherParticipant={user} />)} 
         </div>
     )
 };

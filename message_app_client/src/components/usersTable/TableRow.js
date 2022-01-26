@@ -3,7 +3,7 @@ import ActionButton from "./ActionButton";
 import "./user_table.css";
 
 const TableRow = (props) => {
-    const { userId, otherParticipant } = props;
+    const { otherParticipant } = props;
     const { username: otherParticipantName, user_id: otherParticipantId, request_status: status, is_sender: isSender } = otherParticipant;
 
     return (
@@ -13,7 +13,6 @@ const TableRow = (props) => {
                 otherParticipantId={otherParticipantId}
                 status={status}
                 isSender={isSender}
-                userId={userId}
             />
         </div>
     )
