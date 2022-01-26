@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { getApiRoute } from "../../state";
-import { SessionDataContext } from "../../contexts/SessionDataContext";
+import { SessionDataContext } from "../../Contexts";
 
 const BASE_URL = getApiRoute("requestMessage");
 const ActionButton = (props) => {

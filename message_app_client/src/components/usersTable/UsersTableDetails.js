@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import TableRow from "./TableRow";
-import { SessionDataContext } from "../../contexts/SessionDataContext";
+import { SessionDataContext } from "../../Contexts";
 import { useNavigate } from "react-router-dom";
 import { getApiRoute, routes } from "../../state";
 
