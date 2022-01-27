@@ -12,11 +12,13 @@ export const getApiRoute = (name) => {
 export const apiRoutes = {
     signin: "api/signin",
     getConversations: "api/get_conversations",
-    getTenMessages: "api/messages/get_ten_messages"
+    requestMessage: "api/request",
+    getTenMessages: "/api/messages/get_ten_messages"
     // add more routes here when needed
 };
 
 export const routes = {
     login: "/login",
-    messages: "/messages"
+    messages: "/messages",
+    findUsers: "/find_users"
 };
