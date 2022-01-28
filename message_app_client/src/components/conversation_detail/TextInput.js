@@ -1,8 +1,6 @@
 const TextInput = (props) => {
     return (
-        <div className="text-input">
-                Write a message...
-        </div>
+        <input className="text-input" placeholder="Write a Message ..." ref={props.inputRef}></input>
     )
 };
 

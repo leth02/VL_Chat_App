@@ -5,7 +5,7 @@ import ConversationHeader from './ConversationHeader';
 import ConversationDetail from './ConversationDetail';
 import ConversationInput from './ConversationInput';
 import { ConversationDataContext } from '../../Contexts';
-import { getApiRoute } from '../../state';
+import { getApiRoute, socket } from '../../state';
 
 const ConversationDetailPanel = () => {
     const { conversationID } = useContext(ConversationDataContext)
@@ -23,18 +23,26 @@ const ConversationDetailPanel = () => {
     }
 
     useEffect(() => {
-        if (conversationID) {fetchLatestMessagesData();}
-      }, []);
+        // Only fetch the message if the user has already joined a conversation
+        if (conversationID) fetchLatestMessagesData();
+    }, [conversationID]);
+
+    useEffect(() => {
+        // Websocket event that receives new message from the server
+        socket.on("messageHandlerClient", function(payload) {
+            // payload contains four primary keys: id, sender_id, content, created_at
+            // four optional keys (message with image): regular_source, thumbnail_source, width, height
+            setMessages(messages => [...messages, payload])
+        });
+    }, [])
 
     return (
         <div className='conversation-detail-panel'>
             {conversationID ? (
                 <>
                     <ConversationHeader />
-                    <ConversationDetail
-                        messages={messages}
-                    />
-                    <ConversationInput/>
+                    <ConversationDetail messages={messages} />
+                    <ConversationInput />
                 </>
             ) : <div className='no-conversation'>Select a Conversation</div>}
         </div>

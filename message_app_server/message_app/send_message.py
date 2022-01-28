@@ -1,5 +1,6 @@
 import os
 import time
+from unicodedata import name
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask import Blueprint, render_template, session, request, jsonify
 from message_app.model import Messages, Conversations, User
@@ -137,23 +138,23 @@ def is_typing(data):
 @socketio.on("message_handler_server", namespace="/messages")
 def message_handler(data):
     # The data is a dictionary with six keys:
-    # "username": The username of the sender
-    # "message": The content of the message
-    # "conversation_id": The current conversation's id
-    # "timestamp": The time that user sent this image
+    # "senderID": The username of the sender
+    # "content": The content of the message
+    # "conversationID": The current conversation's id
+    # "createdAt": The message's sent time
     # "image": The image as a binary file. Value = None if the message doesn't have any attachment
-    # "image_name": The name of the image. Value = "" if the message doesn't have any attachment
-    username = data["username"]
-    message = data["message"]
-    conversation_id = data["conversation_id"]
-    created_at = data["created_at"]
+    # "imageName": The name of the image. Value = "" if the message doesn't have any attachment
+    user_id = data["senderID"]
+    message = data["content"]
+    conversation_id = data["conversationID"]
+    created_at = data["createdAt"]
     attachment_name = ""
     image = None
 
     if ("image" in data.keys()):
-        image_name = data["image_name"]
+        image_name = data["imageName"]
         image = data["image"]
-        attachment_name = str(created_at) + username + image_name # Lower the chance of having duplicated image file
+        attachment_name = str(created_at) + user_id + image_name # Lower the chance of having duplicated image file
         image_path = os.path.join(IMAGE_STORAGE_PATH, "regular_" + attachment_name)
         # Store the regular image to the system
         with open(image_path, "wb") as f:
@@ -175,7 +176,6 @@ def message_handler(data):
         }
 
     # Update the database
-    user_id = User.select(username).id
     conversation = Conversations.select(conversation_id)
     new_message = Messages(sender_id=user_id, content=message, created_at=created_at, conversation_id=conversation_id, attachment_name=attachment_name)
     Messages.insert(new_message)
@@ -183,18 +183,18 @@ def message_handler(data):
     DB.session.commit()
 
     # Return data
-    return_data = {
+    payload = {
         "id": new_message.id,
-        "conversation_id": conversation_id,
-        "username": username,
-        "message": message,
+        "sender_id": user_id,
+        "content": message,
         "created_at": created_at
     }
 
     if image:
-        return_data.update(image_data)
+        payload.update(image_data)
 
-    emit("message_handler_client", return_data, room=conversation_id)
+    emit("updateLastMessageID", {"conversation_id": conversation_id, "last_message_id": new_message.id}, room=conversation_id)
+    emit("messageHandlerClient", payload, room=conversation_id)
 
 # A socket that updates user's last_active_time
 @socketio.on("last_active", namespace="/messages")

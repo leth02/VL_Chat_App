@@ -1,10 +1,11 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import Messages from './Message';
 import { SessionDataContext } from '../../Contexts';
+import { socket } from '../../state';
 
 const ConversationDetail = (props) => {
-    const { messages } = props;
+    const [ messages, setMessages ] = useState(props.messages);
     const { currentUserID } = useContext(SessionDataContext);
 
     const renderMessage = (message) => {
@@ -22,6 +23,10 @@ const ConversationDetail = (props) => {
         );
     };
 
+    useEffect(() => {
+        setMessages(props.messages);
+    }, [props.messages]);
+
     return (
         <div className='conversation-detail'>
            {messages.map(m => renderMessage(m))} 
@@ -30,4 +35,3 @@ const ConversationDetail = (props) => {
 };
 
 export default ConversationDetail;
-
