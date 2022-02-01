@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 
 import Messages from './Message';
 import { SessionDataContext } from '../../Contexts';
-import { socket } from '../../state';
 
 const ConversationDetail = (props) => {
     const [ messages, setMessages ] = useState(props.messages);
@@ -13,12 +12,28 @@ const ConversationDetail = (props) => {
         const senderName = message.sender_id === currentUserID ? "You" : message.sender_name;
         const content = message.content;
         const createdAt = message.created_at;
+        const hasAttachment = message.has_attachment;
+        let attachmentData = {};
+        
+        if (hasAttachment){
+            // If the message contains image, update image data
+            attachmentData = {
+                thumbnailName: message.thumbnail_name,
+                imageName: message.regular_name,
+                width: message.width,
+                height: message.height,
+                alt: message.sender_name
+            }
+        }
+
         return (
             <Messages
                 key={id}
                 senderName={senderName}
                 content={content}
                 createdAt={createdAt}
+                attachmentData={attachmentData}
+                hasAttachment={hasAttachment}
             />
         );
     };

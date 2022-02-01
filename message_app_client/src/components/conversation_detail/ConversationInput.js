@@ -27,12 +27,19 @@ const ConversationInput = (props) => {
             createdAt: date.getTime()
         }
 
-        //
+        // Image data
+        if (imageInput.current.files.length !== 0){
+            const imageFile = imageInput.current.files[0];
+            payload.imageName = imageFile.name;
+            payload.image = imageFile; 
+        }
 
         // Sends message to the server
         socket.emit("message_handler_server", payload);
 
-        messageInput.current.value = ""; // Clear texting field after sending message 
+        // Clear input field after sending message
+        messageInput.current.value = "";
+        imageInput.current.value = "";
     }
 
     return (

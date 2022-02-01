@@ -6,7 +6,9 @@ function getTimeString(timestamp) {
     let messageTime = new Date(timestamp);
 
     if (timestamp > todayBeginningTime.getTime()) {
-        return `Today at ${messageTime.getHours()}:${messageTime.getMinutes()}`;
+        let minute = messageTime.getMinutes()
+        minute = messageTime.getMinutes() < 10 ? "0" + minute : minute
+        return `Today at ${messageTime.getHours()}:${minute}`;
     } else if (timestamp > yesterDayBeginningTime.getTime()) {
         return `Yesterday at ${messageTime.getHours()}:${messageTime.getMinutes()}`;
     } else {

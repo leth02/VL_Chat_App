@@ -28,10 +28,10 @@ const ConversationDetailPanel = () => {
     }, [conversationID]);
 
     useEffect(() => {
-        // Websocket event that receives new message from the server
+        // WebSocket event that receives new message from the server
         socket.on("messageHandlerClient", function(payload) {
-            // payload contains four primary keys: id, sender_id, content, created_at
-            // four optional keys (message with image): regular_source, thumbnail_source, width, height
+            // payload contains 5 primary keys: id, sender_id, content, created_at, has_attachment
+            // four extra keys (message with image): regular_name, thumbnail_name, width, height
             setMessages(messages => [...messages, payload])
         });
     }, [])
