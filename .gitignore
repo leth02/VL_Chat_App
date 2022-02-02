@@ -138,3 +138,5 @@ dmypy.json
 # macOS
 .DS_Store
 
+# User images storage
+/message_app_server/message_app/user_images_storage/*

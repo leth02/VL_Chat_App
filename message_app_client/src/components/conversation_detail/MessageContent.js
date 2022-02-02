@@ -8,7 +8,7 @@ const MessageContent = (props) => {
     useEffect(() => {
         if (!hasAttachment) return;
         
-        const { thumbnailName, imageName, width, height, alt } = attachmentData
+        const { thumbnailName, imageName, alt } = attachmentData
         const APIGetThumbnail = getApiRoute("getImage") + "/" + thumbnailName;
 
         const showRegularImageSize = () => {
@@ -20,10 +20,10 @@ const MessageContent = (props) => {
             .catch(error => console.error(error));
         }
 
-        // Fetch image from the server
+        // Fetch image's thumbnail from the server
         fetch(APIGetThumbnail)
         .then(response => response.blob())
-        .then(image => setImageElement(<img src={URL.createObjectURL(image)} alt={alt} width={width} height={height} onClick={showRegularImageSize}></img>))
+        .then(image => setImageElement(<img src={URL.createObjectURL(image)} alt={alt} onClick={showRegularImageSize}></img>))
         .catch(error => console.error(error));
 
     }, [hasAttachment, attachmentData])

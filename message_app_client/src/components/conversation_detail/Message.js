@@ -4,7 +4,7 @@ import MessageContent from './MessageContent';
 const Messages = (props) => {
     const { senderName, content, createdAt, hasAttachment, attachmentData } = props;
 
-    // There are two types of CSS class for the message:
+    // There are two types of CSS class for a message:
     // message-yourself: Message will be displayed on the right of the conversation detail 
     // message-otherParticipant: Message will be displayed on the left of the conversation detail
     const messageCSS = "message" + (senderName === "You" ? "-yourself" : "-otherParticipant")

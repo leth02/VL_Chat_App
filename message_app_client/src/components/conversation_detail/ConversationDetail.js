@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-
 import Messages from './Message';
 import { SessionDataContext } from '../../Contexts';
 
@@ -20,8 +19,6 @@ const ConversationDetail = (props) => {
             attachmentData = {
                 thumbnailName: message.thumbnail_name,
                 imageName: message.regular_name,
-                width: message.width,
-                height: message.height,
                 alt: message.sender_name
             }
         }

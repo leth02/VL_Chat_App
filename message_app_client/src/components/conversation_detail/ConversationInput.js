@@ -1,5 +1,4 @@
 import { useRef, useContext } from 'react';
-
 import ImageInput from './ImageInput';
 import TextInput from './TextInput';
 import { SessionDataContext, ConversationDataContext } from '../../Contexts';
