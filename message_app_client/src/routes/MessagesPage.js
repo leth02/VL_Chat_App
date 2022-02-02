@@ -30,7 +30,7 @@ function MessagesPage() {
         console.error(error);
       })
     }
-  }, [APIConversationsURL, currentUserID, navigate]);
+  }, [APIConversationsURL, currentUserID, navigate, setCurrentRoute]);
 
   return (
     <div className='container'>

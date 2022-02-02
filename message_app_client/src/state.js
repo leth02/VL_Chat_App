@@ -13,7 +13,8 @@ export const apiRoutes = {
     signin: "api/signin",
     getConversations: "api/get_conversations",
     requestMessage: "api/request",
-    getTenMessages: "/api/messages/get_ten_messages"
+    getTenMessages: "/api/messages/get_ten_messages",
+    getImage: "api/get_image"
     // add more routes here when needed
 };
 

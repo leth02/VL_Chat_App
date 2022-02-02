@@ -2,9 +2,11 @@ import MessageHeader from './MessageHeader';
 import MessageContent from './MessageContent';
 
 const Messages = (props) => {
-    const { senderName, content, createdAt } = props;
+    const { senderName, content, createdAt, hasAttachment, attachmentData } = props;
 
-    // Set CSS class for the message (either message-yourself or message-otherParticipant)
+    // There are two types of CSS class for a message:
+    // message-yourself: Message will be displayed on the right of the conversation detail 
+    // message-otherParticipant: Message will be displayed on the left of the conversation detail
     const messageCSS = "message" + (senderName === "You" ? "-yourself" : "-otherParticipant")
 
     return (
@@ -15,7 +17,8 @@ const Messages = (props) => {
             />
             <MessageContent
                 content={content}
-                isImage={false}
+                hasAttachment={hasAttachment}
+                attachmentData={attachmentData}
             />
         </div>
     )

@@ -276,7 +276,7 @@ class Messages(db.Model):
         return id
 
     @classmethod
-    def getMessages(cls, conversation_id: int, number_of_messages: int, cursor: int) -> List:
+    def get_messages(cls, conversation_id: int, number_of_messages: int, cursor: int) -> List:
         messages = []
 
         if cursor == None:
@@ -288,7 +288,8 @@ class Messages(db.Model):
                     sub_query.c.sender_id,
                     sub_query.c.content,
                     sub_query.c.created_at,
-                    sub_query.c.conversation_id
+                    sub_query.c.conversation_id,
+                    sub_query.c.attachment_name
                     ).join(sub_query, User.id == sub_query.c.sender_id).all()
         else:
             # query messages starting from cursor
@@ -299,7 +300,8 @@ class Messages(db.Model):
                     sub_query.c.sender_id,
                     sub_query.c.content,
                     sub_query.c.created_at,
-                    sub_query.c.conversation_id
+                    sub_query.c.conversation_id,
+                    sub_query.c.attachment_name
                     ).join(sub_query, User.id == sub_query.c.sender_id).all()
 
         messages_to_dict = []
@@ -311,7 +313,8 @@ class Messages(db.Model):
                 "sender_name": m.username,
                 "content": m.content,
                 "created_at": m.created_at,
-                "conversation_id": m.conversation_id
+                "conversation_id": m.conversation_id,
+                "attachment_name": m.attachment_name
                 })
 
         return messages_to_dict
